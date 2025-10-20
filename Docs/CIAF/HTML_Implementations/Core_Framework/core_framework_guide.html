@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CIAF Core Framework Guide</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6; color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
+            border-radius: 20px; padding: 40px; text-align: center; margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .nav-link {
+            display: inline-block; background: #764ba2; color: white;
+            padding: 10px 20px; border-radius: 25px; text-decoration: none;
+            margin: 5px; transition: all 0.3s ease;
+        }
+        .nav-link:hover { background: #667eea; transform: translateY(-2px); }
+        
+        .section {
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
+            border-radius: 20px; padding: 40px; margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .architecture-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px; margin-top: 30px;
+        }
+        
+        .component-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white; padding: 30px; border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+        .component-card:hover { transform: translateY(-5px); }
+        
+        .implementation-pattern {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white; padding: 25px; border-radius: 15px; margin: 20px 0;
+        }
+        
+        .governance-tier {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: white; padding: 25px; border-radius: 15px; margin: 20px 0;
+        }
+        
+        .code-example {
+            background: #2c3e50; color: #ecf0f1; padding: 25px; border-radius: 15px;
+            margin: 20px 0; font-family: 'Courier New', monospace; overflow-x: auto;
+            border-left: 5px solid #667eea;
+        }
+        
+        .framework-diagram {
+            background: #f8f9fa; border-radius: 15px; padding: 30px; margin: 25px 0;
+            border: 2px solid #667eea; text-align: center;
+        }
+        
+        .quick-nav {
+            position: fixed; top: 50%; right: 20px; transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px);
+            border-radius: 15px; padding: 20px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1000; max-width: 200px;
+        }
+        .quick-nav a {
+            display: block; color: #667eea; text-decoration: none;
+            padding: 8px 0; border-bottom: 1px solid #eee;
+            font-size: 14px; transition: color 0.3s ease;
+        }
+        .quick-nav a:hover { color: #764ba2; }
+        .quick-nav a:last-child { border-bottom: none; }
+        
+        .tier-badge {
+            display: inline-block; background: #667eea; color: white;
+            padding: 5px 12px; border-radius: 20px; font-size: 12px;
+            font-weight: bold; margin: 5px;
+        }
+        .tier-1 { background: #27ae60; }
+        .tier-2 { background: #f39c12; }
+        .tier-3 { background: #e74c3c; }
+        .tier-4 { background: #9b59b6; }
+        
+        @media (max-width: 768px) {
+            .quick-nav { display: none; }
+            .architecture-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔧 CIAF Core Framework Guide</h1>
+            <p><strong>Comprehensive Implementation Guide for AI Governance Architecture</strong></p>
+            <p>Technical documentation for deploying enterprise-grade AI governance systems</p>
+            <div style="margin-top: 20px;">
+                <a href="../index.html" class="nav-link">← Back to Overview</a>
+                <a href="#architecture" class="nav-link">Architecture</a>
+                <a href="#implementation" class="nav-link">Implementation</a>
+                <a href="#governance" class="nav-link">Governance Tiers</a>
+                <a href="#examples" class="nav-link">Code Examples</a>
+            </div>
+        </div>
+
+        <div class="quick-nav">
+            <h4 style="color: #667eea; margin-bottom: 15px;">Quick Navigation</h4>
+            <a href="#architecture">🏗️ Core Architecture</a>
+            <a href="#components">🔧 Framework Components</a>
+            <a href="#governance">⚖️ Governance Tiers</a>
+            <a href="#implementation">💻 Implementation</a>
+            <a href="#patterns">📋 Design Patterns</a>
+            <a href="#examples">💡 Code Examples</a>
+            <a href="#integration">🔗 Integration Guide</a>
+        </div>
+
+        <div class="section" id="architecture">
+            <h2>🏗️ CIAF Core Architecture</h2>
+            <div class="framework-diagram">
+                <h3>CIAF Framework Architecture Overview</h3>
+                <p><strong>Multi-Layer Governance Architecture with Cryptographic Verification</strong></p>
+                <div style="margin: 20px 0; font-family: monospace;">
+                    ┌─────────────────────────────────────────────────┐<br>
+                    │ <strong>APPLICATION LAYER</strong> (Industry Implementations) │<br>
+                    ├─────────────────────────────────────────────────┤<br>
+                    │ <strong>GOVERNANCE LAYER</strong> (Policy Enforcement)     │<br>
+                    ├─────────────────────────────────────────────────┤<br>
+                    │ <strong>COMPLIANCE LAYER</strong> (Regulatory Mapping)     │<br>
+                    ├─────────────────────────────────────────────────┤<br>
+                    │ <strong>CORE LAYER</strong> (Crypto + Determinism)        │<br>
+                    └─────────────────────────────────────────────────┘
+                </div>
+            </div>
+            
+            <div class="architecture-grid">
+                <div class="component-card">
+                    <h3>🔐 Cryptographic Core</h3>
+                    <p><strong>Foundation Layer</strong></p>
+                    <ul style="margin-top: 10px;">
+                        <li>Merkle tree verification</li>
+                        <li>Digital signatures & provenance</li>
+                        <li>Immutable audit trails</li>
+                        <li>Zero-knowledge compliance proofs</li>
+                    </ul>
+                </div>
+                
+                <div class="component-card">
+                    <h3>⚖️ Policy Enforcement</h3>
+                    <p><strong>Governance Layer</strong></p>
+                    <ul style="margin-top: 10px;">
+                        <li>Dynamic policy interpretation</li>
+                        <li>Real-time compliance checking</li>
+                        <li>Automated governance workflows</li>
+                        <li>Multi-jurisdictional harmonization</li>
+                    </ul>
+                </div>
+                
+                <div class="component-card">
+                    <h3>📊 Compliance Engine</h3>
+                    <p><strong>Regulatory Layer</strong></p>
+                    <ul style="margin-top: 10px;">
+                        <li>EU AI Act implementation</li>
+                        <li>GDPR/CCPA privacy compliance</li>
+                        <li>Sector-specific regulations</li>
+                        <li>Continuous compliance monitoring</li>
+                    </ul>
+                </div>
+                
+                <div class="component-card">
+                    <h3>🔍 Audit & Transparency</h3>
+                    <p><strong>Accountability Layer</strong></p>
+                    <ul style="margin-top: 10px;">
+                        <li>Comprehensive audit logs</li>
+                        <li>Explainable AI decisions</li>
+                        <li>Stakeholder transparency</li>
+                        <li>Risk assessment reporting</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="components">
+            <h2>🔧 Core Framework Components</h2>
+            
+            <div class="implementation-pattern">
+                <h3>📋 Key Components Overview</h3>
+                <p>CIAF implements a modular architecture with interchangeable components for maximum flexibility and compliance coverage.</p>
+            </div>
+
+            <div class="code-example">
+                <pre>
+<strong># CIAF Core Components Structure</strong>
+
+from ciaf.core import (
+    CryptographicCore,          # Merkle trees, signatures, verification
+    DeterminismEngine,          # Reproducible AI operations
+    PolicyEnforcement,          # Dynamic governance rules
+    ComplianceValidator         # Regulatory compliance checking
+)
+
+from ciaf.governance import (
+    RiskAssessment,            # Multi-tier risk evaluation
+    AuditTrail,                # Immutable audit logging
+    StakeholderTransparency,   # Explainable AI reporting
+    BiasDetection              # Fairness monitoring
+)
+
+from ciaf.compliance import (
+    EUAIActCompliance,         # EU AI Act Articles 1-85
+    GDPRIntegration,           # Privacy by design
+    SectoralRegulations,       # Industry-specific rules
+    GlobalHarmonization        # Multi-jurisdictional mapping
+)
+
+from ciaf.industry import (
+    BankingCompliance,         # Financial sector governance
+    HealthcareCompliance,      # Medical AI regulations
+    AutonomousVehicles,        # Transportation safety
+    # ... 20+ industry modules
+)
+</pre>
+            </div>
+        </div>
+
+        <div class="section" id="governance">
+            <h2>⚖️ Governance Tier System</h2>
+            
+            <div class="governance-tier">
+                <h3>🎯 Four-Tier Classification System</h3>
+                <p>CIAF implements a risk-based governance approach with escalating controls based on AI system impact and complexity.</p>
+            </div>
+
+            <div class="architecture-grid">
+                <div class="component-card" style="background: linear-gradient(135deg, #27ae60, #2ecc71);">
+                    <div class="tier-badge tier-1">TIER 1</div>
+                    <h3>📊 Traditional Business AI</h3>
+                    <p><strong>Standard Risk Systems</strong></p>
+                    <ul style="margin-top: 10px;">
+                        <li>Basic compliance monitoring</li>
+                        <li>Standard audit requirements</li>
+                        <li>Routine bias detection</li>
+                        <li>Human oversight optional</li>
+                    </ul>
+                    <p style="margin-top: 15px; font-size: 14px;"><em>Examples: Basic analytics, simple automation</em></p>
+                </div>
+                
+                <div class="component-card" style="background: linear-gradient(135deg, #f39c12, #e67e22);">
+                    <div class="tier-badge tier-2">TIER 2</div>
+                    <h3>🏛️ Regulated Industries</h3>
+                    <p><strong>Enhanced Risk Systems</strong></p>
+                    <ul style="margin-top: 10px;">
+                        <li>Sector-specific compliance</li>
+                        <li>Enhanced audit trails</li>
+                        <li>Regular bias assessments</li>
+                        <li>Human oversight recommended</li>
+                    </ul>
+                    <p style="margin-top: 15px; font-size: 14px;"><em>Examples: Banking, healthcare, insurance</em></p>
+                </div>
+                
+                <div class="component-card" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">
+                    <div class="tier-badge tier-3">TIER 3</div>
+                    <h3>⚠️ High-Risk Applications</h3>
+                    <p><strong>Critical Risk Systems</strong></p>
+                    <ul style="margin-top: 10px;">
+                        <li>Strict EU AI Act compliance</li>
+                        <li>Continuous monitoring</li>
+                        <li>Mandatory human oversight</li>
+                        <li>Real-time risk assessment</li>
+                    </ul>
+                    <p style="margin-top: 15px; font-size: 14px;"><em>Examples: Employment decisions, critical infrastructure</em></p>
+                </div>
+                
+                <div class="component-card" style="background: linear-gradient(135deg, #9b59b6, #8e44ad);">
+                    <div class="tier-badge tier-4">TIER 4</div>
+                    <h3>🚀 Frontier AI Systems</h3>
+                    <p><strong>Extreme Risk Systems</strong></p>
+                    <ul style="margin-top: 10px;">
+                        <li>Comprehensive governance</li>
+                        <li>Cryptographic verification</li>
+                        <li>Multi-agent coordination</li>
+                        <li>Emergent capability detection</li>
+                    </ul>
+                    <p style="margin-top: 15px; font-size: 14px;"><em>Examples: Foundation models, autonomous weapons, AGI</em></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="implementation">
+            <h2>💻 Implementation Guide</h2>
+            
+            <div class="implementation-pattern">
+                <h3>🚀 Quick Start Implementation</h3>
+                <p>Step-by-step guide to implement CIAF governance in your AI systems</p>
+            </div>
+
+            <h3>Step 1: Framework Initialization</h3>
+            <div class="code-example">
+                <pre>
+<strong># Initialize CIAF Framework</strong>
+from ciaf import CIAFFramework
+
+# Initialize with your organization's configuration
+framework = CIAFFramework(
+    organization_id="your_org_id",
+    compliance_requirements=[
+        "EU_AI_ACT", "GDPR", "CCPA", "NIST_AI_RMF"
+    ],
+    industry_sector="healthcare",  # or banking, manufacturing, etc.
+    governance_tier="TIER_3",      # Based on your AI system risk
+    cryptographic_verification=True
+)
+
+# Configure governance policies
+framework.configure_governance(
+    policy_file="governance_policies.json",
+    regulatory_mapping="eu_ai_act_mapping.json",
+    audit_requirements="audit_config.json"
+)
+</pre>
+            </div>
+
+            <h3>Step 2: AI System Registration</h3>
+            <div class="code-example">
+                <pre>
+<strong># Register AI systems for governance</strong>
+
+# Define your AI system
+ai_system = framework.register_ai_system(
+    system_id="medical_diagnosis_ai",
+    system_type="DIAGNOSTIC_SUPPORT",
+    risk_category="HIGH_RISK",  # EU AI Act classification
+    data_sources=["patient_records", "medical_imaging"],
+    decision_impact="CRITICAL",
+    human_oversight_required=True
+)
+
+# Configure model governance
+ai_system.configure_model_governance(
+    model_provenance=True,
+    bias_monitoring=True,
+    explainability_level="DETAILED",
+    audit_frequency="CONTINUOUS"
+)
+</pre>
+            </div>
+
+            <h3>Step 3: Compliance Integration</h3>
+            <div class="code-example">
+                <pre>
+<strong># Integrate compliance requirements</strong>
+
+# EU AI Act compliance
+eu_compliance = framework.enable_eu_ai_act_compliance(
+    system=ai_system,
+    conformity_assessment=True,
+    quality_management_system=True,
+    risk_management_system=True,
+    data_governance=True
+)
+
+# GDPR privacy compliance
+privacy_compliance = framework.enable_gdpr_compliance(
+    system=ai_system,
+    data_protection_by_design=True,
+    consent_management=True,
+    data_subject_rights=True
+)
+
+# Industry-specific compliance
+healthcare_compliance = framework.enable_healthcare_compliance(
+    system=ai_system,
+    hipaa_compliance=True,
+    fda_validation=True,
+    clinical_decision_support=True
+)
+</pre>
+            </div>
+        </div>
+
+        <div class="section" id="patterns">
+            <h2>📋 Implementation Patterns</h2>
+            
+            <h3>🔄 Continuous Governance Pattern</h3>
+            <div class="code-example">
+                <pre>
+<strong># Continuous AI Governance Implementation</strong>
+
+class ContinuousAIGovernance:
+    def __init__(self, ai_system):
+        self.system = ai_system
+        self.governance = CIAFFramework()
+        
+    def run_governance_cycle(self):
+        """Execute complete governance cycle"""
+        
+        # 1. Real-time monitoring
+        monitoring_results = self.governance.monitor_ai_system(
+            system=self.system,
+            metrics=['fairness', 'accuracy', 'privacy', 'safety'],
+            real_time=True
+        )
+        
+        # 2. Compliance validation
+        compliance_status = self.governance.validate_compliance(
+            system=self.system,
+            regulations=['EU_AI_ACT', 'GDPR', 'SECTOR_SPECIFIC'],
+            validation_depth='COMPREHENSIVE'
+        )
+        
+        # 3. Risk assessment
+        risk_assessment = self.governance.assess_risks(
+            system=self.system,
+            risk_categories=['BIAS', 'PRIVACY', 'SAFETY', 'SECURITY'],
+            assessment_frequency='CONTINUOUS'
+        )
+        
+        # 4. Automated remediation
+        if risk_assessment.requires_action():
+            remediation = self.governance.execute_remediation(
+                system=self.system,
+                identified_risks=risk_assessment.high_risks,
+                auto_fix=True
+            )
+            
+        # 5. Audit trail update
+        self.governance.update_audit_trail(
+            system=self.system,
+            governance_cycle_results={
+                'monitoring': monitoring_results,
+                'compliance': compliance_status,
+                'risk_assessment': risk_assessment,
+                'remediation': remediation if risk_assessment.requires_action() else None
+            }
+        )
+        
+        return GovernanceCycleResults(
+            monitoring_results, compliance_status, 
+            risk_assessment, remediation
+        )
+</pre>
+            </div>
+
+            <h3>🔐 Cryptographic Verification Pattern</h3>
+            <div class="code-example">
+                <pre>
+<strong># Cryptographic AI Governance Verification</strong>
+
+class CryptographicAIVerification:
+    def __init__(self):
+        self.crypto_core = CryptographicCore()
+        self.merkle_tree = MerkleTreeManager()
+        
+    def create_verifiable_ai_decision(self, ai_decision, governance_context):
+        """Create cryptographically verifiable AI decision"""
+        
+        # 1. Create decision metadata
+        decision_metadata = {
+            'decision_id': ai_decision.id,
+            'timestamp': datetime.utcnow(),
+            'model_version': ai_decision.model_version,
+            'input_hash': self.crypto_core.hash_inputs(ai_decision.inputs),
+            'governance_policies': governance_context.active_policies,
+            'compliance_status': governance_context.compliance_validation
+        }
+        
+        # 2. Generate Merkle proof
+        merkle_proof = self.merkle_tree.generate_proof(
+            decision_data=ai_decision.full_data,
+            metadata=decision_metadata
+        )
+        
+        # 3. Create digital signature
+        signature = self.crypto_core.sign_decision(
+            decision=ai_decision,
+            metadata=decision_metadata,
+            merkle_root=merkle_proof.root
+        )
+        
+        # 4. Package verifiable decision
+        verifiable_decision = VerifiableAIDecision(
+            original_decision=ai_decision,
+            cryptographic_proof=merkle_proof,
+            digital_signature=signature,
+            governance_metadata=decision_metadata,
+            verification_instructions=self.generate_verification_guide()
+        )
+        
+        return verifiable_decision
+        
+    def verify_ai_decision(self, verifiable_decision):
+        """Verify the authenticity and integrity of an AI decision"""
+        
+        # 1. Verify digital signature
+        signature_valid = self.crypto_core.verify_signature(
+            decision=verifiable_decision.original_decision,
+            signature=verifiable_decision.digital_signature
+        )
+        
+        # 2. Verify Merkle proof
+        merkle_valid = self.merkle_tree.verify_proof(
+            proof=verifiable_decision.cryptographic_proof,
+            decision_data=verifiable_decision.original_decision.full_data
+        )
+        
+        # 3. Verify governance compliance
+        compliance_valid = self.validate_governance_compliance(
+            decision=verifiable_decision.original_decision,
+            governance_metadata=verifiable_decision.governance_metadata
+        )
+        
+        return VerificationResult(
+            signature_valid=signature_valid,
+            merkle_proof_valid=merkle_valid,
+            compliance_valid=compliance_valid,
+            overall_valid=all([signature_valid, merkle_valid, compliance_valid])
+        )
+</pre>
+            </div>
+        </div>
+
+        <div class="section" id="examples">
+            <h2>💡 Complete Implementation Examples</h2>
+            
+            <h3>🏥 Healthcare AI Governance Example</h3>
+            <div class="code-example">
+                <pre>
+<strong># Complete Healthcare AI Implementation</strong>
+
+from ciaf.healthcare import HealthcareAIGovernanceFramework
+
+class MedicalDiagnosisAI:
+    def __init__(self):
+        self.governance = HealthcareAIGovernanceFramework(
+            compliance_standards=['HIPAA', 'FDA_510K', 'EU_MDR'],
+            clinical_validation_required=True,
+            patient_safety_priority=True
+        )
+        
+    def diagnose_with_governance(self, patient_data, clinical_context):
+        """Perform medical diagnosis with full governance oversight"""
+        
+        # 1. Privacy protection and consent validation
+        privacy_check = self.governance.validate_patient_privacy(
+            patient_data=patient_data,
+            consent_status=clinical_context.patient_consent,
+            data_minimization=True,
+            hipaa_compliance=True
+        )
+        
+        # 2. Clinical decision support governance
+        clinical_validation = self.governance.validate_clinical_context(
+            diagnosis_request=clinical_context,
+            physician_oversight=clinical_context.attending_physician,
+            clinical_guidelines=clinical_context.applicable_guidelines
+        )
+        
+        # 3. AI model inference with bias monitoring
+        diagnosis_result = self.governance.perform_governed_inference(
+            model=self.diagnostic_model,
+            patient_data=privacy_check.anonymized_data,
+            bias_monitoring=True,
+            fairness_constraints=clinical_validation.fairness_requirements
+        )
+        
+        # 4. Explainable AI for clinical decision
+        explanation = self.governance.generate_clinical_explanation(
+            diagnosis=diagnosis_result,
+            confidence_level=diagnosis_result.confidence,
+            supporting_evidence=diagnosis_result.evidence,
+            alternative_diagnoses=diagnosis_result.differentials
+        )
+        
+        # 5. FDA compliance validation
+        fda_validation = self.governance.validate_fda_compliance(
+            diagnosis=diagnosis_result,
+            device_classification=self.device_classification,
+            clinical_validation=clinical_validation
+        )
+        
+        # 6. Create audit trail
+        audit_entry = self.governance.create_clinical_audit_entry(
+            patient_id=patient_data.patient_id,
+            diagnosis=diagnosis_result,
+            physician=clinical_context.attending_physician,
+            privacy_compliance=privacy_check,
+            fda_compliance=fda_validation,
+            timestamp=datetime.utcnow()
+        )
+        
+        return MedicalDiagnosisResult(
+            diagnosis=diagnosis_result,
+            explanation=explanation,
+            compliance_validation=fda_validation,
+            audit_trail=audit_entry,
+            physician_review_required=diagnosis_result.requires_human_review
+        )
+</pre>
+            </div>
+
+            <h3>🏦 Banking AI Governance Example</h3>
+            <div class="code-example">
+                <pre>
+<strong># Complete Banking AI Implementation</strong>
+
+from ciaf.banking import BankingAIGovernanceFramework
+
+class CreditDecisionAI:
+    def __init__(self):
+        self.governance = BankingAIGovernanceFramework(
+            regulatory_compliance=['FCRA', 'ECOA', 'GDPR', 'EU_AI_ACT'],
+            fair_lending_enforcement=True,
+            algorithmic_accountability=True
+        )
+        
+    def make_credit_decision_with_governance(self, application_data):
+        """Make credit decision with comprehensive governance"""
+        
+        # 1. Fair lending compliance
+        fair_lending_check = self.governance.validate_fair_lending(
+            application=application_data,
+            protected_attributes=['race', 'gender', 'age', 'religion'],
+            historical_bias_analysis=True,
+            disparate_impact_testing=True
+        )
+        
+        # 2. FCRA compliance validation
+        fcra_compliance = self.governance.validate_fcra_compliance(
+            credit_decision_process=self.credit_model,
+            adverse_action_procedures=True,
+            credit_report_accuracy=True,
+            consumer_rights_protection=True
+        )
+        
+        # 3. Bias-free credit scoring
+        credit_decision = self.governance.perform_fair_credit_assessment(
+            application=application_data,
+            model=self.credit_model,
+            fairness_constraints=fair_lending_check.fairness_requirements,
+            bias_mitigation=True
+        )
+        
+        # 4. Explainable credit decision
+        decision_explanation = self.governance.generate_credit_explanation(
+            decision=credit_decision,
+            key_factors=credit_decision.decision_factors,
+            adverse_action_reasons=credit_decision.adverse_factors,
+            consumer_rights_notice=True
+        )
+        
+        # 5. Regulatory reporting
+        regulatory_report = self.governance.generate_regulatory_report(
+            credit_decision=credit_decision,
+            fair_lending_metrics=fair_lending_check.metrics,
+            compliance_validation=fcra_compliance,
+            reporting_requirements=['HMDA', 'CRA', 'EU_AI_ACT_ARTICLE_64']
+        )
+        
+        return CreditDecisionResult(
+            decision=credit_decision,
+            explanation=decision_explanation,
+            compliance_validation=fcra_compliance,
+            regulatory_report=regulatory_report,
+            consumer_notice=decision_explanation.consumer_notice
+        )
+</pre>
+            </div>
+        </div>
+
+        <div class="section" id="integration">
+            <h2>🔗 Integration Guide</h2>
+            
+            <div class="implementation-pattern">
+                <h3>🔧 Framework Integration Patterns</h3>
+                <p>Best practices for integrating CIAF with existing AI infrastructure and compliance systems</p>
+            </div>
+
+            <h3>📊 Enterprise Integration</h3>
+            <div class="code-example">
+                <pre>
+<strong># Enterprise-wide CIAF Integration</strong>
+
+class EnterpriseAIGovernance:
+    def __init__(self, enterprise_config):
+        self.governance_hub = CIAFFramework(enterprise_config)
+        self.compliance_dashboard = ComplianceDashboard()
+        self.audit_system = AuditSystem()
+        
+    def integrate_existing_ai_systems(self, ai_systems_inventory):
+        """Integrate existing AI systems into governance framework"""
+        
+        integration_results = []
+        
+        for ai_system in ai_systems_inventory:
+            # Assess current governance state
+            governance_assessment = self.governance_hub.assess_current_governance(
+                system=ai_system,
+                compliance_gaps=True,
+                risk_assessment=True
+            )
+            
+            # Create integration plan
+            integration_plan = self.governance_hub.create_integration_plan(
+                system=ai_system,
+                current_state=governance_assessment,
+                target_compliance=ai_system.required_compliance,
+                migration_timeline=ai_system.integration_timeline
+            )
+            
+            # Execute integration
+            integration_result = self.governance_hub.execute_integration(
+                system=ai_system,
+                integration_plan=integration_plan,
+                validation_testing=True
+            )
+            
+            integration_results.append(integration_result)
+            
+        return EnterpriseIntegrationResults(integration_results)
+</pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🚀 Next Steps</h2>
+            <div style="text-align: center; margin-top: 30px;">
+                <a href="../index.html" class="nav-link">← Back to Framework Overview</a>
+                <a href="#" class="nav-link" onclick="window.scrollTo(0,0)">↑ Back to Top</a>
+            </div>
+            
+            <div style="margin-top: 40px; padding: 30px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border-radius: 15px;">
+                <h3>📚 Additional Resources</h3>
+                <ul style="margin-top: 15px;">
+                    <li><strong>Industry Implementations:</strong> Explore 20+ industry-specific governance examples</li>
+                    <li><strong>Regulatory Compliance:</strong> Comprehensive EU AI Act, GDPR, and sector-specific guidance</li>
+                    <li><strong>Technical Documentation:</strong> API references, configuration guides, and best practices</li>
+                    <li><strong>Community Support:</strong> Join the CIAF developer community for implementation assistance</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Highlight active section in quick nav
+        window.addEventListener('scroll', function() {
+            const sections = document.querySelectorAll('.section[id]');
+            const navLinks = document.querySelectorAll('.quick-nav a');
+            
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 60) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.style.fontWeight = 'normal';
+                if (link.getAttribute('href') === '#' + current) {
+                    link.style.fontWeight = 'bold';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

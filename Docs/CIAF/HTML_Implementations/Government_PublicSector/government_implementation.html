@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CIAF Government & Public Sector Implementation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-link {
+            display: inline-block;
+            background: #34495e;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: #2c3e50;
+            transform: translateY(-2px);
+        }
+
+        .implementation-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .service-card {
+            background: linear-gradient(135deg, #34495e, #2c3e50);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .transparency-dashboard {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+        }
+
+        .algorithm-card {
+            background: white;
+            border-left: 4px solid #3498db;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .citizen-rights-section {
+            background: linear-gradient(135deg, #27ae60, #219a52);
+            color: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin: 30px 0;
+        }
+
+        .public-audit-monitor {
+            background: white;
+            border: 3px solid #34495e;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .code-example {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+
+        .accountability-meter {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .transparency-score {
+            font-size: 3em;
+            font-weight: bold;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏛️ CIAF Government & Public Sector Implementation</h1>
+            <p>Comprehensive AI governance framework for government agencies, public services, and citizen-facing AI systems</p>
+            <div style="margin-top: 20px;">
+                <a href="../index.html" class="nav-link">← Back to Overview</a>
+                <a href="#transparency" class="nav-link">Public Transparency</a>
+                <a href="#accountability" class="nav-link">Accountability</a>
+                <a href="#demo" class="nav-link">Live Demo</a>
+            </div>
+        </div>
+
+        <div class="implementation-section">
+            <h2>🎯 Government AI Governance Overview</h2>
+            <p>The CIAF Government implementation ensures transparent, accountable, and fair AI deployment in public services while protecting citizen rights and maintaining democratic values.</p>
+
+            <div class="service-grid">
+                <div class="service-card">
+                    <h3>🗳️ Electoral & Democratic AI</h3>
+                    <p>Secure and transparent AI systems for electoral processes, voting technology, and democratic participation platforms.</p>
+                </div>
+
+                <div class="service-card">
+                    <h3>👮 Law Enforcement AI</h3>
+                    <p>Ethical oversight for predictive policing, facial recognition, and criminal justice algorithms with bias prevention.</p>
+                </div>
+
+                <div class="service-card">
+                    <h3>💼 Benefits & Social Services</h3>
+                    <p>Fair and transparent AI for welfare determination, disability assessments, and social service allocation.</p>
+                </div>
+
+                <div class="service-card">
+                    <h3>🏥 Public Health AI</h3>
+                    <p>Privacy-preserving health surveillance, pandemic response coordination, and public health decision support.</p>
+                </div>
+
+                <div class="service-card">
+                    <h3>🚦 Smart City Infrastructure</h3>
+                    <p>Intelligent traffic management, resource allocation, and urban planning with citizen privacy protection.</p>
+                </div>
+
+                <div class="service-card">
+                    <h3>📋 Regulatory Compliance</h3>
+                    <p>Automated compliance monitoring, regulatory sandbox management, and policy impact assessment.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="citizen-rights-section">
+            <h2>👥 Citizen Rights & Protections</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
+                <div>
+                    <h4>🔍 Right to Explanation</h4>
+                    <p>Citizens can request explanations for AI-driven decisions affecting them, with clear, understandable responses.</p>
+                </div>
+                
+                <div>
+                    <h4>⚖️ Right to Fair Treatment</h4>
+                    <p>Protection against algorithmic bias and discrimination in public services and government decisions.</p>
+                </div>
+                
+                <div>
+                    <h4>🔒 Privacy Protection</h4>
+                    <p>Strong data protection measures with minimal data collection and secure processing protocols.</p>
+                </div>
+                
+                <div>
+                    <h4>📢 Public Notification</h4>
+                    <p>Transparent disclosure when AI systems are used in government services and decision-making processes.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="implementation-section" id="transparency">
+            <h2>📊 Public Transparency Dashboard</h2>
+            
+            <div class="transparency-dashboard">
+                <h3>Government AI Systems Public Registry</h3>
+                <p>Real-time transparency into AI systems used across government agencies</p>
+                
+                <div class="algorithm-card">
+                    <h4>🚦 Traffic Management System</h4>
+                    <p><strong>Agency:</strong> Department of Transportation</p>
+                    <p><strong>Purpose:</strong> Optimize traffic flow and reduce congestion</p>
+                    <p><strong>Data Used:</strong> Traffic sensors, weather data, event schedules</p>
+                    <p><strong>Bias Assessment:</strong> ✅ Passed (No geographic discrimination detected)</p>
+                    <p><strong>Last Audit:</strong> October 15, 2025</p>
+                    <p><strong>Public Impact:</strong> 23% reduction in average commute times</p>
+                </div>
+                
+                <div class="algorithm-card">
+                    <h4>💼 Benefits Eligibility Assessment</h4>
+                    <p><strong>Agency:</strong> Department of Social Services</p>
+                    <p><strong>Purpose:</strong> Determine eligibility for social assistance programs</p>
+                    <p><strong>Data Used:</strong> Income records, employment history, family status</p>
+                    <p><strong>Bias Assessment:</strong> ⚠️ Under Review (Potential age bias detected)</p>
+                    <p><strong>Last Audit:</strong> October 18, 2025</p>
+                    <p><strong>Human Override Rate:</strong> 12.3%</p>
+                </div>
+                
+                <div class="algorithm-card">
+                    <h4>🏥 Hospital Resource Allocation</h4>
+                    <p><strong>Agency:</strong> Public Health Department</p>
+                    <p><strong>Purpose:</strong> Optimize hospital bed and staff allocation</p>
+                    <p><strong>Data Used:</strong> Patient flow, staffing levels, equipment availability</p>
+                    <p><strong>Bias Assessment:</strong> ✅ Passed (Equitable resource distribution)</p>
+                    <p><strong>Last Audit:</strong> October 17, 2025</p>
+                    <p><strong>Efficiency Improvement:</strong> 31% faster patient placement</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="implementation-section" id="accountability">
+            <h2>📋 Accountability & Oversight Framework</h2>
+            
+            <div class="public-audit-monitor">
+                <h3>Real-Time Accountability Metrics</h3>
+                
+                <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 20px;">
+                    <div class="accountability-meter">
+                        <span class="transparency-score" id="transparency-score">94%</span>
+                        <div>Transparency Score</div>
+                    </div>
+                    
+                    <div class="accountability-meter">
+                        <span class="transparency-score" id="fairness-score">97%</span>
+                        <div>Fairness Assessment</div>
+                    </div>
+                    
+                    <div class="accountability-meter">
+                        <span class="transparency-score" id="citizen-satisfaction">89%</span>
+                        <div>Citizen Satisfaction</div>
+                    </div>
+                    
+                    <div class="accountability-meter">
+                        <span class="transparency-score" id="audit-compliance">100%</span>
+                        <div>Audit Compliance</div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 30px;">
+                    <h4>📈 Recent Accountability Actions</h4>
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin: 10px 0;">
+                        <p><strong>October 18, 2025:</strong> Benefits assessment algorithm suspended pending bias review</p>
+                        <p><strong>October 16, 2025:</strong> Public hearing scheduled for new predictive policing system</p>
+                        <p><strong>October 14, 2025:</strong> Citizen appeal process updated with faster response times</p>
+                        <p><strong>October 12, 2025:</strong> Algorithm transparency report published for Q3 2025</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="implementation-section" id="demo">
+            <h2>💻 Implementation Example</h2>
+
+            <h3>Government AI Governance Framework</h3>
+            <div class="code-example">
+                <pre>
+from ciaf.government import GovernmentAIGovernanceFramework
+from ciaf.transparency import PublicAccountability, CitizenRights
+from ciaf.democratic import DemocraticOversight
+
+class PublicSectorAISystem:
+    def __init__(self, agency_id, system_purpose):
+        self.governance = GovernmentAIGovernanceFramework()
+        self.accountability = PublicAccountability()
+        self.citizen_rights = CitizenRights()
+        self.democratic_oversight = DemocraticOversight()
+        self.agency_id = agency_id
+        self.system_purpose = system_purpose
+        
+    def deploy_government_ai_system(self, ai_model, citizen_impact_assessment):
+        """Deploy AI system with full public accountability and transparency"""
+        
+        # Public notification and transparency requirements
+        public_notification = self.accountability.create_public_notification(
+            agency=self.agency_id,
+            system_purpose=self.system_purpose,
+            ai_model_description=ai_model.description,
+            citizen_impact=citizen_impact_assessment,
+            data_sources=ai_model.data_sources
+        )
+        
+        # Democratic oversight validation
+        oversight_approval = self.democratic_oversight.validate_deployment(
+            ai_system=ai_model,
+            public_notification=public_notification,
+            citizen_impact=citizen_impact_assessment
+        )
+        
+        if not oversight_approval.approved:
+            return self.handle_oversight_rejection(oversight_approval)
+        
+        # Citizen rights framework implementation
+        rights_framework = self.citizen_rights.implement_protection_framework(
+            ai_system=ai_model,
+            affected_citizen_groups=citizen_impact_assessment.affected_groups,
+            explanation_requirements=True,
+            appeal_process=True,
+            bias_monitoring=True
+        )
+        
+        # Bias and fairness assessment
+        fairness_assessment = self.governance.conduct_fairness_assessment(
+            ai_model=ai_model,
+            protected_attributes=['race', 'gender', 'age', 'disability', 'religion'],
+            citizen_groups=citizen_impact_assessment.affected_groups
+        )
+        
+        if fairness_assessment.bias_detected:
+            bias_mitigation = self.governance.implement_bias_mitigation(
+                ai_model=ai_model,
+                bias_assessment=fairness_assessment,
+                mitigation_strategies=['retraining', 'algorithmic_debiasing', 'human_oversight']
+            )
+        
+        # Public transparency measures
+        transparency_measures = self.accountability.implement_transparency(
+            ai_system=ai_model,
+            public_registry_entry=True,
+            algorithm_description=True,
+            performance_metrics=True,
+            audit_schedule=True
+        )
+        
+        # Continuous monitoring and public reporting
+        monitoring_system = self.governance.deploy_public_monitoring(
+            ai_system=ai_model,
+            transparency_measures=transparency_measures,
+            citizen_rights_framework=rights_framework,
+            reporting_frequency='quarterly',
+            public_dashboard=True
+        )
+        
+        # Citizen feedback and appeal system
+        feedback_system = self.citizen_rights.deploy_feedback_system(
+            ai_system=ai_model,
+            appeal_process=rights_framework.appeal_process,
+            explanation_service=rights_framework.explanation_service
+        )
+        
+        return PublicSectorAIDeployment(
+            system_id=f"{self.agency_id}_{ai_model.name}",
+            public_notification=public_notification,
+            oversight_approval=oversight_approval,
+            fairness_assessment=fairness_assessment,
+            transparency_measures=transparency_measures,
+            citizen_rights_framework=rights_framework,
+            monitoring_system=monitoring_system,
+            feedback_system=feedback_system,
+            deployment_status='ACTIVE_WITH_OVERSIGHT'
+        )
+        
+    def handle_citizen_explanation_request(self, request):
+        """Process citizen request for AI decision explanation"""
+        
+        # Validate citizen's right to explanation
+        explanation_right = self.citizen_rights.validate_explanation_right(
+            citizen_id=request.citizen_id,
+            decision_id=request.decision_id,
+            ai_system=request.ai_system
+        )
+        
+        if explanation_right.valid:
+            # Generate citizen-friendly explanation
+            explanation = self.governance.generate_citizen_explanation(
+                ai_decision=request.ai_decision,
+                citizen_context=request.citizen_context,
+                explanation_level='citizen_friendly'
+            )
+            
+            # Record explanation provision for audit
+            self.accountability.record_explanation_provided(
+                citizen_id=request.citizen_id,
+                decision_id=request.decision_id,
+                explanation=explanation,
+                timestamp=datetime.utcnow()
+            )
+            
+            return CitizenExplanationResponse(
+                explanation=explanation,
+                provided_timestamp=datetime.utcnow(),
+                appeal_options=self.citizen_rights.get_appeal_options(request),
+                contact_information=self.get_agency_contact_info()
+            )
+        else:
+            return self.handle_invalid_explanation_request(explanation_right)
+</pre>
+            </div>
+        </div>
+
+        <div class="implementation-section">
+            <h2>🚀 Getting Started with Government AI Governance</h2>
+            
+            <div style="background: linear-gradient(135deg, #34495e, #2c3e50); color: white; padding: 30px; border-radius: 15px; margin: 20px 0;">
+                <h3>📋 Public Sector Implementation Guide</h3>
+                <div style="margin-top: 20px;">
+                    <p>✅ <strong>Public Consultation:</strong> Engage citizens in AI system planning and deployment</p>
+                    <p>✅ <strong>Transparency Framework:</strong> Implement public AI registry and reporting systems</p>
+                    <p>✅ <strong>Citizen Rights:</strong> Establish explanation, appeal, and feedback mechanisms</p>
+                    <p>✅ <strong>Democratic Oversight:</strong> Create governance structures with public accountability</p>
+                    <p>✅ <strong>Bias Prevention:</strong> Implement comprehensive fairness assessment and monitoring</p>
+                    <p>✅ <strong>Continuous Monitoring:</strong> Deploy real-time oversight and public reporting systems</p>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <a href="../index.html" class="nav-link">← Back to Framework Overview</a>
+                <a href="https://github.com/DenzilGreenwood/CIAF_Model_Creation" class="nav-link">View Full Documentation</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simulate real-time accountability metrics updates
+        function updateAccountabilityMetrics() {
+            const transparencyScore = document.getElementById('transparency-score');
+            const fairnessScore = document.getElementById('fairness-score');
+            const citizenSatisfaction = document.getElementById('citizen-satisfaction');
+            const auditCompliance = document.getElementById('audit-compliance');
+            
+            // Transparency score (high stability)
+            if (transparencyScore) {
+                const current = parseFloat(transparencyScore.textContent.replace('%', ''));
+                const newScore = Math.max(90, Math.min(99, current + (Math.random() - 0.5) * 1));
+                transparencyScore.textContent = newScore.toFixed(0) + '%';
+            }
+            
+            // Fairness score (very stable)
+            if (fairnessScore) {
+                const current = parseFloat(fairnessScore.textContent.replace('%', ''));
+                const newScore = Math.max(95, Math.min(100, current + (Math.random() - 0.5) * 0.5));
+                fairnessScore.textContent = newScore.toFixed(0) + '%';
+            }
+            
+            // Citizen satisfaction (moderate variation)
+            if (citizenSatisfaction) {
+                const current = parseFloat(citizenSatisfaction.textContent.replace('%', ''));
+                const newScore = Math.max(80, Math.min(95, current + (Math.random() - 0.5) * 2));
+                citizenSatisfaction.textContent = newScore.toFixed(0) + '%';
+            }
+            
+            // Audit compliance (should stay high)
+            if (auditCompliance) {
+                const scores = [98, 99, 100];
+                auditCompliance.textContent = scores[Math.floor(Math.random() * scores.length)] + '%';
+            }
+        }
+
+        // Update every 7 seconds
+        setInterval(updateAccountabilityMetrics, 7000);
+
+        // Add interactive elements to service cards
+        document.querySelectorAll('.service-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px)';
+                this.style.boxShadow = '0 15px 30px rgba(0, 0, 0, 0.3)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+                this.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.2)';
+            });
+        });
+
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

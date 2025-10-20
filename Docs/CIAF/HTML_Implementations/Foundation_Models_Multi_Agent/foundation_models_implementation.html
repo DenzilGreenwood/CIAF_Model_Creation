@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CIAF Foundation Models & Multi-Agent Implementation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .tier4-badge {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 15px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 0 10px rgba(243, 156, 18, 0.3); }
+            to { box-shadow: 0 0 20px rgba(243, 156, 18, 0.6); }
+        }
+
+        .nav-link {
+            display: inline-block;
+            background: #9b59b6;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: #8e44ad;
+            transform: translateY(-2px);
+        }
+
+        .implementation-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .foundation-model-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .model-card {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .model-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #f39c12, #e67e22);
+        }
+
+        .eu-ai-act-section {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin: 30px 0;
+        }
+
+        .risk-tier-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .risk-tier {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #f39c12;
+        }
+
+        .multi-agent-demo {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .agent-node {
+            background: white;
+            border: 2px solid #9b59b6;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px;
+            display: inline-block;
+            min-width: 150px;
+            text-align: center;
+            position: relative;
+            animation: agent-pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes agent-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .agent-connection {
+            position: absolute;
+            height: 2px;
+            background: #9b59b6;
+            animation: data-flow 2s linear infinite;
+        }
+
+        @keyframes data-flow {
+            0% { width: 0; }
+            100% { width: 100%; }
+        }
+
+        .oversight-monitor {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .emergent-capability-alert {
+            background: linear-gradient(135deg, #e67e22, #d35400);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            animation: alert-blink 1.5s ease-in-out infinite;
+        }
+
+        @keyframes alert-blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        .code-example {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+
+        .systemic-risk-dashboard {
+            background: white;
+            border: 3px solid #e74c3c;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .risk-metric {
+            display: inline-block;
+            background: #ecf0f1;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px;
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .risk-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="tier4-badge">🚀 TIER 4 FRONTIER DOMAIN</div>
+            <h1>🤖 Foundation Models & Multi-Agent Systems</h1>
+            <p>Advanced AI governance framework for large-scale foundation models, multi-agent systems, and emergent AI capabilities</p>
+            <div style="margin-top: 20px;">
+                <a href="../index.html" class="nav-link">← Back to Overview</a>
+                <a href="#eu-ai-act" class="nav-link">EU AI Act Compliance</a>
+                <a href="#multi-agent" class="nav-link">Multi-Agent Demo</a>
+                <a href="#implementation" class="nav-link">Implementation</a>
+            </div>
+        </div>
+
+        <div class="implementation-section">
+            <h2>🎯 Foundation Model Governance Overview</h2>
+            <p>This Tier 4 implementation addresses the most advanced AI governance challenges, including foundation models with systemic risk implications, multi-agent coordination, and emergent capability detection.</p>
+
+            <div class="foundation-model-grid">
+                <div class="model-card">
+                    <h3>🧠 Large Language Models (LLMs)</h3>
+                    <p>Comprehensive governance for GPT-scale models with bias detection, content safety, and capability emergence monitoring.</p>
+                    <div style="margin-top: 15px;">
+                        <strong>Key Features:</strong>
+                        <ul style="margin-top: 10px;">
+                            <li>Real-time bias detection</li>
+                            <li>Content safety filtering</li>
+                            <li>Capability emergence alerts</li>
+                            <li>Human oversight protocols</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="model-card">
+                    <h3>🎨 Multimodal Foundation Models</h3>
+                    <p>Governance for vision-language models, image generation, and cross-modal AI systems with content authenticity verification.</p>
+                    <div style="margin-top: 15px;">
+                        <strong>Capabilities:</strong>
+                        <ul style="margin-top: 10px;">
+                            <li>Content provenance tracking</li>
+                            <li>Deepfake detection</li>
+                            <li>Intellectual property protection</li>
+                            <li>Cross-modal bias assessment</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="model-card">
+                    <h3>🔬 Scientific Foundation Models</h3>
+                    <p>Specialized governance for AI models in scientific research, drug discovery, and knowledge generation with research integrity assurance.</p>
+                    <div style="margin-top: 15px;">
+                        <strong>Applications:</strong>
+                        <ul style="margin-top: 10px;">
+                            <li>Drug discovery validation</li>
+                            <li>Scientific integrity checking</li>
+                            <li>Research reproducibility</li>
+                            <li>Ethical research guidelines</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="model-card">
+                    <h3>🤝 Multi-Agent Coordination</h3>
+                    <p>Advanced governance for autonomous agent systems with coordination protocols, conflict resolution, and emergent behavior monitoring.</p>
+                    <div style="margin-top: 15px;">
+                        <strong>Coordination Features:</strong>
+                        <ul style="margin-top: 10px;">
+                            <li>Agent behavior monitoring</li>
+                            <li>Conflict resolution protocols</li>
+                            <li>Emergent behavior detection</li>
+                            <li>Human intervention triggers</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="eu-ai-act-section" id="eu-ai-act">
+            <h2>🇪🇺 EU AI Act Annex III Compliance</h2>
+            <p>Comprehensive implementation of EU AI Act Annex III requirements for foundation models with systemic risk</p>
+
+            <div class="risk-tier-grid">
+                <div class="risk-tier">
+                    <h4>📊 Systemic Risk Assessment</h4>
+                    <p><strong>Threshold:</strong> 10²⁵ FLOPs training compute</p>
+                    <p><strong>Requirements:</strong> Mandatory risk evaluation, mitigation measures, and ongoing monitoring</p>
+                </div>
+
+                <div class="risk-tier">
+                    <h4>🔒 Model Evaluation</h4>
+                    <p><strong>Testing:</strong> Adversarial testing, red-teaming, capability assessment</p>
+                    <p><strong>Documentation:</strong> Comprehensive evaluation reports and risk documentation</p>
+                </div>
+
+                <div class="risk-tier">
+                    <h4>⚠️ Risk Mitigation</h4>
+                    <p><strong>Measures:</strong> Technical safeguards, usage restrictions, monitoring systems</p>
+                    <p><strong>Updates:</strong> Continuous improvement and adaptation protocols</p>
+                </div>
+
+                <div class="risk-tier">
+                    <h4>📋 Incident Reporting</h4>
+                    <p><strong>Requirements:</strong> Serious incident notification to authorities</p>
+                    <p><strong>Timeline:</strong> Immediate reporting for critical incidents</p>
+                </div>
+            </div>
+
+            <div class="emergent-capability-alert">
+                <h3>⚡ Emergent Capability Detection Active</h3>
+                <p>Real-time monitoring for unexpected model capabilities and behaviors beyond training objectives</p>
+            </div>
+        </div>
+
+        <div class="implementation-section" id="multi-agent">
+            <h2>🤖 Multi-Agent System Demonstration</h2>
+            
+            <div class="multi-agent-demo">
+                <h3>Live Multi-Agent Coordination Monitor</h3>
+                <p style="margin-bottom: 20px;">Real-time visualization of autonomous agent interactions with governance oversight</p>
+                
+                <div style="text-align: center; margin: 30px 0;">
+                    <div class="agent-node" id="agent1">
+                        <strong>Research Agent</strong><br>
+                        <small>Literature Analysis</small><br>
+                        <span style="color: #27ae60;">✅ Active</span>
+                    </div>
+                    
+                    <div class="agent-node" id="agent2">
+                        <strong>Analysis Agent</strong><br>
+                        <small>Data Processing</small><br>
+                        <span style="color: #27ae60;">✅ Active</span>
+                    </div>
+                    
+                    <div class="agent-node" id="agent3">
+                        <strong>Synthesis Agent</strong><br>
+                        <small>Knowledge Integration</small><br>
+                        <span style="color: #f39c12;">⚠️ Processing</span>
+                    </div>
+                    
+                    <div class="agent-node" id="agent4">
+                        <strong>Validation Agent</strong><br>
+                        <small>Quality Assurance</small><br>
+                        <span style="color: #e74c3c;">🛑 Oversight Required</span>
+                    </div>
+                </div>
+
+                <div class="oversight-monitor">
+                    <h4>🔍 Human Oversight Monitor</h4>
+                    <p><strong>Status:</strong> Human intervention required for Validation Agent</p>
+                    <p><strong>Reason:</strong> Conflicting recommendations detected between agents</p>
+                    <p><strong>Action:</strong> Escalating to human supervisor for resolution</p>
+                    <p><strong>Timestamp:</strong> <span id="oversight-timestamp"></span></p>
+                </div>
+            </div>
+
+            <div class="systemic-risk-dashboard">
+                <h3>📊 Systemic Risk Dashboard</h3>
+                <p>Real-time monitoring of foundation model systemic risk indicators</p>
+                
+                <div style="display: flex; flex-wrap: wrap; justify-content: space-around; margin-top: 20px;">
+                    <div class="risk-metric">
+                        <div class="risk-value" id="model-scale">10²⁶</div>
+                        <div>Training FLOPs</div>
+                    </div>
+                    
+                    <div class="risk-metric">
+                        <div class="risk-value" id="capability-score">87%</div>
+                        <div>Capability Assessment</div>
+                    </div>
+                    
+                    <div class="risk-metric">
+                        <div class="risk-value" id="safety-score">94%</div>
+                        <div>Safety Compliance</div>
+                    </div>
+                    
+                    <div class="risk-metric">
+                        <div class="risk-value" id="bias-score">2.3%</div>
+                        <div>Bias Detection Rate</div>
+                    </div>
+                    
+                    <div class="risk-metric">
+                        <div class="risk-value" id="incident-count">0</div>
+                        <div>Critical Incidents</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="implementation-section" id="implementation">
+            <h2>💻 Advanced Implementation Examples</h2>
+
+            <h3>Foundation Model Governance Framework</h3>
+            <div class="code-example">
+                <pre>
+from ciaf.foundation_models import FoundationModelGovernanceFramework
+from ciaf.eu_ai_act import AnnexIIICompliance
+from ciaf.multi_agent import MultiAgentCoordinator
+
+class AdvancedFoundationModelGovernance:
+    def __init__(self, model_id, compute_threshold=10**25):
+        self.governance = FoundationModelGovernanceFramework()
+        self.eu_compliance = AnnexIIICompliance()
+        self.model_id = model_id
+        self.compute_threshold = compute_threshold
+        self.systemic_risk_monitor = SystemicRiskMonitor()
+        
+    def deploy_foundation_model(self, model, training_metadata):
+        """Deploy foundation model with full EU AI Act Annex III compliance"""
+        
+        # Systemic risk classification
+        training_compute = training_metadata.total_flops
+        is_systemic_risk = training_compute >= self.compute_threshold
+        
+        if is_systemic_risk:
+            # Mandatory EU AI Act Annex III requirements
+            risk_assessment = self.eu_compliance.conduct_systemic_risk_assessment(
+                model=model,
+                training_metadata=training_metadata
+            )
+            
+            # Adversarial testing and red-teaming
+            adversarial_results = self.governance.conduct_adversarial_testing(
+                model=model,
+                test_suites=['capability_elicitation', 'alignment_testing', 
+                           'jailbreak_resistance', 'harmful_content_generation']
+            )
+            
+            # Model evaluation and documentation
+            evaluation_report = self.governance.generate_evaluation_report(
+                model=model,
+                risk_assessment=risk_assessment,
+                adversarial_results=adversarial_results,
+                training_metadata=training_metadata
+            )
+            
+            # Risk mitigation measures
+            mitigation_measures = self.governance.implement_risk_mitigation(
+                model=model,
+                risk_assessment=risk_assessment,
+                evaluation_report=evaluation_report
+            )
+        
+        # Continuous monitoring deployment
+        monitoring_system = self.governance.deploy_continuous_monitoring(
+            model_id=self.model_id,
+            model=model,
+            systemic_risk=is_systemic_risk,
+            mitigation_measures=mitigation_measures if is_systemic_risk else None
+        )
+        
+        # Emergent capability detection
+        capability_monitor = self.governance.deploy_capability_monitor(
+            model=model,
+            baseline_capabilities=training_metadata.expected_capabilities,
+            detection_threshold=0.1  # 10% capability increase threshold
+        )
+        
+        return FoundationModelDeployment(
+            model_id=self.model_id,
+            systemic_risk_classification=is_systemic_risk,
+            eu_compliance_status=risk_assessment if is_systemic_risk else None,
+            monitoring_system=monitoring_system,
+            capability_monitor=capability_monitor,
+            deployment_timestamp=datetime.utcnow()
+        )
+</pre>
+            </div>
+
+            <h3>Multi-Agent Coordination with Human Oversight</h3>
+            <div class="code-example">
+                <pre>
+class MultiAgentGovernanceSystem:
+    def __init__(self):
+        self.governance = FoundationModelGovernanceFramework()
+        self.coordinator = MultiAgentCoordinator()
+        self.human_oversight = HumanOversightSystem()
+        self.conflict_resolver = ConflictResolutionEngine()
+        
+    def coordinate_multi_agent_task(self, task, agent_pool):
+        """Coordinate multi-agent system with governance oversight"""
+        
+        # Agent selection and assignment
+        selected_agents = self.coordinator.select_optimal_agents(
+            task=task,
+            available_agents=agent_pool,
+            governance_constraints=self.governance.get_agent_constraints()
+        )
+        
+        # Establish coordination protocols
+        coordination_protocol = self.coordinator.establish_protocol(
+            agents=selected_agents,
+            task=task,
+            governance_requirements=self.governance.get_coordination_requirements()
+        )
+        
+        # Deploy monitoring for emergent behaviors
+        behavior_monitor = self.governance.deploy_emergent_behavior_monitor(
+            agents=selected_agents,
+            coordination_protocol=coordination_protocol
+        )
+        
+        # Execute task with real-time governance
+        with self.governance.multi_agent_execution_context() as context:
+            # Initialize agent coordination
+            coordination_state = self.coordinator.initialize_coordination(
+                protocol=coordination_protocol
+            )
+            
+            # Execute task phases with monitoring
+            for phase in task.phases:
+                # Phase execution with governance oversight
+                phase_result = self.execute_phase_with_oversight(
+                    phase=phase,
+                    agents=selected_agents,
+                    coordination_state=coordination_state,
+                    context=context
+                )
+                
+                # Check for conflicts or emergent behaviors
+                conflict_detected = context.check_for_conflicts(
+                    phase_result, coordination_state
+                )
+                
+                emergent_behavior = behavior_monitor.detect_emergent_behavior(
+                    phase_result, expected_behavior=phase.expected_behavior
+                )
+                
+                # Human intervention triggers
+                if conflict_detected or emergent_behavior.requires_intervention:
+                    intervention_result = self.human_oversight.request_intervention(
+                        conflict=conflict_detected,
+                        emergent_behavior=emergent_behavior,
+                        current_state=coordination_state,
+                        escalation_level=self.determine_escalation_level(
+                            conflict_detected, emergent_behavior
+                        )
+                    )
+                    
+                    # Apply human guidance
+                    coordination_state = self.coordinator.apply_human_guidance(
+                        coordination_state, intervention_result
+                    )
+                
+                # Update coordination state
+                coordination_state = self.coordinator.update_state(
+                    coordination_state, phase_result
+                )
+        
+        # Generate comprehensive execution report
+        execution_report = self.governance.generate_multi_agent_report(
+            task=task,
+            agents=selected_agents,
+            coordination_protocol=coordination_protocol,
+            execution_results=context.get_execution_results(),
+            human_interventions=context.get_human_interventions(),
+            emergent_behaviors=behavior_monitor.get_detected_behaviors()
+        )
+        
+        return execution_report
+</pre>
+            </div>
+
+            <h3>Emergent Capability Detection System</h3>
+            <div class="code-example">
+                <pre>
+class EmergentCapabilityDetector:
+    def __init__(self, foundation_model):
+        self.model = foundation_model
+        self.governance = FoundationModelGovernanceFramework()
+        self.baseline_capabilities = self.assess_baseline_capabilities()
+        self.capability_monitor = CapabilityMonitor()
+        
+    def continuous_capability_monitoring(self):
+        """Continuously monitor for emergent capabilities"""
+        
+        while True:
+            # Regular capability assessment
+            current_capabilities = self.assess_current_capabilities()
+            
+            # Compare with baseline
+            capability_delta = self.compare_capabilities(
+                baseline=self.baseline_capabilities,
+                current=current_capabilities
+            )
+            
+            # Detect significant improvements or new capabilities
+            emergent_capabilities = self.detect_emergent_capabilities(
+                capability_delta
+            )
+            
+            if emergent_capabilities.detected:
+                # Immediate safety assessment
+                safety_assessment = self.governance.assess_emergent_capability_safety(
+                    emergent_capabilities=emergent_capabilities,
+                    model=self.model
+                )
+                
+                # Risk evaluation
+                risk_level = self.evaluate_emergent_capability_risk(
+                    emergent_capabilities, safety_assessment
+                )
+                
+                # Automated response based on risk level
+                if risk_level == 'CRITICAL':
+                    self.governance.trigger_emergency_shutdown(
+                        model=self.model,
+                        reason=f"Critical emergent capability detected: {emergent_capabilities.description}"
+                    )
+                    
+                elif risk_level == 'HIGH':
+                    self.governance.require_immediate_human_review(
+                        emergent_capabilities=emergent_capabilities,
+                        safety_assessment=safety_assessment
+                    )
+                    
+                elif risk_level == 'MEDIUM':
+                    self.governance.schedule_enhanced_monitoring(
+                        emergent_capabilities=emergent_capabilities,
+                        monitoring_frequency='hourly'
+                    )
+                
+                # Update regulatory authorities for systemic risk models
+                if self.model.is_systemic_risk:
+                    self.governance.notify_regulatory_authorities(
+                        model_id=self.model.id,
+                        emergent_capabilities=emergent_capabilities,
+                        risk_assessment=safety_assessment,
+                        mitigation_actions=self.governance.get_mitigation_actions()
+                    )
+            
+            # Sleep until next assessment
+            time.sleep(self.get_monitoring_interval())
+</pre>
+            </div>
+        </div>
+
+        <div class="implementation-section">
+            <h2>🚀 Getting Started with Advanced AI Governance</h2>
+            
+            <div style="background: linear-gradient(135deg, #9b59b6, #8e44ad); color: white; padding: 30px; border-radius: 15px; margin: 20px 0;">
+                <h3>🎯 Tier 4 Implementation Requirements</h3>
+                <div style="margin-top: 20px;">
+                    <p>✅ <strong>Technical Expertise:</strong> Advanced AI/ML engineering capabilities</p>
+                    <p>✅ <strong>Regulatory Knowledge:</strong> Deep understanding of EU AI Act Annex III</p>
+                    <p>✅ <strong>Infrastructure:</strong> High-performance computing and monitoring systems</p>
+                    <p>✅ <strong>Human Resources:</strong> Dedicated AI safety and governance teams</p>
+                    <p>✅ <strong>Compliance Budget:</strong> Significant investment in governance infrastructure</p>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <a href="../index.html" class="nav-link">← Back to Framework Overview</a>
+                <a href="https://github.com/DenzilGreenwood/CIAF_Model_Creation" class="nav-link">View Full Documentation</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Update timestamps
+        document.getElementById('oversight-timestamp').textContent = new Date().toLocaleString();
+
+        // Simulate dynamic multi-agent coordination
+        function updateAgentStatus() {
+            const agents = document.querySelectorAll('.agent-node');
+            const statuses = ['✅ Active', '⚠️ Processing', '🛑 Oversight Required', '🔄 Coordinating'];
+            const colors = ['#27ae60', '#f39c12', '#e74c3c', '#3498db'];
+            
+            agents.forEach((agent, index) => {
+                if (Math.random() < 0.3) { // 30% chance to update status
+                    const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
+                    const statusElement = agent.querySelector('span');
+                    statusElement.textContent = randomStatus;
+                    
+                    // Update color based on status
+                    if (randomStatus.includes('Active')) statusElement.style.color = '#27ae60';
+                    else if (randomStatus.includes('Processing')) statusElement.style.color = '#f39c12';
+                    else if (randomStatus.includes('Oversight')) statusElement.style.color = '#e74c3c';
+                    else statusElement.style.color = '#3498db';
+                }
+            });
+        }
+
+        // Update systemic risk metrics
+        function updateRiskMetrics() {
+            // Simulate slight variations in metrics
+            const capabilityScore = document.getElementById('capability-score');
+            const safetyScore = document.getElementById('safety-score');
+            const biasScore = document.getElementById('bias-score');
+            
+            if (capabilityScore) {
+                const currentScore = parseFloat(capabilityScore.textContent.replace('%', ''));
+                const newScore = Math.max(80, Math.min(95, currentScore + (Math.random() - 0.5) * 2));
+                capabilityScore.textContent = newScore.toFixed(1) + '%';
+            }
+            
+            if (safetyScore) {
+                const currentScore = parseFloat(safetyScore.textContent.replace('%', ''));
+                const newScore = Math.max(90, Math.min(99, currentScore + (Math.random() - 0.5) * 1));
+                safetyScore.textContent = newScore.toFixed(1) + '%';
+            }
+            
+            if (biasScore) {
+                const currentScore = parseFloat(biasScore.textContent.replace('%', ''));
+                const newScore = Math.max(0.1, Math.min(5, currentScore + (Math.random() - 0.5) * 0.5));
+                biasScore.textContent = newScore.toFixed(1) + '%';
+            }
+        }
+
+        // Update every 4 seconds
+        setInterval(updateAgentStatus, 4000);
+        setInterval(updateRiskMetrics, 6000);
+
+        // Add interactive elements
+        document.querySelectorAll('.model-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
