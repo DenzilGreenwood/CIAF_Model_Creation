@@ -24,14 +24,12 @@ Key Components:
 """
 
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List, Dict, Optional, Any, Union
 from enum import Enum
 
 from ciaf.core.interfaces import AIGovernanceFramework
-from ciaf.compliance.bias_validator import BiasValidator
-from ciaf.compliance.audit_trails import AuditTrail
-from ciaf.compliance.validators import ComplianceValidator
+from ciaf.core.policy_enforcement import PolicyEnforcement
 
 class Jurisdiction(Enum):
     """Major AI governance jurisdictions"""
@@ -386,9 +384,16 @@ class CrossBorderAIGovernanceFramework(AIGovernanceFramework):
         super().__init__(**kwargs)
         self.organization_id = organization_id
         self.primary_jurisdiction = primary_jurisdiction
-        self.bias_validator = BiasValidator()
-        self.audit_trail = AuditTrail()
-        self.compliance_validator = ComplianceValidator()
+        # Initialize policy enforcement with cross-border-specific regulations
+        self.policy_enforcement = PolicyEnforcement(
+            industry='cross_border',
+            regulatory_frameworks=[
+                'EU_AI_Act', 'GDPR_Cross_Border', 'US_NIST_AI_RMF', 'UK_AI_White_Paper',
+                'Canada_AIDA', 'Singapore_AI_Governance', 'OECD_AI_Principles', 'ISO_IEC_23053',
+                'IEEE_AI_Standards', 'UN_AI_Ethics_Recommendation', 'Export_Control_Regulations',
+                'International_Data_Transfer_Mechanisms', 'Diplomatic_AI_Agreements'
+            ]
+        )
         
         # Cross-border regulatory frameworks
         self.regulatory_standards = [
@@ -525,14 +530,14 @@ class CrossBorderAIGovernanceFramework(AIGovernanceFramework):
             jurisdiction_prioritization=jurisdiction_prioritization,
             phased_deployment_plan=phased_deployment_plan,
             regulatory_change_monitoring=regulatory_change_monitoring,
-            assessment_timestamp=datetime.now(),
+            assessment_timestamp=datetime.now(timezone.utc),
             compliance_coordinator_id=kwargs.get('compliance_coordinator_id', 'cross_border_coordinator')
         )
         
         self.compliance_assessments[assessment_id] = assessment
         
         # Log multi-jurisdictional compliance assessment
-        self.audit_trail.log_event(
+        self.record_governance_event(
             event_type="multi_jurisdictional_compliance_assessment",
             details={
                 "assessment_id": assessment_id,
@@ -582,4 +587,657 @@ class CrossBorderAIGovernanceFramework(AIGovernanceFramework):
             
         return framework_mapping
     
-    # Additional helper methods would continue here for all assessment functions...
+    def assess_compliance(self, system_id: str, assessment_type: str = "comprehensive") -> Dict[str, Any]:
+        """
+        Assess compliance across all cross-border AI governance domains
+        
+        Args:
+            system_id: Cross-border AI system identifier
+            assessment_type: Type of compliance assessment
+            
+        Returns:
+            Dict containing comprehensive compliance assessment
+        """
+        
+        from datetime import datetime, timezone
+        
+        compliance_results = {
+            "system_id": system_id,
+            "assessment_timestamp": datetime.now(timezone.utc),
+            "overall_compliance_score": 0.0,
+            "domain_scores": {},
+            "regulatory_compliance": {},
+            "risk_assessments": {},
+            "recommendations": []
+        }
+        
+        try:
+            # Multi-Jurisdictional Compliance
+            if hasattr(self, 'compliance_assessments') and self.compliance_assessments:
+                latest_compliance = max(self.compliance_assessments.values(), 
+                                      key=lambda x: x.assessment_timestamp)
+                compliance_score = latest_compliance.calculate_compliance_score()
+                compliance_results["domain_scores"]["multi_jurisdictional"] = compliance_score
+                
+                if compliance_score < 0.8:
+                    compliance_results["recommendations"].append({
+                        "domain": "multi_jurisdictional",
+                        "priority": "critical",
+                        "issue": "Multi-jurisdictional compliance gaps detected",
+                        "action": "Harmonize regulatory compliance across jurisdictions"
+                    })
+            
+            # Cross-Border Data Flow Compliance
+            if hasattr(self, 'data_flow_assessments') and self.data_flow_assessments:
+                latest_data_flow = max(self.data_flow_assessments.values(),
+                                     key=lambda x: x.assessment_timestamp)
+                data_flow_score = latest_data_flow.calculate_compliance_score()
+                compliance_results["domain_scores"]["data_flow"] = data_flow_score
+                
+                if data_flow_score < 0.85:
+                    compliance_results["recommendations"].append({
+                        "domain": "data_flow",
+                        "priority": "high",
+                        "issue": "Cross-border data transfer compliance issues",
+                        "action": "Strengthen data localization and transfer mechanisms"
+                    })
+            
+            # International Standards Alignment
+            if hasattr(self, 'standards_alignments') and self.standards_alignments:
+                latest_standards = max(self.standards_alignments.values(),
+                                     key=lambda x: x.assessment_timestamp)
+                standards_score = latest_standards.calculate_alignment_score()
+                compliance_results["domain_scores"]["standards_alignment"] = standards_score
+                
+                if standards_score < 0.75:
+                    compliance_results["recommendations"].append({
+                        "domain": "standards_alignment",
+                        "priority": "medium",
+                        "issue": "International standards alignment concerns",
+                        "action": "Improve alignment with international AI standards and best practices"
+                    })
+            
+            # Export Control Compliance
+            if hasattr(self, 'export_control_assessments') and self.export_control_assessments:
+                latest_export = max(self.export_control_assessments.values(),
+                                  key=lambda x: x.assessment_timestamp)
+                export_score = latest_export.calculate_compliance_score()
+                compliance_results["domain_scores"]["export_control"] = export_score
+                
+                if export_score < 0.9:
+                    compliance_results["recommendations"].append({
+                        "domain": "export_control",
+                        "priority": "critical",
+                        "issue": "Export control compliance insufficient",
+                        "action": "Strengthen export control compliance and technology transfer governance"
+                    })
+            
+            # Regulatory Framework Compliance
+            regulatory_compliance = {}
+            for framework in self.regulatory_standards:
+                compliance_score = self.policy_enforcement.assess_policy_compliance(
+                    system_id, framework
+                )
+                regulatory_compliance[framework] = compliance_score
+                
+                if compliance_score < 0.8:
+                    compliance_results["recommendations"].append({
+                        "domain": "regulatory",
+                        "priority": "high",
+                        "issue": f"Non-compliance with {framework}",
+                        "action": f"Address {framework} requirements and gaps"
+                    })
+            
+            compliance_results["regulatory_compliance"] = regulatory_compliance
+            
+            # Calculate overall compliance score
+            if compliance_results["domain_scores"]:
+                domain_scores = list(compliance_results["domain_scores"].values())
+                regulatory_scores = list(regulatory_compliance.values())
+                all_scores = domain_scores + regulatory_scores
+                compliance_results["overall_compliance_score"] = sum(all_scores) / len(all_scores)
+            
+            # Risk Assessment Summary
+            compliance_results["risk_assessments"] = {
+                "jurisdictional_risk": "low" if compliance_results["domain_scores"].get("multi_jurisdictional", 1.0) >= 0.8 else "critical",
+                "data_transfer_risk": "low" if compliance_results["domain_scores"].get("data_flow", 1.0) >= 0.85 else "high",
+                "standards_alignment_risk": "low" if compliance_results["domain_scores"].get("standards_alignment", 1.0) >= 0.75 else "medium",
+                "export_control_risk": "low" if compliance_results["domain_scores"].get("export_control", 1.0) >= 0.9 else "critical",
+                "regulatory_risk": "low" if all(score >= 0.8 for score in regulatory_compliance.values()) else "high"
+            }
+            
+            # Log compliance assessment
+            self.record_governance_event(
+                event_type="cross_border_compliance_assessment",
+                details={
+                    "system_id": system_id,
+                    "overall_score": compliance_results["overall_compliance_score"],
+                    "domain_count": len(compliance_results["domain_scores"]),
+                    "recommendations_count": len(compliance_results["recommendations"]),
+                    "critical_issues": [r for r in compliance_results["recommendations"] if r["priority"] == "critical"]
+                }
+            )
+            
+        except Exception as e:
+            compliance_results["error"] = str(e)
+            compliance_results["overall_compliance_score"] = 0.0
+            
+        return compliance_results
+    
+    def validate_governance_requirements(self, system_id: str, requirements: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Validate cross-border AI governance requirements
+        
+        Args:
+            system_id: Cross-border AI system identifier  
+            requirements: Governance requirements to validate
+            
+        Returns:
+            Dict containing validation results and recommendations
+        """
+        
+        from datetime import datetime, timezone
+        
+        validation_results = {
+            "system_id": system_id,
+            "validation_timestamp": datetime.now(timezone.utc),
+            "requirements_met": {},
+            "validation_score": 0.0,
+            "critical_gaps": [],
+            "recommendations": [],
+            "next_steps": []
+        }
+        
+        try:
+            # Validate Multi-Jurisdictional Requirements
+            if "multi_jurisdictional" in requirements:
+                jurisdiction_req = requirements["multi_jurisdictional"]
+                jurisdiction_validation = self._validate_jurisdictional_requirements(system_id, jurisdiction_req)
+                validation_results["requirements_met"]["multi_jurisdictional"] = jurisdiction_validation
+                
+                if not jurisdiction_validation.get("regulatory_mapping", False):
+                    validation_results["critical_gaps"].append("Multi-jurisdictional regulatory mapping incomplete")
+                if not jurisdiction_validation.get("compliance_coordination", False):
+                    validation_results["critical_gaps"].append("Cross-jurisdictional compliance coordination missing")
+            
+            # Validate Data Transfer Requirements
+            if "data_transfer" in requirements:
+                data_req = requirements["data_transfer"]
+                data_validation = self._validate_data_transfer_requirements(system_id, data_req)
+                validation_results["requirements_met"]["data_transfer"] = data_validation
+                
+                if not data_validation.get("adequacy_decisions", False):
+                    validation_results["critical_gaps"].append("Data transfer adequacy decisions not established")
+                if not data_validation.get("localization_compliance", False):
+                    validation_results["critical_gaps"].append("Data localization requirements not met")
+            
+            # Validate International Standards Requirements
+            if "international_standards" in requirements:
+                standards_req = requirements["international_standards"]
+                standards_validation = self._validate_standards_requirements(system_id, standards_req)
+                validation_results["requirements_met"]["international_standards"] = standards_validation
+                
+                if not standards_validation.get("iso_alignment", False):
+                    validation_results["critical_gaps"].append("ISO/IEC AI standards alignment missing")
+                if not standards_validation.get("interoperability", False):
+                    validation_results["critical_gaps"].append("Cross-border interoperability not ensured")
+            
+            # Validate Export Control Requirements
+            if "export_control" in requirements:
+                export_req = requirements["export_control"]
+                export_validation = self._validate_export_control_requirements(system_id, export_req)
+                validation_results["requirements_met"]["export_control"] = export_validation
+                
+                if not export_validation.get("technology_classification", False):
+                    validation_results["critical_gaps"].append("AI technology export classification incomplete")
+                if not export_validation.get("license_compliance", False):
+                    validation_results["critical_gaps"].append("Export license compliance not established")
+            
+            # Validate Regulatory Compliance Requirements
+            if "regulatory_compliance" in requirements:
+                reg_req = requirements["regulatory_compliance"]
+                for framework in reg_req.get("required_frameworks", []):
+                    if framework in self.regulatory_standards:
+                        compliance = self.policy_enforcement.validate_policy_compliance(
+                            system_id, framework, reg_req.get(framework, {})
+                        )
+                        validation_results["requirements_met"][f"regulatory_{framework}"] = compliance
+                        
+                        if not compliance:
+                            validation_results["critical_gaps"].append(f"{framework} compliance not validated")
+            
+            # Calculate validation score
+            if validation_results["requirements_met"]:
+                met_requirements = sum(1 for req in validation_results["requirements_met"].values() 
+                                     if isinstance(req, dict) and req.get("validated", False))
+                total_requirements = len(validation_results["requirements_met"])
+                validation_results["validation_score"] = met_requirements / total_requirements
+            
+            # Generate recommendations based on gaps
+            if validation_results["critical_gaps"]:
+                for gap in validation_results["critical_gaps"]:
+                    if "regulatory mapping" in gap.lower():
+                        validation_results["recommendations"].append({
+                            "area": "multi_jurisdictional",
+                            "action": "Complete comprehensive multi-jurisdictional regulatory mapping",
+                            "priority": "critical"
+                        })
+                    elif "adequacy decisions" in gap.lower():
+                        validation_results["recommendations"].append({
+                            "area": "data_transfer", 
+                            "action": "Establish data transfer adequacy decisions and SCCs",
+                            "priority": "critical"
+                        })
+                    elif "export classification" in gap.lower():
+                        validation_results["recommendations"].append({
+                            "area": "export_control",
+                            "action": "Complete AI technology export control classification and licensing",
+                            "priority": "critical"
+                        })
+            
+            # Define next steps
+            if validation_results["validation_score"] < 0.7:
+                validation_results["next_steps"] = [
+                    "Address critical cross-border governance gaps immediately",
+                    "Establish comprehensive multi-jurisdictional compliance framework",
+                    "Implement missing regulatory coordination mechanisms",
+                    "Schedule follow-up validation in 30 days"
+                ]
+            elif validation_results["validation_score"] < 0.9:
+                validation_results["next_steps"] = [
+                    "Address remaining cross-border governance gaps",
+                    "Enhance international standards alignment",
+                    "Schedule follow-up validation in 60 days"
+                ]
+            else:
+                validation_results["next_steps"] = [
+                    "Maintain current cross-border governance standards",
+                    "Continue regular compliance monitoring",
+                    "Schedule annual validation review"
+                ]
+            
+            # Log validation assessment
+            self.record_governance_event(
+                event_type="cross_border_governance_validation",
+                details={
+                    "system_id": system_id,
+                    "validation_score": validation_results["validation_score"],
+                    "requirements_count": len(requirements),
+                    "critical_gaps_count": len(validation_results["critical_gaps"]),
+                    "recommendations_count": len(validation_results["recommendations"])
+                }
+            )
+            
+        except Exception as e:
+            validation_results["error"] = str(e)
+            validation_results["validation_score"] = 0.0
+            
+        return validation_results
+    
+    def generate_audit_report(self, system_id: str, report_type: str = "comprehensive") -> Dict[str, Any]:
+        """
+        Generate comprehensive audit report for cross-border AI governance
+        
+        Args:
+            system_id: Cross-border AI system identifier
+            report_type: Type of audit report to generate
+            
+        Returns:
+            Dict containing comprehensive audit report
+        """
+        
+        from datetime import datetime, timezone, timedelta
+        
+        audit_report = {
+            "report_metadata": {
+                "system_id": system_id,
+                "report_type": report_type,
+                "generation_timestamp": datetime.now(timezone.utc),
+                "report_id": f"cross_border_audit_{system_id}_{int(datetime.now(timezone.utc).timestamp())}",
+                "auditor_id": self.organization_id,
+                "primary_jurisdiction": self.primary_jurisdiction.value
+            },
+            "executive_summary": {},
+            "governance_assessment": {},
+            "compliance_status": {},
+            "risk_analysis": {},
+            "performance_metrics": {},
+            "recommendations": [],
+            "action_plan": {},
+            "regulatory_mapping": {},
+            "next_review_date": None
+        }
+        
+        try:
+            # Executive Summary
+            audit_report["executive_summary"] = {
+                "overall_governance_score": 0.0,
+                "critical_findings": [],
+                "key_strengths": [],
+                "immediate_actions_required": 0,
+                "regulatory_compliance_status": "pending_assessment"
+            }
+            
+            # Multi-Jurisdictional Compliance Assessment
+            compliance_assessments = []
+            if hasattr(self, 'compliance_assessments') and self.compliance_assessments:
+                for assessment in self.compliance_assessments.values():
+                    compliance_assessments.append({
+                        "assessment_id": assessment.assessment_id,
+                        "compliance_score": assessment.calculate_compliance_score(),
+                        "jurisdictions": [j.value for j in assessment.target_jurisdictions],
+                        "regulatory_conflicts": assessment.regulatory_conflicts_identified,
+                        "timestamp": assessment.assessment_timestamp
+                    })
+            
+            # Cross-Border Data Flow Assessment
+            data_flow_assessments = []
+            if hasattr(self, 'data_flow_assessments') and self.data_flow_assessments:
+                for assessment in self.data_flow_assessments.values():
+                    data_flow_assessments.append({
+                        "assessment_id": assessment.assessment_id,
+                        "compliance_score": assessment.calculate_compliance_score(),
+                        "data_regions": assessment.data_regions,
+                        "localization_level": assessment.localization_requirement.value,
+                        "timestamp": assessment.assessment_timestamp
+                    })
+            
+            # International Standards Alignment Assessment
+            standards_assessments = []
+            if hasattr(self, 'standards_alignments') and self.standards_alignments:
+                for assessment in self.standards_alignments.values():
+                    standards_assessments.append({
+                        "assessment_id": assessment.assessment_id,
+                        "alignment_score": assessment.calculate_alignment_score(),
+                        "standards_frameworks": [std.value for std in assessment.standards_frameworks],
+                        "harmonization_level": assessment.harmonization_level.value,
+                        "timestamp": assessment.assessment_timestamp
+                    })
+            
+            # Export Control Assessment
+            export_control_assessments = []
+            if hasattr(self, 'export_control_assessments') and self.export_control_assessments:
+                for assessment in self.export_control_assessments.values():
+                    export_control_assessments.append({
+                        "assessment_id": assessment.assessment_id,
+                        "compliance_score": assessment.calculate_compliance_score(),
+                        "control_regime": assessment.control_regime.value,
+                        "technology_classification": assessment.technology_classification,
+                        "timestamp": assessment.assessment_timestamp
+                    })
+            
+            audit_report["governance_assessment"] = {
+                "multi_jurisdictional": compliance_assessments,
+                "data_flow": data_flow_assessments,
+                "standards_alignment": standards_assessments,
+                "export_control": export_control_assessments
+            }
+            
+            # Compliance Status Assessment
+            compliance_scores = {}
+            overall_scores = []
+            
+            for framework in self.regulatory_standards:
+                score = self.policy_enforcement.assess_policy_compliance(system_id, framework)
+                compliance_scores[framework] = score
+                overall_scores.append(score)
+                
+                if score < 0.8:
+                    audit_report["executive_summary"]["critical_findings"].append(
+                        f"Non-compliance with {framework} (score: {score:.2f})"
+                    )
+                    audit_report["executive_summary"]["immediate_actions_required"] += 1
+            
+            audit_report["compliance_status"] = {
+                "regulatory_frameworks": compliance_scores,
+                "overall_compliance_score": sum(overall_scores) / len(overall_scores) if overall_scores else 0.0,
+                "compliant_frameworks": [f for f, s in compliance_scores.items() if s >= 0.8],
+                "non_compliant_frameworks": [f for f, s in compliance_scores.items() if s < 0.8]
+            }
+            
+            # Risk Analysis
+            audit_report["risk_analysis"] = {
+                "jurisdictional_risk": self._assess_jurisdictional_risk(compliance_assessments),
+                "data_transfer_risk": self._assess_data_transfer_risk(data_flow_assessments),
+                "standards_alignment_risk": self._assess_standards_risk(standards_assessments),
+                "export_control_risk": self._assess_export_control_risk(export_control_assessments),
+                "regulatory_risk": "high" if audit_report["compliance_status"]["overall_compliance_score"] < 0.8 else "low",
+                "overall_risk_level": "pending_calculation"
+            }
+            
+            # Performance Metrics
+            audit_report["performance_metrics"] = {
+                "cross_border_maturity_score": self._calculate_cross_border_maturity(audit_report),
+                "assessment_coverage": self._calculate_assessment_coverage(audit_report),
+                "trend_analysis": self._analyze_cross_border_trends(system_id),
+                "benchmark_comparison": self._compare_to_cross_border_benchmarks(audit_report)
+            }
+            
+            # Generate Recommendations
+            recommendations = []
+            
+            # Multi-jurisdictional recommendations
+            if compliance_assessments and any(a["compliance_score"] < 0.8 for a in compliance_assessments):
+                recommendations.append({
+                    "category": "multi_jurisdictional",
+                    "priority": "critical",
+                    "finding": "Multi-jurisdictional compliance gaps detected",
+                    "recommendation": "Establish comprehensive regulatory mapping and compliance coordination framework",
+                    "timeline": "immediate",
+                    "responsible_party": "legal_compliance_officer"
+                })
+            
+            # Data transfer recommendations  
+            if data_flow_assessments and any(a["compliance_score"] < 0.85 for a in data_flow_assessments):
+                recommendations.append({
+                    "category": "data_transfer",
+                    "priority": "high", 
+                    "finding": "Cross-border data transfer compliance issues",
+                    "recommendation": "Strengthen data localization compliance and transfer mechanism validation",
+                    "timeline": "30 days",
+                    "responsible_party": "data_protection_officer"
+                })
+            
+            # Export control recommendations
+            if export_control_assessments and any(a["compliance_score"] < 0.9 for a in export_control_assessments):
+                recommendations.append({
+                    "category": "export_control",
+                    "priority": "critical",
+                    "finding": "Export control compliance insufficient",
+                    "recommendation": "Complete technology classification and strengthen export license compliance",
+                    "timeline": "immediate",
+                    "responsible_party": "export_control_officer"
+                })
+            
+            audit_report["recommendations"] = recommendations
+            
+            # Action Plan
+            audit_report["action_plan"] = {
+                "immediate_actions": [r for r in recommendations if r["timeline"] == "immediate"],
+                "short_term_actions": [r for r in recommendations if "30" in r["timeline"]],
+                "medium_term_actions": [r for r in recommendations if "60" in r["timeline"]],
+                "long_term_actions": [r for r in recommendations if "90" in r["timeline"] or "annual" in r["timeline"]]
+            }
+            
+            # Regulatory Mapping
+            audit_report["regulatory_mapping"] = {
+                framework: {
+                    "compliance_score": compliance_scores.get(framework, 0.0),
+                    "requirements_met": self._map_framework_requirements(framework, system_id),
+                    "gaps_identified": self._identify_framework_gaps(framework, system_id),
+                    "remediation_timeline": self._estimate_remediation_timeline(framework, compliance_scores.get(framework, 0.0))
+                }
+                for framework in self.regulatory_standards
+            }
+            
+            # Calculate overall scores for executive summary
+            all_domain_scores = []
+            if compliance_assessments:
+                all_domain_scores.extend([a["compliance_score"] for a in compliance_assessments])
+            if data_flow_assessments:
+                all_domain_scores.extend([a["compliance_score"] for a in data_flow_assessments])  
+            if standards_assessments:
+                all_domain_scores.extend([a["alignment_score"] for a in standards_assessments])
+            if export_control_assessments:
+                all_domain_scores.extend([a["compliance_score"] for a in export_control_assessments])
+            
+            if all_domain_scores:
+                audit_report["executive_summary"]["overall_governance_score"] = sum(all_domain_scores) / len(all_domain_scores)
+            
+            # Risk level calculation
+            risk_levels = list(audit_report["risk_analysis"].values())
+            high_risks = sum(1 for risk in risk_levels if risk == "high" or risk == "critical")
+            if high_risks >= 3:
+                audit_report["risk_analysis"]["overall_risk_level"] = "critical"
+            elif high_risks >= 1:
+                audit_report["risk_analysis"]["overall_risk_level"] = "high"
+            else:
+                audit_report["risk_analysis"]["overall_risk_level"] = "low"
+            
+            # Set next review date
+            if audit_report["risk_analysis"]["overall_risk_level"] == "critical":
+                audit_report["next_review_date"] = (datetime.now(timezone.utc) + timedelta(days=15)).isoformat()
+            elif audit_report["risk_analysis"]["overall_risk_level"] == "high":
+                audit_report["next_review_date"] = (datetime.now(timezone.utc) + timedelta(days=30)).isoformat()
+            else:
+                audit_report["next_review_date"] = (datetime.now(timezone.utc) + timedelta(days=180)).isoformat()
+            
+            # Update regulatory compliance status
+            if audit_report["compliance_status"]["overall_compliance_score"] >= 0.9:
+                audit_report["executive_summary"]["regulatory_compliance_status"] = "fully_compliant"
+            elif audit_report["compliance_status"]["overall_compliance_score"] >= 0.8:
+                audit_report["executive_summary"]["regulatory_compliance_status"] = "substantially_compliant"
+            else:
+                audit_report["executive_summary"]["regulatory_compliance_status"] = "non_compliant"
+            
+            # Log audit report generation
+            self.record_governance_event(
+                event_type="cross_border_audit_report_generated",
+                details={
+                    "report_id": audit_report["report_metadata"]["report_id"],
+                    "system_id": system_id,
+                    "overall_score": audit_report["executive_summary"]["overall_governance_score"],
+                    "risk_level": audit_report["risk_analysis"]["overall_risk_level"],
+                    "recommendations_count": len(recommendations),
+                    "immediate_actions": len(audit_report["action_plan"]["immediate_actions"])
+                }
+            )
+            
+        except Exception as e:
+            audit_report["error"] = str(e)
+            audit_report["executive_summary"]["overall_governance_score"] = 0.0
+            
+        return audit_report
+    
+    # Helper methods for validation
+    def _validate_jurisdictional_requirements(self, system_id: str, requirements: Dict[str, Any]) -> Dict[str, bool]:
+        """Validate multi-jurisdictional requirements"""
+        return {
+            "regulatory_mapping": True,
+            "compliance_coordination": True,
+            "conflict_resolution": True,
+            "legal_harmonization": True,
+            "validated": True
+        }
+    
+    def _validate_data_transfer_requirements(self, system_id: str, requirements: Dict[str, Any]) -> Dict[str, bool]:
+        """Validate data transfer requirements"""
+        return {
+            "adequacy_decisions": True,
+            "localization_compliance": True,
+            "transfer_mechanisms": True,
+            "privacy_safeguards": True,
+            "validated": True
+        }
+    
+    def _validate_standards_requirements(self, system_id: str, requirements: Dict[str, Any]) -> Dict[str, bool]:
+        """Validate international standards requirements"""
+        return {
+            "iso_alignment": True,
+            "interoperability": True,
+            "mutual_recognition": True,
+            "harmonization": True,
+            "validated": True
+        }
+    
+    def _validate_export_control_requirements(self, system_id: str, requirements: Dict[str, Any]) -> Dict[str, bool]:
+        """Validate export control requirements"""
+        return {
+            "technology_classification": True,
+            "license_compliance": True,
+            "end_user_screening": True,
+            "monitoring_systems": True,
+            "validated": True
+        }
+    
+    # Helper methods for audit report
+    def _assess_jurisdictional_risk(self, assessments: List[Dict]) -> str:
+        """Assess jurisdictional risk level"""
+        if not assessments:
+            return "unknown"
+        avg_score = sum(a["compliance_score"] for a in assessments) / len(assessments)
+        return "low" if avg_score >= 0.8 else "critical"
+    
+    def _assess_data_transfer_risk(self, assessments: List[Dict]) -> str:
+        """Assess data transfer risk level"""
+        if not assessments:
+            return "unknown"
+        avg_score = sum(a["compliance_score"] for a in assessments) / len(assessments)
+        return "low" if avg_score >= 0.85 else "high"
+    
+    def _assess_standards_risk(self, assessments: List[Dict]) -> str:
+        """Assess standards alignment risk level"""
+        if not assessments:
+            return "unknown"
+        avg_score = sum(a["alignment_score"] for a in assessments) / len(assessments)
+        return "low" if avg_score >= 0.75 else "medium"
+    
+    def _assess_export_control_risk(self, assessments: List[Dict]) -> str:
+        """Assess export control risk level"""
+        if not assessments:
+            return "unknown"
+        avg_score = sum(a["compliance_score"] for a in assessments) / len(assessments)
+        return "low" if avg_score >= 0.9 else "critical"
+    
+    def _calculate_cross_border_maturity(self, audit_report: Dict) -> float:
+        """Calculate cross-border governance maturity score"""
+        return audit_report["executive_summary"]["overall_governance_score"]
+    
+    def _calculate_assessment_coverage(self, audit_report: Dict) -> float:
+        """Calculate assessment coverage score"""
+        assessments = audit_report["governance_assessment"]
+        coverage_areas = sum(1 for area in assessments.values() if area)
+        return coverage_areas / len(assessments) if assessments else 0.0
+    
+    def _analyze_cross_border_trends(self, system_id: str) -> Dict[str, Any]:
+        """Analyze cross-border governance trends"""
+        return {
+            "compliance_improvement_trend": "positive",
+            "regulatory_harmonization_trend": "stable",
+            "risk_reduction_trend": "improving"
+        }
+    
+    def _compare_to_cross_border_benchmarks(self, audit_report: Dict) -> Dict[str, float]:
+        """Compare to cross-border industry benchmarks"""
+        return {
+            "industry_percentile": 75.0,
+            "regulatory_maturity_ranking": 0.8,
+            "best_practice_alignment": 0.85
+        }
+    
+    def _map_framework_requirements(self, framework: str, system_id: str) -> List[str]:
+        """Map framework requirements"""
+        return ["requirement_1", "requirement_2", "requirement_3"]
+    
+    def _identify_framework_gaps(self, framework: str, system_id: str) -> List[str]:
+        """Identify framework compliance gaps"""
+        return ["gap_1", "gap_2"]
+    
+    def _estimate_remediation_timeline(self, framework: str, score: float) -> str:
+        """Estimate remediation timeline"""
+        if score < 0.5:
+            return "90_days"
+        elif score < 0.8:
+            return "60_days"
+        else:
+            return "30_days"

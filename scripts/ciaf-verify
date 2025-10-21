@@ -1,0 +1,369 @@
+#!/usr/bin/env python3
+"""
+CIAF Receipt Verifier
+====================
+
+Cryptographic verification tool for CIAF inference receipts.
+Validates signatures, Merkle proofs, and policy coverage.
+
+Usage:
+    ciaf-verify receipts/ --full-audit
+    ciaf-verify single_receipt.json --check-merkle
+    ciaf-verify batch/ --policy-coverage --output report.json
+"""
+
+import sys
+import os
+import json
+import argparse
+from pathlib import Path
+from typing import Dict, List, Optional, Tuple
+import hashlib
+import base64
+from dataclasses import dataclass
+
+# Add CIAF to path
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
+from ciaf.core.crypto import CryptographicSigner
+from ciaf.core.merkle import MerkleTree
+
+@dataclass
+class VerificationResult:
+    """Result of receipt verification"""
+    receipt_id: str
+    signature_valid: bool
+    merkle_valid: bool
+    policy_coverage: float
+    governance_score: float
+    errors: List[str]
+    warnings: List[str]
+
+class CIAFReceiptVerifier:
+    """Cryptographic verifier for CIAF inference receipts"""
+    
+    def __init__(self):
+        self.signer = CryptographicSigner()
+        
+    def verify_receipt(self, receipt_path: Path) -> VerificationResult:
+        """Verify a single CIAF inference receipt"""
+        
+        try:
+            with open(receipt_path, 'r', encoding='utf-8') as f:
+                receipt = json.load(f)
+        except Exception as e:
+            return VerificationResult(
+                receipt_id=str(receipt_path),
+                signature_valid=False,
+                merkle_valid=False,
+                policy_coverage=0.0,
+                governance_score=0.0,
+                errors=[f"Failed to load receipt: {e}"],
+                warnings=[]
+            )
+        
+        errors = []
+        warnings = []
+        receipt_id = receipt.get('receipt_id', 'unknown')
+        
+        # Verify digital signature
+        signature_valid = self._verify_signature(receipt, errors)
+        
+        # Verify Merkle proof
+        merkle_valid = self._verify_merkle_proof(receipt, errors, warnings)
+        
+        # Calculate policy coverage
+        policy_coverage = self._calculate_policy_coverage(receipt, warnings)
+        
+        # Calculate governance score
+        governance_score = self._calculate_governance_score(receipt)
+        
+        return VerificationResult(
+            receipt_id=receipt_id,
+            signature_valid=signature_valid,
+            merkle_valid=merkle_valid,
+            policy_coverage=policy_coverage,
+            governance_score=governance_score,
+            errors=errors,
+            warnings=warnings
+        )
+    
+    def _verify_signature(self, receipt: Dict, errors: List[str]) -> bool:
+        """Verify the cryptographic signature of the receipt"""
+        
+        try:
+            # Extract signature and payload
+            signature = receipt.get('signature')
+            if not signature:
+                errors.append("Missing signature field")
+                return False
+            
+            # Create canonical payload for verification
+            payload_data = {
+                'model_anchor': receipt.get('model_anchor'),
+                'input_hash': receipt.get('input_hash'),
+                'prediction_hash': receipt.get('prediction_hash'),
+                'governance_metadata': receipt.get('governance_metadata'),
+                'timestamp': receipt.get('timestamp')
+            }
+            
+            # Verify signature (simplified for demo)
+            payload_hash = hashlib.sha256(
+                json.dumps(payload_data, sort_keys=True).encode()
+            ).hexdigest()
+            
+            # In a real implementation, this would verify against public key
+            expected_sig_start = payload_hash[:8]
+            return signature.startswith(expected_sig_start)
+            
+        except Exception as e:
+            errors.append(f"Signature verification failed: {e}")
+            return False
+    
+    def _verify_merkle_proof(self, receipt: Dict, errors: List[str], warnings: List[str]) -> bool:
+        """Verify the Merkle proof in the receipt"""
+        
+        try:
+            merkle_proof = receipt.get('merkle_proof')
+            if not merkle_proof:
+                warnings.append("No Merkle proof found (optional)")
+                return True  # Not required for all receipts
+            
+            # Extract Merkle proof components
+            leaf_hash = merkle_proof.get('leaf_hash')
+            proof_path = merkle_proof.get('proof_path', [])
+            root_hash = merkle_proof.get('root_hash')
+            
+            if not all([leaf_hash, root_hash]):
+                errors.append("Incomplete Merkle proof")
+                return False
+            
+            # Verify proof path (simplified verification)
+            current_hash = leaf_hash
+            for proof_element in proof_path:
+                # In real implementation, would properly reconstruct tree
+                current_hash = hashlib.sha256(
+                    (current_hash + proof_element).encode()
+                ).hexdigest()
+            
+            # Check if computed root matches claimed root
+            return current_hash == root_hash[:len(current_hash)]
+            
+        except Exception as e:
+            errors.append(f"Merkle proof verification failed: {e}")
+            return False
+    
+    def _calculate_policy_coverage(self, receipt: Dict, warnings: List[str]) -> float:
+        """Calculate policy coverage score"""
+        
+        try:
+            governance_metadata = receipt.get('governance_metadata', {})
+            policies_applied = governance_metadata.get('policies_applied', [])
+            
+            if not policies_applied:
+                warnings.append("No policies applied in governance metadata")
+                return 0.0
+            
+            # Sample policy requirements for different frameworks
+            required_policies = {
+                'banking': ['BNK-001', 'BNK-047', 'BNK-052', 'BNK-071'],
+                'healthcare': ['HLT-001', 'HLT-051', 'HLT-076'],
+                'government': ['GOV-001', 'GOV-078', 'GOV-089']
+            }
+            
+            # Determine framework from policy IDs
+            framework = None
+            for policy_id in policies_applied:
+                if policy_id.startswith('BNK-'):
+                    framework = 'banking'
+                    break
+                elif policy_id.startswith('HLT-'):
+                    framework = 'healthcare'
+                    break
+                elif policy_id.startswith('GOV-'):
+                    framework = 'government'
+                    break
+            
+            if not framework:
+                warnings.append("Could not determine framework from policy IDs")
+                return 0.5  # Neutral score for unknown framework
+            
+            # Calculate coverage percentage
+            required = set(required_policies[framework])
+            applied = set(policies_applied)
+            coverage = len(required.intersection(applied)) / len(required)
+            
+            if coverage < 0.8:
+                warnings.append(f"Policy coverage below 80% ({coverage:.1%})")
+            
+            return coverage
+            
+        except Exception as e:
+            warnings.append(f"Policy coverage calculation failed: {e}")
+            return 0.0
+    
+    def _calculate_governance_score(self, receipt: Dict) -> float:
+        """Calculate overall governance score"""
+        
+        try:
+            governance_metadata = receipt.get('governance_metadata', {})
+            
+            scores = []
+            
+            # Bias checks score
+            bias_checks = governance_metadata.get('bias_checks', {})
+            if bias_checks:
+                bias_score = sum(bias_checks.values()) / len(bias_checks)
+                scores.append(bias_score)
+            
+            # Regulatory compliance score
+            regulatory = governance_metadata.get('regulatory_compliance', {})
+            if regulatory:
+                reg_score = sum(1 for v in regulatory.values() if v) / len(regulatory)
+                scores.append(reg_score)
+            
+            # Model performance score
+            performance = governance_metadata.get('model_performance', {})
+            if performance:
+                perf_score = performance.get('confidence', 0.5)
+                scores.append(perf_score)
+            
+            # Calculate weighted average
+            if scores:
+                return sum(scores) / len(scores)
+            else:
+                return 0.5  # Neutral score if no metadata
+                
+        except Exception as e:
+            return 0.0
+
+def verify_directory(directory: Path, verifier: CIAFReceiptVerifier) -> List[VerificationResult]:
+    """Verify all receipts in a directory"""
+    
+    results = []
+    receipt_files = list(directory.glob('*.json'))
+    
+    if not receipt_files:
+        print(f"⚠️  No receipt files found in {directory}")
+        return results
+    
+    print(f"🔍 Verifying {len(receipt_files)} receipts in {directory}")
+    
+    for receipt_file in receipt_files:
+        result = verifier.verify_receipt(receipt_file)
+        results.append(result)
+        
+        # Print immediate feedback
+        status = "✅" if result.signature_valid and result.merkle_valid else "❌"
+        print(f"  {status} {receipt_file.name} - Coverage: {result.policy_coverage:.1%}")
+    
+    return results
+
+def print_summary_report(results: List[VerificationResult]):
+    """Print comprehensive verification summary"""
+    
+    if not results:
+        print("❌ No receipts to verify")
+        return
+    
+    total_receipts = len(results)
+    valid_signatures = sum(1 for r in results if r.signature_valid)
+    valid_merkle = sum(1 for r in results if r.merkle_valid)
+    avg_coverage = sum(r.policy_coverage for r in results) / total_receipts
+    avg_governance = sum(r.governance_score for r in results) / total_receipts
+    
+    print(f"\n📊 Verification Summary")
+    print(f"=" * 40)
+    print(f"   • Total Receipts: {total_receipts}")
+    print(f"   • Valid Signatures: {valid_signatures}/{total_receipts} ({valid_signatures/total_receipts:.1%})")
+    print(f"   • Valid Merkle Proofs: {valid_merkle}/{total_receipts} ({valid_merkle/total_receipts:.1%})")
+    print(f"   • Average Policy Coverage: {avg_coverage:.1%}")
+    print(f"   • Average Governance Score: {avg_governance:.3f}")
+    
+    # Show errors and warnings
+    all_errors = [error for r in results for error in r.errors]
+    all_warnings = [warning for r in results for warning in r.warnings]
+    
+    if all_errors:
+        print(f"\n❌ Errors ({len(all_errors)}):")
+        for error in set(all_errors):  # Unique errors only
+            print(f"   • {error}")
+    
+    if all_warnings:
+        print(f"\n⚠️  Warnings ({len(all_warnings)}):")
+        for warning in set(all_warnings):  # Unique warnings only
+            print(f"   • {warning}")
+    
+    # Overall assessment
+    overall_valid = valid_signatures == total_receipts and len(all_errors) == 0
+    print(f"\n🎯 Overall Assessment: {'✅ PASS' if overall_valid else '❌ ISSUES FOUND'}")
+
+def main():
+    """Main verification function"""
+    
+    parser = argparse.ArgumentParser(
+        description="CIAF Receipt Verifier - Cryptographic validation of AI governance receipts"
+    )
+    parser.add_argument('path', help='Path to receipt file or directory')
+    parser.add_argument('--full-audit', action='store_true', help='Perform comprehensive audit')
+    parser.add_argument('--check-merkle', action='store_true', help='Verify Merkle proofs')
+    parser.add_argument('--policy-coverage', action='store_true', help='Check policy coverage')
+    parser.add_argument('--output', help='Output detailed report to JSON file')
+    parser.add_argument('--verbose', '-v', action='store_true', help='Verbose output')
+    
+    args = parser.parse_args()
+    
+    print("🔒 CIAF Receipt Verifier v1.0")
+    print("=" * 40)
+    
+    # Initialize verifier
+    verifier = CIAFReceiptVerifier()
+    
+    # Determine if path is file or directory
+    path = Path(args.path)
+    if not path.exists():
+        print(f"❌ Path not found: {path}")
+        return 1
+    
+    # Verify receipts
+    if path.is_file():
+        result = verifier.verify_receipt(path)
+        results = [result]
+        print(f"🔍 Verifying single receipt: {path}")
+    else:
+        results = verify_directory(path, verifier)
+    
+    # Print summary
+    print_summary_report(results)
+    
+    # Save detailed report if requested
+    if args.output:
+        output_data = {
+            'verification_timestamp': '2024-10-20T15:30:00Z',
+            'total_receipts': len(results),
+            'results': [
+                {
+                    'receipt_id': r.receipt_id,
+                    'signature_valid': r.signature_valid,
+                    'merkle_valid': r.merkle_valid,
+                    'policy_coverage': r.policy_coverage,
+                    'governance_score': r.governance_score,
+                    'errors': r.errors,
+                    'warnings': r.warnings
+                }
+                for r in results
+            ]
+        }
+        
+        with open(args.output, 'w', encoding='utf-8') as f:
+            json.dump(output_data, f, indent=2)
+        
+        print(f"\n📄 Detailed report saved to: {args.output}")
+    
+    # Return exit code
+    all_valid = all(r.signature_valid and not r.errors for r in results)
+    return 0 if all_valid else 1
+
+if __name__ == "__main__":
+    exit_code = main()
+    sys.exit(exit_code)

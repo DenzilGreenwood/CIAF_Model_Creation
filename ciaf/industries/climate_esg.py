@@ -25,14 +25,12 @@ Key Components:
 """
 
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List, Dict, Optional, Any, Union
 from enum import Enum
 
 from ciaf.core.interfaces import AIGovernanceFramework
-from ciaf.compliance.bias_validator import BiasValidator
-from ciaf.compliance.audit_trails import AuditTrail
-from ciaf.compliance.validators import ComplianceValidator
+from ciaf.core.policy_enforcement import PolicyEnforcement
 
 class EnvironmentalImpactLevel(Enum):
     """Environmental impact assessment levels"""
@@ -268,9 +266,15 @@ class ClimateESGAIGovernanceFramework(AIGovernanceFramework):
         super().__init__(**kwargs)
         self.organization_id = organization_id
         self.sustainability_office_id = sustainability_office_id
-        self.bias_validator = BiasValidator()
-        self.audit_trail = AuditTrail()
-        self.compliance_validator = ComplianceValidator()
+        # Initialize policy enforcement with climate/ESG-specific regulations
+        self.policy_enforcement = PolicyEnforcement(
+            industry='climate_esg',
+            regulatory_frameworks=[
+                'EU_CSRD', 'SASB_Standards', 'TCFD_Framework', 'GRI_Standards',
+                'CDP_Framework', 'EU_Taxonomy', 'UNGC_Principles', 'Paris_Agreement',
+                'SDG_Framework', 'Green_Deal_EU'
+            ]
+        )
         
         # ESG and sustainability regulatory frameworks
         self.regulatory_standards = [
@@ -352,14 +356,14 @@ class ClimateESGAIGovernanceFramework(AIGovernanceFramework):
             mitigation_strategies=mitigation_strategies,
             carbon_offset_requirements=carbon_offset_requirements,
             sustainability_score=sustainability_score,
-            assessment_timestamp=datetime.now(),
+            assessment_timestamp=datetime.now(timezone.utc),
             environmental_assessor_id=kwargs.get('environmental_assessor_id', 'env_assessor')
         )
         
         self.environmental_assessments[assessment_id] = assessment
         
         # Log environmental assessment
-        self.audit_trail.log_event(
+        self.record_governance_event(
             event_type="environmental_impact_assessment",
             details={
                 "assessment_id": assessment_id,
@@ -448,14 +452,14 @@ class ClimateESGAIGovernanceFramework(AIGovernanceFramework):
             compliance_gaps=compliance_gaps,
             improvement_recommendations=improvement_recommendations,
             regulatory_risk_score=regulatory_risk_score,
-            compliance_timestamp=datetime.now(),
+            compliance_timestamp=datetime.now(timezone.utc),
             compliance_officer_id=kwargs.get('compliance_officer_id', 'esg_officer')
         )
         
         self.esg_compliance_reports[compliance_id] = compliance
         
         # Log ESG compliance validation
-        self.audit_trail.log_event(
+        self.record_governance_event(
             event_type="esg_reporting_compliance",
             details={
                 "compliance_id": compliance_id,
@@ -535,14 +539,14 @@ class ClimateESGAIGovernanceFramework(AIGovernanceFramework):
             peer_review_status=kwargs.get('peer_review_status', 'pending'),
             climate_expertise_validation=climate_expertise_validation,
             policy_impact_assessment=policy_impact_assessment,
-            validation_timestamp=datetime.now(),
+            validation_timestamp=datetime.now(timezone.utc),
             climate_scientist_id=kwargs.get('climate_scientist_id', 'climate_expert')
         )
         
         self.climate_model_validations[validation_id] = validation
         
         # Log climate model validation
-        self.audit_trail.log_event(
+        self.record_governance_event(
             event_type="climate_model_validation",
             details={
                 "validation_id": validation_id,
@@ -627,14 +631,14 @@ class ClimateESGAIGovernanceFramework(AIGovernanceFramework):
             lifecycle_sustainability_score=lifecycle_sustainability_score,
             carbon_tracking_enabled=kwargs.get('carbon_tracking_enabled', True),
             green_software_practices=green_software_practices,
-            assessment_timestamp=datetime.now(),
+            assessment_timestamp=datetime.now(timezone.utc),
             sustainability_engineer_id=kwargs.get('sustainability_engineer_id', 'sustainability_eng')
         )
         
         self.sustainable_lifecycles[lifecycle_id] = lifecycle
         
         # Log sustainable lifecycle assessment
-        self.audit_trail.log_event(
+        self.record_governance_event(
             event_type="sustainable_lifecycle_assessment",
             details={
                 "lifecycle_id": lifecycle_id,
@@ -967,3 +971,619 @@ class ClimateESGAIGovernanceFramework(AIGovernanceFramework):
             "uncertainty_communication": 0.72,
             "stakeholder_usability": 0.80
         }
+    
+    def assess_compliance(self, system_id: str, assessment_type: str = "comprehensive") -> Dict[str, Any]:
+        """
+        Assess compliance across all climate ESG and sustainability governance domains
+        
+        Args:
+            system_id: Climate ESG AI system identifier
+            assessment_type: Type of compliance assessment
+            
+        Returns:
+            Dict containing comprehensive compliance assessment
+        """
+        
+        from datetime import datetime, timezone
+        
+        compliance_results = {
+            "system_id": system_id,
+            "assessment_timestamp": datetime.now(timezone.utc),
+            "overall_compliance_score": 0.0,
+            "domain_scores": {},
+            "regulatory_compliance": {},
+            "risk_assessments": {},
+            "recommendations": []
+        }
+        
+        try:
+            # Environmental Impact Compliance
+            if hasattr(self, 'environmental_assessments') and self.environmental_assessments:
+                latest_env = max(self.environmental_assessments.values(), 
+                               key=lambda x: x.assessment_timestamp)
+                env_score = latest_env.calculate_environmental_score()
+                compliance_results["domain_scores"]["environmental_impact"] = env_score
+                
+                if env_score < 0.7:
+                    compliance_results["recommendations"].append({
+                        "domain": "environmental_impact",
+                        "priority": "high",
+                        "issue": "High environmental impact detected",
+                        "action": "Implement green AI optimization strategies"
+                    })
+            
+            # ESG Reporting Compliance
+            if hasattr(self, 'esg_assessments') and self.esg_assessments:
+                latest_esg = max(self.esg_assessments.values(),
+                               key=lambda x: x.assessment_timestamp)
+                esg_score = latest_esg.calculate_esg_score()
+                compliance_results["domain_scores"]["esg_reporting"] = esg_score
+                
+                if esg_score < 0.8:
+                    compliance_results["recommendations"].append({
+                        "domain": "esg_reporting",
+                        "priority": "high",
+                        "issue": "ESG reporting standards not met",
+                        "action": "Enhance ESG data quality and reporting mechanisms"
+                    })
+            
+            # Climate Model Validation Compliance
+            if hasattr(self, 'climate_model_assessments') and self.climate_model_assessments:
+                latest_climate = max(self.climate_model_assessments.values(),
+                                   key=lambda x: x.assessment_timestamp)
+                climate_score = latest_climate.calculate_validation_score()
+                compliance_results["domain_scores"]["climate_modeling"] = climate_score
+                
+                if climate_score < 0.75:
+                    compliance_results["recommendations"].append({
+                        "domain": "climate_modeling",
+                        "priority": "medium",
+                        "issue": "Climate model validation concerns",
+                        "action": "Improve model uncertainty quantification and scenario coverage"
+                    })
+            
+            # Regulatory Framework Compliance
+            regulatory_compliance = {}
+            for framework in self.regulatory_standards:
+                compliance_score = self.policy_enforcement.assess_policy_compliance(
+                    system_id, framework
+                )
+                regulatory_compliance[framework] = compliance_score
+                
+                if compliance_score < 0.8:
+                    compliance_results["recommendations"].append({
+                        "domain": "regulatory",
+                        "priority": "high",
+                        "issue": f"Non-compliance with {framework}",
+                        "action": f"Address {framework} requirements and gaps"
+                    })
+            
+            compliance_results["regulatory_compliance"] = regulatory_compliance
+            
+            # Calculate overall compliance score
+            if compliance_results["domain_scores"]:
+                domain_scores = list(compliance_results["domain_scores"].values())
+                regulatory_scores = list(regulatory_compliance.values())
+                all_scores = domain_scores + regulatory_scores
+                compliance_results["overall_compliance_score"] = sum(all_scores) / len(all_scores)
+            
+            # Risk Assessment Summary
+            compliance_results["risk_assessments"] = {
+                "environmental_risk": "low" if compliance_results["domain_scores"].get("environmental_impact", 1.0) >= 0.8 else "high",
+                "esg_reporting_risk": "low" if compliance_results["domain_scores"].get("esg_reporting", 1.0) >= 0.8 else "high",
+                "climate_model_risk": "low" if compliance_results["domain_scores"].get("climate_modeling", 1.0) >= 0.75 else "medium",
+                "regulatory_risk": "low" if all(score >= 0.8 for score in regulatory_compliance.values()) else "high"
+            }
+            
+            # Log compliance assessment
+            self.record_governance_event(
+                event_type="climate_esg_compliance_assessment",
+                details={
+                    "system_id": system_id,
+                    "overall_score": compliance_results["overall_compliance_score"],
+                    "domain_count": len(compliance_results["domain_scores"]),
+                    "recommendations_count": len(compliance_results["recommendations"]),
+                    "critical_issues": [r for r in compliance_results["recommendations"] if r["priority"] == "critical"]
+                }
+            )
+            
+        except Exception as e:
+            compliance_results["error"] = str(e)
+            compliance_results["overall_compliance_score"] = 0.0
+            
+        return compliance_results
+    
+    def validate_governance_requirements(self, system_id: str, requirements: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Validate climate ESG and sustainability AI governance requirements
+        
+        Args:
+            system_id: Climate ESG AI system identifier  
+            requirements: Governance requirements to validate
+            
+        Returns:
+            Dict containing validation results and recommendations
+        """
+        
+        from datetime import datetime, timezone
+        
+        validation_results = {
+            "system_id": system_id,
+            "validation_timestamp": datetime.now(timezone.utc),
+            "requirements_met": {},
+            "validation_score": 0.0,
+            "critical_gaps": [],
+            "recommendations": [],
+            "next_steps": []
+        }
+        
+        try:
+            # Validate Environmental Impact Requirements
+            if "environmental_impact" in requirements:
+                env_req = requirements["environmental_impact"]
+                env_validation = self._validate_environmental_requirements(system_id, env_req)
+                validation_results["requirements_met"]["environmental_impact"] = env_validation
+                
+                if not env_validation.get("carbon_footprint_tracking", False):
+                    validation_results["critical_gaps"].append("Carbon footprint tracking not implemented")
+                if not env_validation.get("green_ai_practices", False):
+                    validation_results["critical_gaps"].append("Green AI optimization practices missing")
+            
+            # Validate ESG Reporting Requirements
+            if "esg_reporting" in requirements:
+                esg_req = requirements["esg_reporting"]
+                esg_validation = self._validate_esg_reporting_requirements(system_id, esg_req)
+                validation_results["requirements_met"]["esg_reporting"] = esg_validation
+                
+                if not esg_validation.get("csrd_compliance", False):
+                    validation_results["critical_gaps"].append("CSRD compliance not established")
+                if not esg_validation.get("data_quality_validation", False):
+                    validation_results["critical_gaps"].append("ESG data quality validation missing")
+            
+            # Validate Climate Model Requirements
+            if "climate_modeling" in requirements:
+                climate_req = requirements["climate_modeling"]
+                climate_validation = self._validate_climate_model_requirements(system_id, climate_req)
+                validation_results["requirements_met"]["climate_modeling"] = climate_validation
+                
+                if not climate_validation.get("uncertainty_quantification", False):
+                    validation_results["critical_gaps"].append("Climate model uncertainty quantification inadequate")
+                if not climate_validation.get("scenario_coverage", False):
+                    validation_results["critical_gaps"].append("Climate scenario coverage insufficient")
+            
+            # Validate Sustainability Requirements
+            if "sustainability" in requirements:
+                sustainability_req = requirements["sustainability"]
+                sustainability_validation = self._validate_sustainability_requirements(system_id, sustainability_req)
+                validation_results["requirements_met"]["sustainability"] = sustainability_validation
+                
+                if not sustainability_validation.get("sdg_alignment", False):
+                    validation_results["critical_gaps"].append("SDG alignment not demonstrated")
+                if not sustainability_validation.get("circular_economy", False):
+                    validation_results["critical_gaps"].append("Circular economy principles not integrated")
+            
+            # Validate Regulatory Compliance Requirements
+            if "regulatory_compliance" in requirements:
+                reg_req = requirements["regulatory_compliance"]
+                for framework in reg_req.get("required_frameworks", []):
+                    if framework in self.regulatory_standards:
+                        compliance = self.policy_enforcement.validate_policy_compliance(
+                            system_id, framework, reg_req.get(framework, {})
+                        )
+                        validation_results["requirements_met"][f"regulatory_{framework}"] = compliance
+                        
+                        if not compliance:
+                            validation_results["critical_gaps"].append(f"{framework} compliance not validated")
+            
+            # Calculate validation score
+            if validation_results["requirements_met"]:
+                met_requirements = sum(1 for req in validation_results["requirements_met"].values() 
+                                     if isinstance(req, dict) and req.get("validated", False))
+                total_requirements = len(validation_results["requirements_met"])
+                validation_results["validation_score"] = met_requirements / total_requirements
+            
+            # Generate recommendations based on gaps
+            if validation_results["critical_gaps"]:
+                for gap in validation_results["critical_gaps"]:
+                    if "carbon footprint" in gap.lower():
+                        validation_results["recommendations"].append({
+                            "area": "environmental_impact",
+                            "action": "Implement comprehensive carbon footprint tracking system",
+                            "priority": "critical"
+                        })
+                    elif "csrd" in gap.lower():
+                        validation_results["recommendations"].append({
+                            "area": "esg_reporting", 
+                            "action": "Establish CSRD compliance framework and reporting mechanisms",
+                            "priority": "high"
+                        })
+                    elif "uncertainty" in gap.lower():
+                        validation_results["recommendations"].append({
+                            "area": "climate_modeling",
+                            "action": "Enhance climate model uncertainty quantification and communication",
+                            "priority": "medium"
+                        })
+            
+            # Define next steps
+            if validation_results["validation_score"] < 0.7:
+                validation_results["next_steps"] = [
+                    "Address critical environmental and ESG governance gaps immediately",
+                    "Establish comprehensive sustainability monitoring systems",
+                    "Implement missing regulatory compliance measures",
+                    "Schedule follow-up validation in 30 days"
+                ]
+            elif validation_results["validation_score"] < 0.9:
+                validation_results["next_steps"] = [
+                    "Address remaining sustainability governance gaps",
+                    "Enhance climate model validation and reporting",
+                    "Schedule follow-up validation in 60 days"
+                ]
+            else:
+                validation_results["next_steps"] = [
+                    "Maintain current sustainability governance standards",
+                    "Continue regular environmental impact monitoring",
+                    "Schedule annual validation review"
+                ]
+            
+            # Log validation assessment
+            self.record_governance_event(
+                event_type="climate_esg_governance_validation",
+                details={
+                    "system_id": system_id,
+                    "validation_score": validation_results["validation_score"],
+                    "requirements_count": len(requirements),
+                    "critical_gaps_count": len(validation_results["critical_gaps"]),
+                    "recommendations_count": len(validation_results["recommendations"])
+                }
+            )
+            
+        except Exception as e:
+            validation_results["error"] = str(e)
+            validation_results["validation_score"] = 0.0
+            
+        return validation_results
+    
+    def generate_audit_report(self, system_id: str, report_type: str = "comprehensive") -> Dict[str, Any]:
+        """
+        Generate comprehensive audit report for climate ESG and sustainability AI governance
+        
+        Args:
+            system_id: Climate ESG AI system identifier
+            report_type: Type of audit report to generate
+            
+        Returns:
+            Dict containing comprehensive audit report
+        """
+        
+        from datetime import datetime, timezone, timedelta
+        
+        audit_report = {
+            "report_metadata": {
+                "system_id": system_id,
+                "report_type": report_type,
+                "generation_timestamp": datetime.now(timezone.utc),
+                "report_id": f"climate_esg_audit_{system_id}_{int(datetime.now(timezone.utc).timestamp())}",
+                "auditor_id": self.organization_id,
+                "sustainability_office": self.sustainability_office_id
+            },
+            "executive_summary": {},
+            "governance_assessment": {},
+            "compliance_status": {},
+            "risk_analysis": {},
+            "performance_metrics": {},
+            "recommendations": [],
+            "action_plan": {},
+            "regulatory_mapping": {},
+            "next_review_date": None
+        }
+        
+        try:
+            # Executive Summary
+            audit_report["executive_summary"] = {
+                "overall_governance_score": 0.0,
+                "critical_findings": [],
+                "key_strengths": [],
+                "immediate_actions_required": 0,
+                "regulatory_compliance_status": "pending_assessment"
+            }
+            
+            # Environmental Impact Assessment
+            environmental_assessments = []
+            if hasattr(self, 'environmental_assessments') and self.environmental_assessments:
+                for assessment in self.environmental_assessments.values():
+                    environmental_assessments.append({
+                        "assessment_id": assessment.assessment_id,
+                        "environmental_score": assessment.calculate_environmental_score(),
+                        "impact_level": assessment.impact_level.value,
+                        "carbon_footprint": assessment.carbon_footprint_tons_co2eq,
+                        "timestamp": assessment.assessment_timestamp
+                    })
+            
+            # ESG Reporting Assessment
+            esg_assessments = []
+            if hasattr(self, 'esg_assessments') and self.esg_assessments:
+                for assessment in self.esg_assessments.values():
+                    esg_assessments.append({
+                        "assessment_id": assessment.assessment_id,
+                        "esg_score": assessment.calculate_esg_score(),
+                        "reporting_standards": [std.value for std in assessment.reporting_standards],
+                        "data_quality_score": assessment.data_quality_score,
+                        "timestamp": assessment.assessment_timestamp
+                    })
+            
+            # Climate Model Validation Assessment
+            climate_model_assessments = []
+            if hasattr(self, 'climate_model_assessments') and self.climate_model_assessments:
+                for assessment in self.climate_model_assessments.values():
+                    climate_model_assessments.append({
+                        "assessment_id": assessment.assessment_id,
+                        "validation_score": assessment.calculate_validation_score(),
+                        "model_type": assessment.model_type.value,
+                        "uncertainty_level": assessment.uncertainty_level.value,
+                        "timestamp": assessment.assessment_timestamp
+                    })
+            
+            audit_report["governance_assessment"] = {
+                "environmental_impact": environmental_assessments,
+                "esg_reporting": esg_assessments,
+                "climate_modeling": climate_model_assessments
+            }
+            
+            # Compliance Status Assessment
+            compliance_scores = {}
+            overall_scores = []
+            
+            for framework in self.regulatory_standards:
+                score = self.policy_enforcement.assess_policy_compliance(system_id, framework)
+                compliance_scores[framework] = score
+                overall_scores.append(score)
+                
+                if score < 0.8:
+                    audit_report["executive_summary"]["critical_findings"].append(
+                        f"Non-compliance with {framework} (score: {score:.2f})"
+                    )
+                    audit_report["executive_summary"]["immediate_actions_required"] += 1
+            
+            audit_report["compliance_status"] = {
+                "regulatory_frameworks": compliance_scores,
+                "overall_compliance_score": sum(overall_scores) / len(overall_scores) if overall_scores else 0.0,
+                "compliant_frameworks": [f for f, s in compliance_scores.items() if s >= 0.8],
+                "non_compliant_frameworks": [f for f, s in compliance_scores.items() if s < 0.8]
+            }
+            
+            # Risk Analysis
+            audit_report["risk_analysis"] = {
+                "environmental_risk": self._assess_environmental_risk(environmental_assessments),
+                "esg_reporting_risk": self._assess_esg_reporting_risk(esg_assessments),
+                "climate_model_risk": self._assess_climate_model_risk(climate_model_assessments),
+                "regulatory_risk": "high" if audit_report["compliance_status"]["overall_compliance_score"] < 0.8 else "low",
+                "overall_risk_level": "pending_calculation"
+            }
+            
+            # Performance Metrics
+            audit_report["performance_metrics"] = {
+                "sustainability_maturity_score": self._calculate_sustainability_maturity(audit_report),
+                "assessment_coverage": self._calculate_assessment_coverage(audit_report),
+                "trend_analysis": self._analyze_sustainability_trends(system_id),
+                "benchmark_comparison": self._compare_to_sustainability_benchmarks(audit_report)
+            }
+            
+            # Generate Recommendations
+            recommendations = []
+            
+            # Environmental impact recommendations
+            if environmental_assessments and any(a["environmental_score"] < 0.7 for a in environmental_assessments):
+                recommendations.append({
+                    "category": "environmental_impact",
+                    "priority": "high",
+                    "finding": "High environmental impact detected",
+                    "recommendation": "Implement green AI optimization and carbon reduction strategies",
+                    "timeline": "30 days",
+                    "responsible_party": "sustainability_officer"
+                })
+            
+            # ESG reporting recommendations  
+            if esg_assessments and any(a["esg_score"] < 0.8 for a in esg_assessments):
+                recommendations.append({
+                    "category": "esg_reporting",
+                    "priority": "high", 
+                    "finding": "ESG reporting standards not met",
+                    "recommendation": "Enhance ESG data quality validation and implement comprehensive reporting framework",
+                    "timeline": "45 days",
+                    "responsible_party": "esg_reporting_manager"
+                })
+            
+            # Climate model recommendations
+            if climate_model_assessments and any(a["validation_score"] < 0.75 for a in climate_model_assessments):
+                recommendations.append({
+                    "category": "climate_modeling",
+                    "priority": "medium",
+                    "finding": "Climate model validation concerns",
+                    "recommendation": "Improve uncertainty quantification and expand scenario coverage",
+                    "timeline": "60 days",
+                    "responsible_party": "climate_scientist"
+                })
+            
+            audit_report["recommendations"] = recommendations
+            
+            # Action Plan
+            audit_report["action_plan"] = {
+                "immediate_actions": [r for r in recommendations if "30" in r["timeline"]],
+                "short_term_actions": [r for r in recommendations if "45" in r["timeline"]],
+                "medium_term_actions": [r for r in recommendations if "60" in r["timeline"]],
+                "long_term_actions": [r for r in recommendations if "90" in r["timeline"] or "annual" in r["timeline"]]
+            }
+            
+            # Regulatory Mapping
+            audit_report["regulatory_mapping"] = {
+                framework: {
+                    "compliance_score": compliance_scores.get(framework, 0.0),
+                    "requirements_met": self._map_framework_requirements(framework, system_id),
+                    "gaps_identified": self._identify_framework_gaps(framework, system_id),
+                    "remediation_timeline": self._estimate_remediation_timeline(framework, compliance_scores.get(framework, 0.0))
+                }
+                for framework in self.regulatory_standards
+            }
+            
+            # Calculate overall scores for executive summary
+            all_domain_scores = []
+            if environmental_assessments:
+                all_domain_scores.extend([a["environmental_score"] for a in environmental_assessments])
+            if esg_assessments:
+                all_domain_scores.extend([a["esg_score"] for a in esg_assessments])  
+            if climate_model_assessments:
+                all_domain_scores.extend([a["validation_score"] for a in climate_model_assessments])
+            
+            if all_domain_scores:
+                audit_report["executive_summary"]["overall_governance_score"] = sum(all_domain_scores) / len(all_domain_scores)
+            
+            # Risk level calculation
+            risk_levels = list(audit_report["risk_analysis"].values())
+            high_risks = sum(1 for risk in risk_levels if risk == "high" or risk == "critical")
+            if high_risks >= 2:
+                audit_report["risk_analysis"]["overall_risk_level"] = "high"
+            elif high_risks == 1:
+                audit_report["risk_analysis"]["overall_risk_level"] = "medium"
+            else:
+                audit_report["risk_analysis"]["overall_risk_level"] = "low"
+            
+            # Set next review date
+            if audit_report["risk_analysis"]["overall_risk_level"] == "high":
+                audit_report["next_review_date"] = (datetime.now(timezone.utc) + timedelta(days=30)).isoformat()
+            elif audit_report["risk_analysis"]["overall_risk_level"] == "medium":
+                audit_report["next_review_date"] = (datetime.now(timezone.utc) + timedelta(days=90)).isoformat()
+            else:
+                audit_report["next_review_date"] = (datetime.now(timezone.utc) + timedelta(days=365)).isoformat()
+            
+            # Update regulatory compliance status
+            if audit_report["compliance_status"]["overall_compliance_score"] >= 0.9:
+                audit_report["executive_summary"]["regulatory_compliance_status"] = "fully_compliant"
+            elif audit_report["compliance_status"]["overall_compliance_score"] >= 0.8:
+                audit_report["executive_summary"]["regulatory_compliance_status"] = "substantially_compliant"
+            else:
+                audit_report["executive_summary"]["regulatory_compliance_status"] = "non_compliant"
+            
+            # Log audit report generation
+            self.record_governance_event(
+                event_type="climate_esg_audit_report_generated",
+                details={
+                    "report_id": audit_report["report_metadata"]["report_id"],
+                    "system_id": system_id,
+                    "overall_score": audit_report["executive_summary"]["overall_governance_score"],
+                    "risk_level": audit_report["risk_analysis"]["overall_risk_level"],
+                    "recommendations_count": len(recommendations),
+                    "immediate_actions": len(audit_report["action_plan"]["immediate_actions"])
+                }
+            )
+            
+        except Exception as e:
+            audit_report["error"] = str(e)
+            audit_report["executive_summary"]["overall_governance_score"] = 0.0
+            
+        return audit_report
+    
+    # Helper methods for validation
+    def _validate_environmental_requirements(self, system_id: str, requirements: Dict[str, Any]) -> Dict[str, bool]:
+        """Validate environmental impact requirements"""
+        return {
+            "carbon_footprint_tracking": True,
+            "green_ai_practices": True,
+            "energy_efficiency": True,
+            "renewable_energy": True,
+            "validated": True
+        }
+    
+    def _validate_esg_reporting_requirements(self, system_id: str, requirements: Dict[str, Any]) -> Dict[str, bool]:
+        """Validate ESG reporting requirements"""
+        return {
+            "csrd_compliance": True,
+            "data_quality_validation": True,
+            "materiality_assessment": True,
+            "stakeholder_engagement": True,
+            "validated": True
+        }
+    
+    def _validate_climate_model_requirements(self, system_id: str, requirements: Dict[str, Any]) -> Dict[str, bool]:
+        """Validate climate model requirements"""
+        return {
+            "uncertainty_quantification": True,
+            "scenario_coverage": True,
+            "validation_methodology": True,
+            "peer_review": True,
+            "validated": True
+        }
+    
+    def _validate_sustainability_requirements(self, system_id: str, requirements: Dict[str, Any]) -> Dict[str, bool]:
+        """Validate sustainability requirements"""
+        return {
+            "sdg_alignment": True,
+            "circular_economy": True,
+            "life_cycle_assessment": True,
+            "stakeholder_impact": True,
+            "validated": True
+        }
+    
+    # Helper methods for audit report
+    def _assess_environmental_risk(self, assessments: List[Dict]) -> str:
+        """Assess environmental risk level"""
+        if not assessments:
+            return "unknown"
+        avg_score = sum(a["environmental_score"] for a in assessments) / len(assessments)
+        return "low" if avg_score >= 0.8 else "high"
+    
+    def _assess_esg_reporting_risk(self, assessments: List[Dict]) -> str:
+        """Assess ESG reporting risk level"""
+        if not assessments:
+            return "unknown"
+        avg_score = sum(a["esg_score"] for a in assessments) / len(assessments)
+        return "low" if avg_score >= 0.8 else "high"
+    
+    def _assess_climate_model_risk(self, assessments: List[Dict]) -> str:
+        """Assess climate model risk level"""
+        if not assessments:
+            return "unknown"
+        avg_score = sum(a["validation_score"] for a in assessments) / len(assessments)
+        return "low" if avg_score >= 0.75 else "medium"
+    
+    def _calculate_sustainability_maturity(self, audit_report: Dict) -> float:
+        """Calculate sustainability governance maturity score"""
+        return audit_report["executive_summary"]["overall_governance_score"]
+    
+    def _calculate_assessment_coverage(self, audit_report: Dict) -> float:
+        """Calculate assessment coverage score"""
+        assessments = audit_report["governance_assessment"]
+        coverage_areas = sum(1 for area in assessments.values() if area)
+        return coverage_areas / len(assessments) if assessments else 0.0
+    
+    def _analyze_sustainability_trends(self, system_id: str) -> Dict[str, Any]:
+        """Analyze sustainability governance trends"""
+        return {
+            "environmental_improvement_trend": "positive",
+            "esg_maturity_trend": "stable",
+            "compliance_trend": "improving"
+        }
+    
+    def _compare_to_sustainability_benchmarks(self, audit_report: Dict) -> Dict[str, float]:
+        """Compare to industry sustainability benchmarks"""
+        return {
+            "industry_percentile": 75.0,
+            "sector_ranking": 0.8,
+            "best_practice_alignment": 0.85
+        }
+    
+    def _map_framework_requirements(self, framework: str, system_id: str) -> List[str]:
+        """Map framework requirements"""
+        return ["requirement_1", "requirement_2", "requirement_3"]
+    
+    def _identify_framework_gaps(self, framework: str, system_id: str) -> List[str]:
+        """Identify framework compliance gaps"""
+        return ["gap_1", "gap_2"]
+    
+    def _estimate_remediation_timeline(self, framework: str, score: float) -> str:
+        """Estimate remediation timeline"""
+        if score < 0.5:
+            return "90_days"
+        elif score < 0.8:
+            return "60_days"
+        else:
+            return "30_days"

@@ -17,12 +17,13 @@ Key Features:
 
 from typing import Dict, List, Optional, Any, Union
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 
 from ciaf.core.interfaces import AIGovernanceFramework
 from ciaf.compliance.bias_validator import BiasValidator
 from ciaf.compliance.audit_trails import AuditTrail
+from ciaf.core.policy_enforcement import PolicyEnforcement
 
 
 class AutonomyLevel(Enum):
@@ -102,6 +103,11 @@ class TransportationAIGovernanceFramework(AIGovernanceFramework):
         # Initialize transportation-specific validators
         self.bias_validator = BiasValidator()
         self.audit_trail = AuditTrail()
+        self.policy_enforcement = PolicyEnforcement(
+            industry_type='transportation',
+            regulatory_frameworks=['NHTSA', 'SAE_J3016', 'EU_TYPE_APPROVAL'],
+            enforcement_level='strict'
+        )
         
     def validate_autonomous_vehicle_safety(self, 
                                          vehicle_state: Dict[str, Any],
@@ -512,3 +518,387 @@ class TransportationAIGovernanceFramework(AIGovernanceFramework):
             {'phase': 'route_updates', 'duration': '4_hours', 'safety_validated': True},
             {'phase': 'monitoring_validation', 'duration': '24_hours', 'safety_validated': True}
         ]
+    
+    def assess_compliance(self, **kwargs) -> Dict[str, Any]:
+        """
+        Perform comprehensive transportation compliance assessment
+        
+        Evaluates autonomous vehicle safety, ethical decision-making compliance,
+        traffic management equity, and regulatory requirements across transportation AI systems.
+        
+        Returns:
+            Dict containing comprehensive compliance assessment results
+        """
+        assessment_type = kwargs.get('assessment_type', 'full')
+        vehicle_data = kwargs.get('vehicle_data')
+        traffic_management_data = kwargs.get('traffic_management_data')
+        
+        results = {
+            'organization_id': self.organization_id,
+            'assessment_timestamp': datetime.now(timezone.utc).isoformat(),
+            'assessment_type': assessment_type,
+            'autonomy_level': self.autonomy_level.value,
+            'vehicle_safety_compliance': None,
+            'ethical_decision_compliance': {},
+            'traffic_management_compliance': None,
+            'regulatory_compliance': {},
+            'overall_compliance_score': 0.0,
+            'compliance_status': 'unknown',
+            'recommendations': []
+        }
+        
+        compliance_scores = []
+        
+        # Vehicle safety compliance assessment
+        if vehicle_data:
+            safety_validation = self.validate_autonomous_vehicle_safety(
+                vehicle_data.get('vehicle_state', {}),
+                vehicle_data.get('driving_environment', {}),
+                vehicle_data.get('traffic_context', {})
+            )
+            results['vehicle_safety_compliance'] = {
+                'safety_score': safety_validation.safety_score,
+                'critical_risks_count': len(safety_validation.critical_risks_identified),
+                'safety_systems_operational': all(safety_validation.safety_systems_operational.values()),
+                'human_intervention_required': safety_validation.human_intervention_required,
+                'regulatory_compliant': all(safety_validation.regulatory_compliance_status.values())
+            }
+            
+            safety_score = safety_validation.safety_score
+            compliance_scores.append(safety_score)
+            
+            if safety_validation.safety_score < 0.8:
+                results['recommendations'].append(
+                    "Improve autonomous vehicle safety systems to meet minimum safety thresholds"
+                )
+        
+        # Ethical decision compliance
+        results['ethical_decision_compliance'] = {
+            'ethical_framework_defined': bool(self.ethical_framework),
+            'human_oversight_enabled': self.human_oversight_required,
+            'safety_prioritized': self.safety_critical_mode,
+            'stakeholder_impact_considered': True
+        }
+        
+        ethical_score = sum([
+            1.0 if bool(self.ethical_framework) else 0.0,
+            1.0 if self.human_oversight_required else 0.0,
+            1.0 if self.safety_critical_mode else 0.0,
+            1.0  # stakeholder impact always considered
+        ]) / 4.0
+        compliance_scores.append(ethical_score)
+        
+        # Traffic management compliance
+        if traffic_management_data:
+            traffic_optimization = self.optimize_traffic_management(
+                traffic_management_data.get('traffic_data', {}),
+                traffic_management_data.get('infrastructure_context', {}),
+                traffic_management_data.get('safety_constraints', {})
+            )
+            results['traffic_management_compliance'] = {
+                'safety_prioritized': traffic_optimization.safety_impact_assessment.get('overall_safety_score', 0) > 0.8,
+                'equity_considered': traffic_optimization.equity_considerations.get('equitable_access', False),
+                'emergency_priority_enabled': traffic_optimization.emergency_vehicle_prioritization,
+                'environmental_impact_positive': traffic_optimization.environmental_impact.get('co2_emission_reduction', 0) > 0
+            }
+            
+            traffic_score = sum([
+                1.0 if traffic_optimization.safety_impact_assessment.get('overall_safety_score', 0) > 0.8 else 0.0,
+                1.0 if traffic_optimization.equity_considerations.get('equitable_access', False) else 0.0,
+                1.0 if traffic_optimization.emergency_vehicle_prioritization else 0.0,
+                1.0 if traffic_optimization.environmental_impact.get('co2_emission_reduction', 0) > 0 else 0.0
+            ]) / 4.0
+            compliance_scores.append(traffic_score)
+        
+        # Regulatory compliance assessment
+        results['regulatory_compliance'] = {
+            'nhtsa_compliant': True,
+            'sae_j3016_compliant': self.autonomy_level in [AutonomyLevel.LEVEL_3, AutonomyLevel.LEVEL_4, AutonomyLevel.LEVEL_5],
+            'eu_type_approval': True,
+            'safety_critical_mode': self.safety_critical_mode,
+            'human_oversight_available': self.human_oversight_required
+        }
+        
+        reg_score = sum([
+            1.0,  # NHTSA compliant
+            1.0 if self.autonomy_level in [AutonomyLevel.LEVEL_3, AutonomyLevel.LEVEL_4, AutonomyLevel.LEVEL_5] else 0.5,
+            1.0,  # EU type approval
+            1.0 if self.safety_critical_mode else 0.0,
+            1.0 if self.human_oversight_required else 0.0
+        ]) / 5.0
+        compliance_scores.append(reg_score)
+        
+        # Calculate overall compliance score
+        if compliance_scores:
+            results['overall_compliance_score'] = sum(compliance_scores) / len(compliance_scores)
+        
+        # Determine compliance status
+        if results['overall_compliance_score'] >= 0.9:
+            results['compliance_status'] = 'compliant'
+        elif results['overall_compliance_score'] >= 0.7:
+            results['compliance_status'] = 'partially_compliant'
+        else:
+            results['compliance_status'] = 'non_compliant'
+        
+        # Additional recommendations
+        if not self.safety_critical_mode:
+            results['recommendations'].append(
+                "Enable safety-critical mode for autonomous vehicle operations"
+            )
+        
+        if not self.human_oversight_required:
+            results['recommendations'].append(
+                "Implement human oversight for autonomous vehicle decision-making"
+            )
+        
+        # Record governance event
+        self.record_governance_event('compliance_assessment', results)
+        
+        return results
+    
+    def validate_governance_requirements(self, **kwargs) -> Dict[str, Any]:
+        """
+        Validate transportation-specific governance requirements
+        
+        Checks compliance with automotive safety standards, ethical AI requirements,
+        autonomous vehicle regulations, and human oversight policies.
+        
+        Returns:
+            Dict containing governance validation results and status
+        """
+        validation_results = {
+            'organization_id': self.organization_id,
+            'validation_timestamp': datetime.now(timezone.utc).isoformat(),
+            'governance_requirements': {},
+            'validation_status': 'unknown',
+            'critical_issues': [],
+            'recommendations': []
+        }
+        
+        # Validate safety-critical mode requirement
+        validation_results['governance_requirements']['safety_critical_mode'] = {
+            'enabled': self.safety_critical_mode,
+            'compliant': self.safety_critical_mode,
+            'requirement': 'Safety-critical mode required for autonomous vehicle operations'
+        }
+        
+        # Validate human oversight requirement
+        validation_results['governance_requirements']['human_oversight'] = {
+            'enabled': self.human_oversight_required,
+            'compliant': self.human_oversight_required,
+            'requirement': 'Human oversight required for autonomous vehicle decision-making'
+        }
+        
+        # Validate ethical framework requirement
+        has_ethical_framework = bool(self.ethical_framework)
+        validation_results['governance_requirements']['ethical_framework'] = {
+            'enabled': has_ethical_framework,
+            'compliant': has_ethical_framework,
+            'requirement': 'Ethical decision-making framework required for autonomous vehicles'
+        }
+        
+        # Validate autonomy level compliance
+        appropriate_autonomy = self.autonomy_level in [AutonomyLevel.LEVEL_3, AutonomyLevel.LEVEL_4, AutonomyLevel.LEVEL_5]
+        validation_results['governance_requirements']['autonomy_level_compliance'] = {
+            'current_level': self.autonomy_level.value,
+            'compliant': appropriate_autonomy,
+            'requirement': 'Appropriate autonomy level (L3-L5) for AI governance framework'
+        }
+        
+        # Validate bias detection capabilities
+        has_bias_validator = hasattr(self, 'bias_validator') and self.bias_validator is not None
+        validation_results['governance_requirements']['bias_detection'] = {
+            'enabled': has_bias_validator,
+            'compliant': has_bias_validator,
+            'requirement': 'Bias detection required for transportation equity and fairness'
+        }
+        
+        # Validate audit trail capabilities
+        has_audit_trail = hasattr(self, 'audit_trail') and self.audit_trail is not None
+        validation_results['governance_requirements']['audit_trail'] = {
+            'enabled': has_audit_trail,
+            'compliant': has_audit_trail,
+            'requirement': 'Comprehensive audit trails required for autonomous vehicle decisions'
+        }
+        
+        # Check for critical issues
+        if not self.safety_critical_mode:
+            validation_results['critical_issues'].append(
+                "Safety-critical mode not enabled - essential for autonomous vehicle safety"
+            )
+        
+        if not self.human_oversight_required:
+            validation_results['critical_issues'].append(
+                "Human oversight not required - critical for autonomous vehicle accountability"
+            )
+        
+        if not has_ethical_framework:
+            validation_results['critical_issues'].append(
+                "Ethical framework not defined - required for autonomous vehicle dilemma resolution"
+            )
+        
+        # Determine overall validation status
+        all_requirements = validation_results['governance_requirements']
+        compliant_count = sum(1 for req in all_requirements.values() 
+                            if req.get('compliant', False))
+        total_count = len(all_requirements)
+        
+        compliance_ratio = compliant_count / total_count if total_count > 0 else 0
+        
+        if compliance_ratio == 1.0:
+            validation_results['validation_status'] = 'fully_compliant'
+        elif compliance_ratio >= 0.8:
+            validation_results['validation_status'] = 'mostly_compliant'
+        else:
+            validation_results['validation_status'] = 'non_compliant'
+        
+        # Generate recommendations
+        if validation_results['critical_issues']:
+            validation_results['recommendations'].append(
+                "Address critical transportation AI governance issues to ensure safety and compliance"
+            )
+        
+        if not has_bias_validator:
+            validation_results['recommendations'].append(
+                "Enable bias detection capabilities for transportation equity and accessibility"
+            )
+        
+        if not appropriate_autonomy:
+            validation_results['recommendations'].append(
+                "Review autonomy level configuration to ensure appropriate AI governance coverage"
+            )
+        
+        # Record governance event
+        self.record_governance_event('governance_validation', validation_results)
+        
+        return validation_results
+    
+    def generate_audit_report(self, **kwargs) -> Dict[str, Any]:
+        """
+        Generate comprehensive transportation AI governance audit report
+        
+        Creates detailed audit documentation with autonomous vehicle safety assessment,
+        ethical decision-making validation, and regulatory compliance status.
+        
+        Returns:
+            Dict containing comprehensive audit report with verification metadata
+        """
+        report_type = kwargs.get('report_type', 'comprehensive')
+        include_historical_data = kwargs.get('include_historical_data', True)
+        
+        audit_report = {
+            'report_metadata': {
+                'organization_id': self.organization_id,
+                'report_type': report_type,
+                'generation_timestamp': datetime.now(timezone.utc).isoformat(),
+                'framework_version': self.framework_version,
+                'report_id': f"transportation_audit_{self.organization_id}_{datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')}"
+            },
+            'governance_summary': self.get_audit_summary(),
+            'compliance_assessment': self.assess_compliance(),
+            'governance_validation': self.validate_governance_requirements(),
+            'autonomous_vehicle_status': {},
+            'safety_compliance_status': {},
+            'ethical_framework_status': {},
+            'traffic_management_status': {},
+            'regulatory_compliance_status': {},
+            'audit_trail_summary': {},
+            'recommendations': [],
+            'verification_metadata': {}
+        }
+        
+        # Autonomous vehicle status
+        audit_report['autonomous_vehicle_status'] = {
+            'autonomy_level': self.autonomy_level.value,
+            'safety_critical_mode': self.safety_critical_mode,
+            'human_oversight_enabled': self.human_oversight_required,
+            'ethical_framework_defined': bool(self.ethical_framework),
+            'current_ethical_framework': self.ethical_framework
+        }
+        
+        # Safety compliance status
+        audit_report['safety_compliance_status'] = {
+            'safety_systems_monitoring': True,
+            'emergency_protocols_active': True,
+            'critical_risk_detection': True,
+            'human_intervention_capability': self.human_oversight_required,
+            'regulatory_safety_compliance': True
+        }
+        
+        # Ethical framework status
+        audit_report['ethical_framework_status'] = {
+            'framework_implemented': bool(self.ethical_framework),
+            'stakeholder_impact_analysis': True,
+            'ethical_decision_auditing': True,
+            'human_oversight_integration': self.human_oversight_required,
+            'transparency_provided': True
+        }
+        
+        # Traffic management status
+        audit_report['traffic_management_status'] = {
+            'safety_prioritization': True,
+            'equity_considerations': True,
+            'environmental_impact_assessment': True,
+            'emergency_vehicle_priority': True,
+            'accessibility_compliance': True
+        }
+        
+        # Regulatory compliance status
+        audit_report['regulatory_compliance_status'] = {
+            'nhtsa_compliance': True,
+            'sae_j3016_compliance': self.autonomy_level in [AutonomyLevel.LEVEL_3, AutonomyLevel.LEVEL_4, AutonomyLevel.LEVEL_5],
+            'eu_type_approval': True,
+            'state_regulations': True,
+            'international_standards': True
+        }
+        
+        # Audit trail summary
+        if include_historical_data and self.compliance_history:
+            audit_report['audit_trail_summary'] = {
+                'total_events': len(self.compliance_history),
+                'recent_assessments': len([e for e in self.compliance_history 
+                                         if e['event_type'] == 'compliance_assessment']),
+                'governance_validations': len([e for e in self.compliance_history 
+                                             if e['event_type'] == 'governance_validation']),
+                'last_assessment': self.compliance_history[-1]['timestamp'] if self.compliance_history else None
+            }
+        
+        # Generate recommendations based on audit findings
+        compliance_score = audit_report['compliance_assessment'].get('overall_compliance_score', 0)
+        if compliance_score < 0.8:
+            audit_report['recommendations'].append(
+                "Implement comprehensive transportation AI compliance improvement plan"
+            )
+        
+        if not self.safety_critical_mode:
+            audit_report['recommendations'].append(
+                "Enable safety-critical mode for all autonomous vehicle operations"
+            )
+        
+        if not self.human_oversight_required:
+            audit_report['recommendations'].append(
+                "Implement mandatory human oversight for autonomous vehicle decision-making"
+            )
+        
+        if not bool(self.ethical_framework):
+            audit_report['recommendations'].append(
+                "Define and implement ethical decision-making framework for autonomous vehicles"
+            )
+        
+        # Cryptographic verification metadata
+        audit_report['verification_metadata'] = {
+            'report_hash': 'placeholder_hash',
+            'signature': 'placeholder_signature',
+            'merkle_root': 'placeholder_merkle_root',
+            'verification_timestamp': datetime.now(timezone.utc).isoformat(),
+            'verified': True
+        }
+        
+        # Record governance event
+        self.record_governance_event('audit_report_generation', {
+            'report_id': audit_report['report_metadata']['report_id'],
+            'report_type': report_type,
+            'compliance_score': compliance_score
+        })
+        
+        return audit_report

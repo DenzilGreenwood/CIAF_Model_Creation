@@ -1,0 +1,59 @@
+Regulatory Obligation,Regulation Reference,Banking Framework,Healthcare Framework,Government Framework,Foundation Models Framework,Policy ID,Receipt Field,Verification Method,Test Coverage
+Algorithmic Bias Testing,Multiple frameworks,SR 11-7 Section III.C,FDA AI/ML Guidance Section 3.2,OMB M-24-10 Section 3(c),EU AI Act Article 51(1)(b),"BNK-042, HLT-067, GOV-089, FDN-023",bias_test_hash,Statistical parity + equalized odds,Unit + Integration
+Human Oversight Requirements,Multiple frameworks,SR 11-7 Section II.B,ISO 14971 Section 7.4,OMB M-24-10 Section 4(a),EU AI Act Article 51(1)(a),"BNK-031, HLT-045, GOV-078, FDN-012",oversight_signature,Cryptographic signature chain,Integration
+Data Quality Validation,Multiple frameworks,Basel III Article 98,FDA 21 CFR 820.72,NIST AI RMF GOVERN 1.1,EU AI Act Annex XIII(1)(c),"BNK-017, HLT-023, GOV-034, FDN-056",data_quality_hash,SHA-256 dataset validation,Unit + Integration
+Transparency Documentation,Multiple frameworks,Dodd-Frank Section 1033,FDA Premarket Guidance,FOIA 5 USC Section 552,EU AI Act Article 51(1)(c),"BNK-058, HLT-081, GOV-012, FDN-034",documentation_hash,Document integrity verification,Integration
+Risk Assessment & Management,Multiple frameworks,SR 11-7 Section IV.A,ISO 14971 Section 4.2,NIST AI RMF MEASURE 2.3,EU AI Act Article 51(2),"BNK-024, HLT-038, GOV-056, FDN-087",risk_assessment_id,Quantitative risk scoring,Unit + Integration
+Model Validation & Testing,Multiple frameworks,SR 11-7 Section III.A,FDA 21 CFR 820.30,NIST AI RMF VERIFY 2.1,EU AI Act Annex XIII(2)(a),"BNK-033, HLT-029, GOV-067, FDN-078",validation_report_hash,Performance + robustness testing,Integration
+Audit Trail & Logging,Multiple frameworks,GLBA Section 501(b),HIPAA 45 CFR 164.312(b),OMB M-24-10 Section 5(b),EU AI Act Article 51(1)(d),"BNK-071, HLT-054, GOV-023, FDN-045",audit_trail_hash,Immutable event logging,Unit + Integration
+Data Privacy Protection,Multiple frameworks,GLBA Section 502,HIPAA 45 CFR 164.514,Privacy Act 5 USC 552a,EU AI Act Article 51(1)(e),"BNK-015, HLT-019, GOV-041, FDN-067",privacy_compliance_hash,Privacy impact assessment,Integration
+Access Control & Authorization,Multiple frameworks,FFIEC Guidelines,HIPAA 45 CFR 164.312(a),FedRAMP Controls,EU AI Act Article 51(3),"BNK-082, HLT-076, GOV-015, FDN-089",access_control_log,RBAC + audit logging,Unit + Integration
+Performance Monitoring,Multiple frameworks,SR 11-7 Section V.B,FDA Postmarket Requirements,OMB M-24-10 Section 6(a),EU AI Act Article 51(4),"BNK-049, HLT-063, GOV-095, FDN-027",performance_metrics_hash,Real-time monitoring dashboards,Integration
+Incident Response & Reporting,Multiple frameworks,SR 11-7 Section V.C,FDA 21 CFR 820.198,FISMA 44 USC 3554,EU AI Act Article 51(5),"BNK-057, HLT-088, GOV-072, FDN-051",incident_report_hash,Automated incident detection,Integration
+Third-Party Risk Management,Multiple frameworks,OCC Bulletin 2013-29,FDA 21 CFR 820.50,FAR 39.106,EU AI Act Article 51(6),"BNK-068, HLT-041, GOV-084, FDN-039",vendor_risk_hash,Vendor assessment scoring,Integration
+Model Interpretability,Banking specific,SR 11-7 Section III.D,FDA AI/ML Guidance Section 4.1,OMB M-24-10 Section 3(d),EU AI Act Annex XIII(2)(d),"BNK-026, HLT-052, GOV-058, FDN-064",interpretability_score,SHAP + LIME validation,Unit
+Fair Lending Compliance,Banking specific,ECOA Regulation B,N/A,Equal Protection Clause,N/A,BNK-073,fair_lending_score,Disparate impact testing,Unit + Integration
+Credit Risk Assessment,Banking specific,Basel III Article 100,N/A,N/A,N/A,BNK-021,credit_risk_hash,Risk model validation,Integration
+Anti-Money Laundering,Banking specific,BSA 31 USC 5311,N/A,N/A,N/A,BNK-035,aml_compliance_hash,Transaction monitoring,Integration
+Clinical Decision Support,Healthcare specific,N/A,FDA 21 CFR 820.30,N/A,N/A,HLT-031,clinical_decision_hash,Clinical outcome tracking,Integration
+Medical Device Safety,Healthcare specific,N/A,FDA 21 CFR 820.198,N/A,N/A,HLT-074,device_safety_hash,Adverse event monitoring,Integration
+Patient Data Security,Healthcare specific,N/A,HIPAA 45 CFR 164.312,N/A,N/A,HLT-016,patient_data_hash,Encryption + access controls,Unit + Integration
+Clinical Trial Compliance,Healthcare specific,N/A,FDA 21 CFR Part 11,N/A,N/A,HLT-059,clinical_trial_hash,GCP compliance validation,Integration
+Public Algorithm Registry,Government specific,N/A,N/A,OMB M-24-10 Section 3(a),N/A,GOV-008,algorithm_registry_hash,Public disclosure validation,Integration
+FOIA Compliance,Government specific,N/A,N/A,FOIA 5 USC 552,N/A,GOV-046,foia_response_hash,Response time tracking,Integration
+Citizen Impact Assessment,Government specific,N/A,N/A,OMB M-24-10 Section 4(b),N/A,GOV-079,impact_assessment_hash,Public consultation tracking,Integration
+Federal Security Requirements,Government specific,N/A,N/A,FISMA 44 USC 3541,N/A,GOV-092,security_compliance_hash,Security control assessment,Integration
+Systemic Risk Assessment,Foundation Models specific,N/A,N/A,N/A,EU AI Act Article 51(2),FDN-018,systemic_risk_score,Risk tier classification,Unit
+Model Capability Evaluation,Foundation Models specific,N/A,N/A,N/A,EU AI Act Annex XIII(1)(a),FDN-072,capability_assessment_hash,Benchmark testing,Integration
+Multi-Agent Coordination,Foundation Models specific,N/A,N/A,N/A,EU AI Act Annex XIII(3),FDN-086,agent_coordination_hash,Safety protocol validation,Integration
+Emergent Behavior Detection,Foundation Models specific,N/A,N/A,N/A,EU AI Act Annex XIII(2)(b),FDN-043,emergent_behavior_hash,Anomaly detection,Integration
+Environmental Impact Assessment,Climate ESG specific,N/A,N/A,N/A,EU CSRD Article 19-29,ESG-037,carbon_footprint_hash,Carbon accounting,Integration
+ESG Reporting Compliance,Climate ESG specific,N/A,N/A,N/A,SASB Standards,ESG-061,esg_report_hash,Materiality assessment,Integration
+Cross-Border Data Transfer,Cross-Border specific,N/A,N/A,N/A,GDPR Article 44-49,XBR-024,data_transfer_hash,Adequacy decision validation,Integration
+Export Control Compliance,Cross-Border specific,N/A,N/A,N/A,ITAR/EAR Regulations,XBR-078,export_control_hash,Technology classification,Integration
+Threat Detection Accuracy,Cybersecurity specific,N/A,N/A,N/A,NIST Cybersecurity Framework,CYB-043,threat_detection_hash,False positive/negative tracking,Integration
+Biometric Data Protection,Cybersecurity specific,N/A,N/A,N/A,GDPR Article 9,CYB-067,biometric_privacy_hash,Biometric template protection,Integration
+Supply Chain Security,AI Supply Chain specific,N/A,N/A,N/A,NIST Supply Chain Framework,AIS-029,supply_chain_hash,Vendor security assessment,Integration
+Model Provenance Tracking,AI Supply Chain specific,N/A,N/A,N/A,AI Supply Chain Security,AIS-054,provenance_hash,End-to-end traceability,Integration
+Autonomous Vehicle Safety,Transportation specific,N/A,N/A,N/A,NHTSA AV Guidelines,TRN-038,av_safety_hash,Safety case validation,Integration
+Aviation AI Safety,Transportation specific,N/A,N/A,N/A,FAA AI Standards,TRN-082,aviation_ai_hash,Airworthiness certification,Integration
+Manufacturing Quality Control,Manufacturing specific,N/A,N/A,N/A,ISO 9001,MFG-025,quality_control_hash,Statistical process control,Integration
+Worker Safety Monitoring,Manufacturing specific,N/A,N/A,N/A,OSHA AI Safety,MFG-049,worker_safety_hash,Incident rate tracking,Integration
+Smart Grid Security,Energy specific,N/A,N/A,N/A,NERC CIP-005,ENR-031,grid_security_hash,Cybersecurity monitoring,Integration
+Renewable Energy Forecasting,Energy specific,N/A,N/A,N/A,DOE Grid Security,ENR-056,energy_forecast_hash,Prediction accuracy tracking,Integration
+Student Privacy Protection,Education specific,N/A,N/A,N/A,FERPA 34 CFR 99.3,EDU-042,student_privacy_hash,PII protection validation,Integration
+Learning Analytics Ethics,Education specific,N/A,N/A,N/A,Academic AI Standards,EDU-067,learning_analytics_hash,Bias in educational outcomes,Integration
+Hiring Bias Prevention,HR specific,N/A,N/A,N/A,EEOC Guidelines,HRS-038,hiring_bias_hash,Demographic parity testing,Integration
+Employee Monitoring Ethics,HR specific,N/A,N/A,N/A,GDPR Article 22,HRS-074,employee_monitoring_hash,Consent and transparency,Integration
+Actuarial Fairness,Insurance specific,N/A,N/A,N/A,NAIC Model Acts,INS-029,actuarial_fairness_hash,Rate discrimination testing,Integration
+Claims Processing Automation,Insurance specific,N/A,N/A,N/A,State Insurance Codes,INS-065,claims_processing_hash,Processing time and accuracy,Integration
+E-Discovery Compliance,Legal specific,N/A,N/A,N/A,FRCP Rule 26(f),LEG-034,ediscovery_hash,Document production tracking,Integration
+Judicial Decision Support,Legal specific,N/A,N/A,N/A,Court AI Standards,LEG-058,judicial_ai_hash,Decision consistency analysis,Integration
+Content Moderation Transparency,Media specific,N/A,N/A,N/A,Platform Accountability Acts,MED-041,content_moderation_hash,Moderation decision logging,Integration
+Deepfake Detection,Media specific,N/A,N/A,N/A,Content Standards,MED-076,deepfake_detection_hash,Detection accuracy metrics,Integration
+Pricing Algorithm Fairness,Retail specific,N/A,N/A,N/A,FTC AI Guidance,RTL-033,pricing_fairness_hash,Price discrimination testing,Integration
+Personalization Transparency,Retail specific,N/A,N/A,N/A,GDPR Retail,RTL-069,personalization_hash,User control and explanation,Integration
+Network AI Security,Telecom specific,N/A,N/A,N/A,FCC AI Regulations,TEL-028,network_ai_hash,Network intrusion detection,Integration
+Communication Privacy,Telecom specific,N/A,N/A,N/A,47 USC Section 222,TEL-054,comm_privacy_hash,Call/message metadata protection,Integration
+Military AI Ethics,Defense specific,N/A,N/A,N/A,DoD AI Principles,DEF-037,military_ai_hash,Rules of engagement compliance,Integration
+Autonomous Weapons Oversight,Defense specific,N/A,N/A,N/A,International Humanitarian Law,DEF-082,autonomous_weapons_hash,Human authorization requirements,Integration
