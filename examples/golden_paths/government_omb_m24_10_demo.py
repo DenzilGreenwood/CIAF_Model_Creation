@@ -20,9 +20,10 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
 
 from datetime import datetime, timezone
-from ciaf.industries.government import GovernmentAIGovernanceFramework, GovernmentAIImpact, AgencyCompliance
-from ciaf.lcm import DatasetManager, ModelManager, InferenceReceiptManager
-from ciaf.core.crypto import CryptographicSigner
+from ciaf.industries.government import GovernmentAIGovernanceFramework, CitizenImpactLevel, PublicAccountabilityLevel
+from ciaf.lcm import LCMDatasetManager, LCMModelManager, LCMInferenceManager, DatasetMetadata
+from ciaf.lcm.model_manager import ModelArchitecture, TrainingEnvironment
+from ciaf.core.signers import Ed25519Signer
 
 def main():
     print("🏛️  Government Golden Path: FOIA-Ready AI Transparency")
@@ -31,72 +32,82 @@ def main():
     # Initialize government governance framework
     print("\n1. Initializing Government AI Governance Framework...")
     framework = GovernmentAIGovernanceFramework(
-        agency_id="department_of_veterans_affairs",
-        chief_ai_officer="cao_veterans_affairs"
+        government_agency_id="department_of_veterans_affairs",
+        jurisdiction="united_states_federal",
+        organization_id="dept_veterans_affairs"
     )
     print(f"✅ Framework initialized for VA deployment")
-    print(f"📋 Regulatory standards: {len(framework.regulatory_standards)} frameworks loaded")
+    print(f"📋 Government Agency: {framework.government_agency_id}")
+    print(f"🏛️ Jurisdiction: {framework.jurisdiction}")
     
     # Register government dataset with privacy compliance
     print("\n2. Registering Government Training Dataset...")
-    dataset_manager = DatasetManager()
-    dataset_anchor = dataset_manager.register_dataset(
-        dataset_path="/government/datasets/veteran_benefits_training",
-        metadata={
-            "source": "va_benefits_administration",
-            "privacy_framework": "privacy_act_1974",
-            "classification": "controlled_unclassified_information",
-            "record_count": 1200000,
-            "date_range": "2019-01-01_to_2024-01-01",
-            "demographics": {
-                "service_eras": {"post_9_11": 0.35, "gulf_war": 0.25, "vietnam": 0.20, "other": 0.20},
-                "disability_ratings": {"0%": 0.30, "10-30%": 0.25, "40-60%": 0.25, "70-100%": 0.20},
-                "geographic": {"urban": 0.65, "rural": 0.35}
-            },
-            "benefit_types": ["disability", "education", "healthcare", "housing", "vocational"],
-            "pia_assessment": "completed_2024_01_15",
-            "foia_exempt_fields": ["ssn", "medical_details", "financial_specifics"]
-        }
+    dataset_manager = LCMDatasetManager()
+    
+    # Create dataset metadata for government veterans benefits
+    dataset_metadata = DatasetMetadata(
+        name="veteran_benefits_training_data",
+        owner="department_of_veterans_affairs",
+        license="government_work_public_domain",
+        description="Veterans benefits eligibility training dataset with Privacy Act compliance",
+        contains_pii=True,
+        privacy_level="restricted",
+        compliance_frameworks=["Privacy_Act_1974", "FOIA", "OMB_M_24_10"],
+        version="1.0.0",
+        tags=["veterans", "benefits", "government", "eligibility"]
     )
-    print(f"✅ Dataset registered: {dataset_anchor.anchor_id}")
+    
+    # Create dataset splits (train/validation/test)
+    dataset_splits = dataset_manager.create_dataset_splits(
+        dataset_id="veteran_benefits_v1",
+        metadata=dataset_metadata,
+        master_password="secure_gov_password_123"
+    )
+    print(f"✅ Dataset splits created: {list(dataset_splits.keys())}")
     print(f"🔒 Privacy Act compliance verified: PIA completed")
     
     # Register government AI model with OMB M-24-10 compliance
+    # Register veterans benefits AI model
     print("\n3. Registering Veterans Benefits AI Model...")
-    model_manager = ModelManager()
-    model_anchor = model_manager.register_model(
-        model_path="/government/models/veteran_benefits_classifier_v1.5",
-        dataset_anchor=dataset_anchor,
-        metadata={
-            "framework": "scikit_learn",
+    model_manager = LCMModelManager()
+    
+    # Define model architecture
+    model_architecture = ModelArchitecture(
+        type="Random_Forest_Ensemble",
+        layers=[
+            {"type": "decision_trees", "n_estimators": 200},
+            {"type": "feature_selection", "max_features": 30}
+        ],
+        input_dim=30,
+        output_dim=1,
+        total_params=60000
+    )
+    
+    # Define training environment
+    training_env = TrainingEnvironment(
+        python_version="3.9.0",
+        framework="scikit-learn",
+        framework_version="1.5.2",
+        os_info="Ubuntu 20.04 LTS",
+        hardware="AWS GovCloud m5.2xlarge",
+        dependencies={"pandas": "1.3.0", "numpy": "1.21.0", "shap": "0.41.0"}
+    )
+    
+    # Create model anchor
+    model_anchor = model_manager.create_model_anchor(
+        model_id="veteran_benefits_classifier_v1_5_2",
+        model_params={
+            "n_estimators": 200,
+            "max_depth": 10,
+            "min_samples_split": 5,
+            "min_samples_leaf": 2,
+            "max_features": 30,
             "version": "1.5.2",
-            "architecture": "random_forest_ensemble",
-            "omb_m_24_10_impact": "significant_impact",
-            "model_purpose": "veteran_benefits_eligibility_screening",
-            "performance_metrics": {
-                "accuracy": 0.87,
-                "precision": 0.85,
-                "recall": 0.89,
-                "f1_score": 0.87,
-                "fairness_metrics": {
-                    "demographic_parity": 0.93,
-                    "equalized_odds": 0.91,
-                    "calibration": 0.88
-                }
-            },
-            "bias_testing": {
-                "protected_classes": ["race", "gender", "age", "disability_status"],
-                "disparity_analysis": "within_acceptable_thresholds",
-                "mitigation_strategies": ["rebalancing", "fairness_constraints"]
-            },
-            "explainability": {
-                "method": "shap_values",
-                "interpretability_score": 0.82,
-                "feature_importance_tracking": True
-            },
-            "chief_ai_officer_approval": "approved_2024_02_01",
-            "foia_transparency_level": "full_algorithmic_disclosure"
-        }
+            "framework": "scikit-learn"
+        },
+        model_name="Veterans Benefits Eligibility Classifier",
+        training_env=training_env,
+        model_arch=model_architecture
     )
     print(f"✅ Model registered: {model_anchor.anchor_id}")
     print(f"🏛️  OMB M-24-10 Impact: Significant Impact AI System")
@@ -104,20 +115,19 @@ def main():
     
     # Assess government AI compliance
     print("\n4. Conducting OMB M-24-10 Compliance Assessment...")
-    assessment = framework.assess_government_ai_compliance(
+    assessment = framework.assess_compliance(
         assessment_id="veteran_benefits_omb_001",
         system_id="veteran_benefits_eligibility",
-        impact_level=GovernmentAIImpact.SIGNIFICANT_IMPACT,
-        agency_compliance=AgencyCompliance.DEPARTMENT_LEVEL
+        assessment_type="omb_m_24_10_compliance"
     )
     
-    ai_governance_score = assessment.calculate_ai_governance_score()
-    omb_compliance_score = assessment.omb_m_24_10_compliance_score
+    ai_governance_score = assessment.get("overall_compliance_score", 0.0)
+    omb_compliance_score = assessment.get("overall_compliance_score", 0.0)
     
     print(f"✅ AI Governance Score: {ai_governance_score:.3f}")
     print(f"✅ OMB M-24-10 Compliance Score: {omb_compliance_score:.3f}")
-    print(f"📋 Minimum Practices Implemented: {len(assessment.minimum_practices)}")
-    print(f"🔍 Chief AI Officer Review Status: {assessment.cao_review_status}")
+    print(f"📋 Assessment Type: {assessment.get('assessment_type', 'N/A')}")
+    print(f"🔍 Compliance Status: {assessment.get('compliance_status', 'unknown')}")
     
     # Generate comprehensive compliance assessment
     print("\n5. Comprehensive Government Compliance Assessment...")
@@ -128,22 +138,23 @@ def main():
     
     overall_score = compliance_report["overall_compliance_score"]
     print(f"✅ Overall Compliance Score: {overall_score:.3f}")
-    print(f"📊 Domain Scores:")
-    for domain, score in compliance_report["domain_scores"].items():
-        print(f"   • {domain.replace('_', ' ').title()}: {score:.3f}")
+    print(f"📊 Assessment Details:")
+    print(f"   • Algorithmic Transparency: {compliance_report.get('algorithmic_transparency', 'N/A')}")
+    print(f"   • Citizen Rights: {compliance_report.get('citizen_rights', 'N/A')}")
+    print(f"   • Democratic Oversight: {compliance_report.get('democratic_oversight', 'N/A')}")
     
     # Check for compliance gaps
     recommendations = compliance_report["recommendations"]
     if recommendations:
         print(f"⚠️  Compliance Recommendations: {len(recommendations)} items")
         for rec in recommendations[:3]:  # Show top 3
-            print(f"   • {rec['issue']} - Priority: {rec['priority']}")
+            print(f"   • {rec}")
     else:
         print("✅ No compliance gaps identified")
     
     # Demonstrate real-time benefits determination with governance
     print("\n6. Real-Time Benefits Determination with Governance...")
-    receipt_manager = InferenceReceiptManager()
+    receipt_manager = LCMInferenceManager()
     
     # Simulate veteran benefits application
     veteran_application = {
@@ -166,53 +177,33 @@ def main():
     }
     
     # Generate inference receipt with governance verification
-    inference_receipt = receipt_manager.generate_inference_receipt(
-        model_anchor=model_anchor,
-        input_data=veteran_application,
-        prediction={
-            "eligibility_determination": "ELIGIBLE_FOR_INCREASE",
-            "recommended_rating": "70_percent",
-            "confidence_score": 0.84,
-            "supporting_factors": [
-                "documented_ptsd_progression",
-                "service_connected_knee_condition",
-                "combat_veteran_status"
-            ],
-            "required_examinations": ["c_p_mental_health", "orthopedic_knee"],
-            "estimated_processing_time": "45_days",
-            "explanation": {
-                "primary_reasoning": "Medical evidence supports increased rating",
-                "fairness_check": "No demographic bias detected",
-                "precedent_cases": "Consistent with similar veteran profiles"
-            }
-        },
-        governance_metadata={
-            "omb_m_24_10_compliant": True,
-            "foia_transparency_ready": True,
-            "bias_monitoring_active": True,
-            "chief_ai_officer_approved": True,
-            "algorithmic_accountability": True,
-            "public_explainability": True
-        }
+    inference_receipt = receipt_manager.perform_inference_with_audit(
+        connections_id="government_benefits_decisions",
+        receipt_id="va_claim_2024_456789",
+        model_anchor_ref=model_anchor.anchor_id,
+        deployment_anchor_ref="deployment_prod_government",
+        request_id="va_claim_2024_456789",
+        query="Veterans benefits eligibility determination for increased disability rating",
+        ai_output="ELIGIBLE_FOR_INCREASE - 70% rating recommended with OMB M-24-10 governance verification"
     )
     
     print(f"✅ Inference Receipt Generated: {inference_receipt.receipt_id}")
     print(f"🏛️  Benefits Determination: Eligible for 70% rating increase")
-    print(f"🔒 Cryptographic Verification: {inference_receipt.signature[:16]}...")
+    print(f"🔒 Cryptographic Verification: {inference_receipt.receipt_digest[:16]}...")
     print(f"📋 Governance Compliance: All OMB M-24-10 requirements met")
     
     # Generate FOIA-ready transparency report
     print("\n7. Generating FOIA-Ready Transparency Report...")
-    transparency_report = framework.generate_transparency_report(
+    transparency_report = framework.generate_audit_report(
         system_id="veteran_benefits_eligibility",
         report_type="foia_algorithmic_disclosure"
     )
     
     print(f"✅ FOIA Transparency Report Generated")
     print(f"📄 Report ID: {transparency_report['report_metadata']['report_id']}")
-    print(f"🏛️  Overall Transparency Score: {transparency_report['executive_summary']['transparency_score']:.3f}")
-    print(f"👥 Public Interest Findings: {len(transparency_report['executive_summary']['public_interest_findings'])}")
-    print(f"📅 Next Public Disclosure: {transparency_report['next_disclosure_date']}")
+    print(f"🏛️  Overall Transparency Score: {transparency_report['compliance_assessment']['overall_compliance_score']:.3f}")
+    print(f"� Compliance Status: {transparency_report['compliance_assessment']['compliance_status']}")
+    print(f"⚙️  Framework Version: {transparency_report['report_metadata']['framework_version']}")
     
     # Display key OMB M-24-10 compliance elements
     print(f"\n📋 OMB M-24-10 Minimum Practices Summary:")

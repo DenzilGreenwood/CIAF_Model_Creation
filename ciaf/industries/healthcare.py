@@ -110,7 +110,7 @@ class HealthcareAIGovernanceFramework(AIGovernanceFramework):
         
         # Initialize medical-specific validators
         self.bias_validator = BiasValidator()
-        self.audit_trail = AuditTrail()
+        self.audit_trail = AuditTrail(f"{organization_id}_framework")
         self.policy_enforcement = PolicyEnforcement(
             industry_type='healthcare',
             regulatory_frameworks=self.compliance_standards,
@@ -511,7 +511,7 @@ class HealthcareAIGovernanceFramework(AIGovernanceFramework):
         # FDA compliance assessment
         results['fda_compliance'] = {
             'device_classification': self.fda_device_classification,
-            'clearance_valid': self._check_fda_clearance(),
+            'clearance_valid': self._check_fda_clearance_status(self.fda_device_classification),
             'clinical_validation_complete': self.clinical_validation_required,
             'quality_system_compliant': self._validate_quality_system_compliance(),
             'adverse_event_reporting': self._check_adverse_event_reporting(),

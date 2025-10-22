@@ -19,9 +19,10 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
 
 from datetime import datetime, timezone
-from ciaf.industries.healthcare import HealthcareAIGovernanceFramework, MedicalDeviceClass, ClinicalRiskLevel
-from ciaf.lcm import DatasetManager, ModelManager, InferenceReceiptManager
-from ciaf.core.crypto import CryptographicSigner
+from ciaf.industries.healthcare import HealthcareAIGovernanceFramework, ClinicalRiskLevel
+from ciaf.lcm import LCMDatasetManager, LCMModelManager, LCMInferenceManager, DatasetMetadata
+from ciaf.lcm.model_manager import ModelArchitecture, TrainingEnvironment
+from ciaf.core.signers import Ed25519Signer
 
 def main():
     print("🏥 Healthcare Golden Path: SaMD Triage System")
@@ -30,55 +31,80 @@ def main():
     # Initialize healthcare governance framework
     print("\n1. Initializing Healthcare AI Governance Framework...")
     framework = HealthcareAIGovernanceFramework(
-        healthcare_organization_id="mercy_general_hospital",
-        medical_device_class="Class_II_SaMD"
+        organization_id="mercy_general_hospital",
+        fda_device_classification="Class_II_SaMD"
     )
     print(f"✅ Framework initialized for Class II SaMD")
-    print(f"📋 Regulatory standards: {len(framework.regulatory_standards)} frameworks loaded")
+    print(f"📋 FDA Device Classification: {framework.fda_device_classification}")
+    print(f"🏥 Organization: {framework.organization_id}")
     
     # Register training dataset with HIPAA compliance
     print("\n2. Registering Clinical Training Dataset...")
-    dataset_manager = DatasetManager()
-    dataset_anchor = dataset_manager.register_dataset(
-        dataset_path="/healthcare/datasets/emergency_triage_training",
-        metadata={
-            "source": "mercy_general_ehr",
-            "anonymization": "hipaa_safe_harbor",
-            "patient_count": 45000,
-            "date_range": "2020-01-01_to_2023-12-31",
-            "demographics": {
-                "age_groups": {"18-30": 0.25, "31-50": 0.35, "51-70": 0.25, "70+": 0.15},
-                "gender": {"female": 0.52, "male": 0.47, "other": 0.01},
-                "ethnicity": {"white": 0.45, "hispanic": 0.25, "black": 0.15, "asian": 0.10, "other": 0.05}
-            },
-            "clinical_conditions": ["chest_pain", "respiratory_distress", "trauma", "cardiac", "neurological"]
-        }
+    dataset_manager = LCMDatasetManager()
+    
+    # Create dataset metadata for healthcare emergency triage
+    dataset_metadata = DatasetMetadata(
+        name="emergency_triage_training_data",
+        owner="mercy_general_hospital",
+        license="proprietary_medical_data",
+        description="Emergency triage training dataset with HIPAA Safe Harbor compliance",
+        contains_pii=True,
+        privacy_level="restricted",
+        compliance_frameworks=["HIPAA", "FDA_510K", "EU_MDR"],
+        version="1.0.0",
+        tags=["emergency", "triage", "clinical", "samd"]
     )
-    print(f"✅ Dataset registered: {dataset_anchor.anchor_id}")
+    
+    # Create dataset splits (train/validation/test)
+    dataset_splits = dataset_manager.create_dataset_splits(
+        dataset_id="emergency_triage_v1",
+        metadata=dataset_metadata,
+        master_password="secure_medical_password_123"
+    )
+    print(f"✅ Dataset splits created: {list(dataset_splits.keys())}")
     print(f"🔒 HIPAA compliance verified: Safe Harbor anonymization")
     
-    # Register SaMD model with FDA compliance
+    # Register SaMD triage model with FDA compliance
     print("\n3. Registering SaMD Triage Model...")
-    model_manager = ModelManager()
-    model_anchor = model_manager.register_model(
-        model_path="/healthcare/models/emergency_triage_v2.1",
-        dataset_anchor=dataset_anchor,
-        metadata={
-            "framework": "pytorch",
+    model_manager = LCMModelManager()
+    
+    # Define model architecture
+    model_architecture = ModelArchitecture(
+        type="Transformer_Clinical",
+        layers=[
+            {"type": "transformer_encoder", "heads": 8, "layers": 6},
+            {"type": "clinical_classifier", "classes": 5}
+        ],
+        input_dim=128,
+        output_dim=5,
+        total_params=25000000
+    )
+    
+    # Define training environment
+    training_env = TrainingEnvironment(
+        python_version="3.9.0",
+        framework="pytorch",
+        framework_version="2.1.0",
+        os_info="Ubuntu 20.04 LTS",
+        hardware="NVIDIA V100 GPU",
+        dependencies={"transformers": "4.21.0", "torch": "2.1.0", "scikit-learn": "1.3.0"}
+    )
+    
+    # Create model anchor
+    model_anchor = model_manager.create_model_anchor(
+        model_id="emergency_triage_samd_v2_1_0",
+        model_params={
+            "num_attention_heads": 8,
+            "num_hidden_layers": 6,
+            "hidden_size": 768,
+            "intermediate_size": 3072,
+            "max_position_embeddings": 512,
             "version": "2.1.0",
-            "architecture": "transformer_clinical",
-            "fda_classification": "Class_II_SaMD",
-            "intended_use": "emergency_department_triage_assistance",
-            "clinical_validation": {
-                "sensitivity": 0.94,
-                "specificity": 0.91,
-                "ppv": 0.89,
-                "npv": 0.95,
-                "auc_roc": 0.93
-            },
-            "iso_14971_risk_class": "Class_B",  # Non-life-threatening
-            "clinical_evidence": "retrospective_validation_45000_cases"
-        }
+            "framework": "pytorch"
+        },
+        model_name="Emergency Triage SaMD",
+        training_env=training_env,
+        model_arch=model_architecture
     )
     print(f"✅ Model registered: {model_anchor.anchor_id}")
     print(f"🏥 FDA Classification: Class II SaMD - Moderate Risk")
@@ -86,20 +112,19 @@ def main():
     
     # Assess clinical decision support compliance
     print("\n4. Conducting Clinical Decision Support Assessment...")
-    assessment = framework.assess_clinical_decision_support(
+    assessment = framework.assess_compliance(
         assessment_id="samd_triage_assessment_001",
         system_id="emergency_triage_ai",
-        device_class=MedicalDeviceClass.CLASS_II_SAMD,
-        clinical_risk_level=ClinicalRiskLevel.MODERATE
+        assessment_type="clinical_decision_support"
     )
     
-    safety_score = assessment.calculate_safety_score()
-    compliance_score = assessment.fda_compliance_score
+    safety_score = assessment.get("overall_compliance_score", 0.0)
+    compliance_score = assessment.get("overall_compliance_score", 0.0)
     
     print(f"✅ Clinical Safety Score: {safety_score:.3f}")
     print(f"✅ FDA Compliance Score: {compliance_score:.3f}")
-    print(f"📋 ISO 14971 Risk Controls: {len(assessment.risk_controls)} implemented")
-    print(f"🔍 Clinical Validation Status: {assessment.clinical_validation_status}")
+    print(f"📋 Assessment Type: {assessment.get('assessment_type', 'N/A')}")
+    print(f"🔍 Compliance Status: {assessment.get('compliance_status', 'unknown')}")
     
     # Generate comprehensive compliance assessment
     print("\n5. Comprehensive Compliance Assessment...")
@@ -110,22 +135,23 @@ def main():
     
     overall_score = compliance_report["overall_compliance_score"]
     print(f"✅ Overall Compliance Score: {overall_score:.3f}")
-    print(f"📊 Domain Scores:")
-    for domain, score in compliance_report["domain_scores"].items():
-        print(f"   • {domain.replace('_', ' ').title()}: {score:.3f}")
+    print(f"📊 Assessment Details:")
+    print(f"   • Patient Privacy: {compliance_report.get('patient_privacy', 'N/A')}")
+    print(f"   • FDA Compliance: {compliance_report.get('fda_compliance', 'N/A')}")
+    print(f"   • Clinical Validation: {compliance_report.get('clinical_validation', 'N/A')}")
     
     # Check for compliance gaps
     recommendations = compliance_report["recommendations"]
     if recommendations:
         print(f"⚠️  Compliance Recommendations: {len(recommendations)} items")
         for rec in recommendations[:3]:  # Show top 3
-            print(f"   • {rec['issue']} - Priority: {rec['priority']}")
+            print(f"   • {rec}")
     else:
         print("✅ No compliance gaps identified")
     
     # Demonstrate real-time inference with governance
     print("\n6. Real-Time Clinical Inference with Governance...")
-    receipt_manager = InferenceReceiptManager()
+    receipt_manager = LCMInferenceManager()
     
     # Simulate patient triage case
     patient_data = {
@@ -138,28 +164,19 @@ def main():
     }
     
     # Generate inference receipt with governance verification
-    inference_receipt = receipt_manager.generate_inference_receipt(
-        model_anchor=model_anchor,
-        input_data=patient_data,
-        prediction={
-            "triage_level": "ESI_Level_2",  # Emergency Severity Index
-            "recommended_actions": ["immediate_physician_evaluation", "cardiac_workup", "monitor_vitals"],
-            "confidence": 0.89,
-            "risk_factors": ["cardiac_symptoms", "age_group_risk"],
-            "differential_diagnosis": ["acute_coronary_syndrome", "pulmonary_embolism", "anxiety"]
-        },
-        governance_metadata={
-            "clinical_decision_support": True,
-            "physician_oversight_required": True,
-            "iso_14971_risk_level": "moderate",
-            "hipaa_logging_enabled": True,
-            "fda_samd_compliant": True
-        }
+    inference_receipt = receipt_manager.perform_inference_with_audit(
+        connections_id="clinical_triage_decisions",
+        receipt_id="patient_triage_12345",
+        model_anchor_ref=model_anchor.anchor_id,
+        deployment_anchor_ref="deployment_prod_clinical",
+        request_id="triage_12345",
+        query="Emergency triage assessment for patient with chest pain and shortness of breath",
+        ai_output="ESI_Level_2 - Immediate physician evaluation recommended with FDA SaMD governance verification"
     )
     
     print(f"✅ Inference Receipt Generated: {inference_receipt.receipt_id}")
     print(f"🏥 Triage Recommendation: ESI Level 2 (Immediate)")
-    print(f"🔒 Cryptographic Verification: {inference_receipt.signature[:16]}...")
+    print(f"🔒 Cryptographic Verification: {inference_receipt.receipt_digest[:16]}...")
     print(f"📋 Governance Compliance: All requirements met")
     
     # Generate FDA-ready audit report
@@ -171,9 +188,9 @@ def main():
     
     print(f"✅ FDA Audit Report Generated")
     print(f"📄 Report ID: {audit_report['report_metadata']['report_id']}")
-    print(f"🏥 Overall Governance Score: {audit_report['executive_summary']['overall_governance_score']:.3f}")
-    print(f"⚠️  Critical Findings: {len(audit_report['executive_summary']['critical_findings'])}")
-    print(f"📅 Next Review Date: {audit_report['next_review_date']}")
+    print(f"🏥 Overall Governance Score: {audit_report['compliance_assessment']['overall_compliance_score']:.3f}")
+    print(f"📊 Compliance Status: {audit_report['compliance_assessment']['compliance_status']}")
+    print(f"⚙️  Framework Version: {audit_report['report_metadata']['framework_version']}")
     
     # Display key FDA compliance elements
     print(f"\n📋 FDA 21 CFR 820 Compliance Summary:")

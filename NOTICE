@@ -1,0 +1,43 @@
+NOTICE
+
+Cognitive Insight AI Framework (CIAF)
+Copyright 2025 Denzil James Greenwood
+All rights reserved except as provided under the Apache 2.0 License.
+
+This product includes software developed by Denzil James Greenwood.
+
+Original Framework Components:
+- Cognitive Insight™ AI Governance Framework
+- Lazy Capsule Materialization (LCM)™ Process
+- Cryptographic Audit Trail System
+- Industry-Specific Compliance Engines
+
+ATTRIBUTION REQUIREMENTS:
+Any use, modification, or distribution of this software must retain
+this copyright notice and attribution to the original author.
+
+TRADEMARK NOTICE:
+"Cognitive Insight" and "Lazy Capsule Materialization" are trademarks
+of Denzil James Greenwood. Use of these marks requires permission.
+
+DEFENSIVE PUBLICATION:
+This repository serves as a public disclosure establishing prior art
+for the technologies, processes, and innovations contained herein,
+including but not limited to:
+
+1. Lazy Capsule Materialization (LCM) cryptographic audit process
+2. Industry-specific AI governance frameworks
+3. Cryptographic receipt generation for AI model governance
+4. Merkle tree-based audit trail architecture for AI compliance
+5. Automated regulatory mapping and compliance verification systems
+
+Publication Date: Original concepts disclosed December 2024
+GitHub Repository: First commit timestamped and publicly available
+Technical Documentation: Comprehensive disclosure in repository docs
+
+The disclosure of these innovations in this repository establishes
+prior art and prevents subsequent patent claims by third parties
+on the core concepts and methodologies described herein.
+
+For licensing inquiries beyond the Apache 2.0 scope, contact:
+denzil.greenwood@cognitiveinsight.ai

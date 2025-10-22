@@ -4,10 +4,19 @@ Cognitive Insight Audit Framework (CIAF)
 A modular framework for creating verifiable AI training and inference pipelines
 with lazy capsule materialization and cryptographic provenance tracking.
 
+Copyright (c) 2025 Denzil James Greenwood
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at:
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Original author of Cognitive Insight™ AI Framework and 
+Lazy Capsule Materialization (LCM)™ process.
+
 Created: 2025-09-09
-Last Modified: 2025-01-19
+Last Modified: 2025-10-21
 Author: Denzil James Greenwood
-Version: 1.1.0
+Version: 1.2.0
 """
 
 # Anchoring module removed - using LCM system instead

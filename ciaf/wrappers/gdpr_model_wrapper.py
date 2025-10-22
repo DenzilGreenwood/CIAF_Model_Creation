@@ -53,6 +53,14 @@ from .policy import (
     create_wrapper_policy
 )
 
+# Consent management system
+from ..compliance.consent import (
+    ConsentManager, ConsentRecord, validate_consent_status, 
+    migrate_consent_metadata, get_consent_manager
+)
+from ..compliance.consent_migration import ConsentMigrationEngine, migrate_wrapper_instance
+from ..core.enums import ConsentStatus, ConsentType, ConsentScope
+
 # Universal model support
 try:
     from .universal_model_adapter import UniversalModelAdapter, UniversalModelDetector
@@ -423,6 +431,11 @@ class GDPRModelWrapper(ModernCIAFModelWrapper):
             audit_trail_enabled=enable_audit_integration,
         )
 
+        # Consent management integration
+        self.consent_manager = get_consent_manager()
+        self.consent_migration_engine = ConsentMigrationEngine(self.consent_manager)
+        self._consent_migrated = False
+
         # Advanced feature initialization
         self.enable_deferred_lcm = enable_deferred_lcm
         self.default_lcm_mode = default_lcm_mode
@@ -657,13 +670,39 @@ class GDPRModelWrapper(ModernCIAFModelWrapper):
         return snapshot
 
     def _comprehensive_pii_sanitization(self, item: Dict[str, Any]) -> Dict[str, Any]:
-        """Enhanced PII sanitization with advanced pattern detection."""
+        """Enhanced PII sanitization with advanced pattern detection and consent validation."""
         sanitized = dict(item)
         redacted_fields = []
         
-        # Enhanced metadata sanitization
+        # Enhanced metadata sanitization with consent validation
         if "metadata" in sanitized:
             meta = dict(sanitized["metadata"])
+            
+            # Validate and migrate consent status if present
+            if "consent_status" in meta:
+                original_consent = meta["consent_status"]
+                try:
+                    validated_consent = validate_consent_status(original_consent)
+                    meta["consent_status"] = validated_consent.value
+                    meta["consent_status_migrated"] = True
+                    meta["consent_status_original"] = str(original_consent)
+                    
+                    # Record consent in consent manager if valid
+                    if validated_consent in [ConsentStatus.GRANTED, ConsentStatus.ACTIVE, ConsentStatus.VALID]:
+                        data_subject_id = meta.get("data_subject_id", "unknown")
+                        if data_subject_id != "unknown":
+                            self.consent_manager.record_consent(
+                                data_subject_id=data_subject_id,
+                                consent_type=ConsentType.EXPLICIT,
+                                consent_scope=ConsentScope.DATA_PROCESSING,
+                                purpose=self._gdpr_manifest.purpose_of_processing,
+                                metadata={"source": "gdpr_wrapper_sanitization", "model_name": self.model_name}
+                            )
+                            
+                except Exception as e:
+                    warnings.warn(f"Consent validation failed for {original_consent}: {e}")
+                    meta["consent_status"] = ConsentStatus.ERROR.value
+                    redacted_fields.append("consent_status_validation_error")
             
             # Check for PII patterns in metadata keys and values
             for key in list(meta.keys()):
@@ -697,6 +736,7 @@ class GDPRModelWrapper(ModernCIAFModelWrapper):
         
         # Store redaction info for compliance tracking
         sanitized["_redacted_fields"] = redacted_fields
+        sanitized["_consent_validated"] = "consent_status" in sanitized.get("metadata", {})
         
         return sanitized
 
@@ -1369,6 +1409,7 @@ class GDPRModelWrapper(ModernCIAFModelWrapper):
                     {"check": "pii_protection_active", "status": "pass"},
                     {"check": "retention_policy_enforced", "status": "pass"},
                     {"check": "dsr_endpoints_available", "status": "pass"},
+                    {"check": "consent_management_active", "status": "pass" if self.consent_manager else "warning"},
                 ])
             
             elif framework == "NIST-AI-RMF":
@@ -1390,6 +1431,195 @@ class GDPRModelWrapper(ModernCIAFModelWrapper):
             validation_results[framework] = framework_validation
         
         return validation_results
+
+    # ----------------------------- Consent Management Methods --------------------------------
+    
+    def record_data_subject_consent(
+        self,
+        data_subject_id: str,
+        consent_type: ConsentType = ConsentType.EXPLICIT,
+        consent_scope: ConsentScope = ConsentScope.DATA_PROCESSING,
+        purpose: Optional[str] = None,
+        expiry_days: Optional[int] = None
+    ) -> ConsentRecord:
+        """Record consent for a data subject with GDPR compliance."""
+        
+        purpose = purpose or self._gdpr_manifest.purpose_of_processing
+        
+        record = self.consent_manager.record_consent(
+            data_subject_id=data_subject_id,
+            consent_type=consent_type,
+            consent_scope=consent_scope,
+            purpose=purpose,
+            legal_basis=self._gdpr_manifest.lawful_basis,
+            expiry_days=expiry_days,
+            metadata={
+                "model_name": self.model_name,
+                "gdpr_manifest_version": self._gdpr_manifest.policy_version,
+                "dpo_contact": self._gdpr_manifest.dpo_contact,
+                "recorded_via": "gdpr_wrapper"
+            }
+        )
+        
+        print(f"✅ [CONSENT] Recorded {consent_type.value} consent for {data_subject_id} (scope: {consent_scope.value})")
+        return record
+    
+    def withdraw_data_subject_consent(
+        self,
+        data_subject_id: str,
+        consent_scope: Optional[ConsentScope] = None
+    ) -> List[str]:
+        """Withdraw consent for a data subject with GDPR right to erasure."""
+        
+        if consent_scope:
+            withdrawn_ids = self.consent_manager.withdraw_consent(
+                data_subject_id=data_subject_id,
+                consent_scope=consent_scope
+            )
+        else:
+            # Withdraw all consents for the data subject
+            withdrawn_ids = self.consent_manager.withdraw_consent(
+                data_subject_id=data_subject_id
+            )
+        
+        if withdrawn_ids:
+            print(f"✅ [CONSENT] Withdrew {len(withdrawn_ids)} consent(s) for {data_subject_id}")
+            
+            # Log GDPR erasure activity
+            for framework in self._gdpr_manifest.regulatory_frameworks:
+                if framework == "GDPR":
+                    erasure_log = {
+                        "framework": framework,
+                        "event": "consent_withdrawal",
+                        "timestamp": datetime.now(timezone.utc).isoformat(),
+                        "data_subject_id": data_subject_id,
+                        "withdrawn_consent_ids": withdrawn_ids,
+                        "scope": consent_scope.value if consent_scope else "all_scopes",
+                        "right_exercised": "Article_17_GDPR"
+                    }
+                    self._compliance_validations[framework].append(erasure_log)
+        
+        return withdrawn_ids
+    
+    def validate_data_subject_consent(
+        self,
+        data_subject_id: str,
+        scope: ConsentScope,
+        purpose: str
+    ) -> Dict[str, Any]:
+        """Validate consent for processing with comprehensive GDPR checks."""
+        
+        validation_result = self.consent_manager.validate_processing_consent(
+            data_subject_id=data_subject_id,
+            scope=scope,
+            purpose=purpose
+        )
+        
+        # Enhanced GDPR-specific validation
+        validation_result.update({
+            "gdpr_compliant": validation_result["consent_valid"] and validation_result["purpose_allowed"],
+            "lawful_basis": self._gdpr_manifest.lawful_basis,
+            "dpo_contact": self._gdpr_manifest.dpo_contact,
+            "retention_period_days": self._gdpr_manifest.retention_days,
+            "model_name": self.model_name,
+            "validation_timestamp": datetime.now(timezone.utc).isoformat()
+        })
+        
+        # Log validation for audit trail
+        for framework in self._gdpr_manifest.regulatory_frameworks:
+            if framework == "GDPR":
+                validation_log = {
+                    "framework": framework,
+                    "event": "consent_validation",
+                    "timestamp": datetime.now(timezone.utc).isoformat(),
+                    "data_subject_id": data_subject_id,
+                    "scope": scope.value,
+                    "purpose": purpose,
+                    "validation_result": validation_result["gdpr_compliant"],
+                    "consent_status": validation_result.get("consent_status", "unknown")
+                }
+                self._compliance_validations[framework].append(validation_log)
+        
+        return validation_result
+    
+    def get_data_subject_consent_summary(self, data_subject_id: str) -> Dict[str, Any]:
+        """Get comprehensive consent summary for a data subject."""
+        
+        consent_records = self.consent_manager.get_consent_records_for_subject(data_subject_id)
+        
+        summary = {
+            "data_subject_id": data_subject_id,
+            "total_consents": len(consent_records),
+            "active_consents": len([r for r in consent_records if r.is_valid()]),
+            "withdrawn_consents": len([r for r in consent_records if r.status == ConsentStatus.WITHDRAWN]),
+            "expired_consents": len([r for r in consent_records if r.status == ConsentStatus.EXPIRED]),
+            "consent_details": [],
+            "gdpr_rights_status": {
+                "right_to_access": True,
+                "right_to_rectification": True,
+                "right_to_erasure": True,
+                "right_to_portability": True,
+                "right_to_restrict_processing": len([r for r in consent_records if r.is_valid()]) > 0
+            },
+            "model_processing_allowed": False
+        }
+        
+        for record in consent_records:
+            consent_detail = {
+                "consent_id": record.consent_id,
+                "consent_type": record.consent_type.value,
+                "consent_scope": record.consent_scope.value,
+                "status": record.status.value,
+                "granted_timestamp": record.granted_timestamp,
+                "withdrawn_timestamp": record.withdrawn_timestamp,
+                "is_valid": record.is_valid(),
+                "purpose": record.purpose
+            }
+            
+            if record.time_until_expiry():
+                consent_detail["time_until_expiry_seconds"] = record.time_until_expiry().total_seconds()
+            
+            summary["consent_details"].append(consent_detail)
+        
+        # Check if model processing is allowed
+        processing_consent = self.validate_data_subject_consent(
+            data_subject_id=data_subject_id,
+            scope=ConsentScope.DATA_PROCESSING,
+            purpose=self._gdpr_manifest.purpose_of_processing
+        )
+        summary["model_processing_allowed"] = processing_consent["gdpr_compliant"]
+        
+        return summary
+    
+    def migrate_legacy_consent_data(
+        self,
+        legacy_consent_data: Dict[str, Any],
+        data_subject_id: str
+    ) -> Dict[str, Any]:
+        """Migrate legacy consent data to new standardized system."""
+        
+        if self._consent_migrated:
+            warnings.warn("Consent data already migrated for this wrapper instance")
+            return {"migration_skipped": True}
+        
+        # Use migration engine to handle the migration
+        migrated_data = self.consent_migration_engine.migrate_gdpr_wrapper_data(
+            legacy_consent_data, data_subject_id
+        )
+        
+        self._consent_migrated = True
+        
+        migration_report = {
+            "migration_completed": True,
+            "data_subject_id": data_subject_id,
+            "migrated_data": migrated_data,
+            "migration_timestamp": datetime.now(timezone.utc).isoformat(),
+            "migration_engine_report": self.consent_migration_engine.export_migration_report()
+        }
+        
+        print(f"✅ [MIGRATION] Legacy consent data migrated for {data_subject_id}")
+        
+        return migration_report
 
     # ----------------------------- Export/Import --------------------------------
     def export_inference_artifact(self, path: Union[str, os.PathLike], 

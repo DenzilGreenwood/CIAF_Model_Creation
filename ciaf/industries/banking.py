@@ -19,11 +19,29 @@ Key Features:
 from typing import Dict, List, Optional, Any, Union
 from dataclasses import dataclass
 from datetime import datetime, timezone
+from enum import Enum
 
 from ciaf.core.interfaces import AIGovernanceFramework
 from ciaf.compliance.bias_validator import BiasValidator
 from ciaf.compliance.audit_trails import AuditTrail
 from ciaf.core.policy_enforcement import PolicyEnforcement
+
+
+class ModelRiskTier(Enum):
+    """Federal Reserve SR 11-7 Model Risk Tier Classification"""
+    TIER_1_HIGH_RISK = "tier_1_high_risk"
+    TIER_2_MODERATE_RISK = "tier_2_moderate_risk"
+    TIER_3_LOW_RISK = "tier_3_low_risk"
+
+
+class CreditRiskCategory(Enum):
+    """Credit Risk Categories for Banking AI Models"""
+    CONSUMER_LENDING = "consumer_lending"
+    COMMERCIAL_LENDING = "commercial_lending"
+    MORTGAGE_LENDING = "mortgage_lending"
+    CREDIT_CARD = "credit_card"
+    AUTO_LENDING = "auto_lending"
+    SMALL_BUSINESS = "small_business"
 
 
 @dataclass
@@ -88,7 +106,7 @@ class BankingAIGovernanceFramework(AIGovernanceFramework):
         
         # Initialize specialized validators
         self.bias_validator = BiasValidator()
-        self.audit_trail = AuditTrail()
+        self.audit_trail = AuditTrail(f"{organization_id}_framework")
         self.policy_enforcement = PolicyEnforcement(
             industry_type='banking',
             regulatory_frameworks=self.regulatory_requirements,

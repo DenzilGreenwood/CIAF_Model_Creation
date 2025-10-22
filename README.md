@@ -4,9 +4,30 @@
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Type Checked](https://img.shields.io/badge/type--checked-mypy-blue.svg)](http://mypy-lang.org/)
 [![Security](https://img.shields.io/badge/security-bandit-yellow.svg)](https://bandit.readthedocs.io/)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![License](https://img.shields.io/badge/license-Apache%202.0-green.svg)](LICENSE)
+
+---
+
+## 🔒 Intellectual Property Notice
+
+**Cognitive Insight™** and **Lazy Capsule Materialization (LCM)™** are original works created by **Denzil James Greenwood**.
+The core concepts, schemas, and cryptographic structures are disclosed publicly to establish authorship and
+enable transparent adoption for verifiable AI governance. This repository and its contents are licensed under
+the Apache License 2.0 for educational and research purposes.
+
+**© 2025 Denzil James Greenwood.** Original author of the Cognitive Insight Audit Framework (CIAF) and Lazy Capsule Materialization (LCM) process. All rights reserved except as provided under the Apache 2.0 License.
+
+- **No patent claims are asserted, and no patent restrictions apply.**
+- **Attribution is required for reuse or derivative works.**
+- **Trademark protection applies to "Cognitive Insight™" and "LCM™" brand names.**
+
+**Defensive Publication:** This repository serves as a public disclosure establishing prior art for the LCM process and cryptographic audit structures. See [LCM_Technical_Disclosure.pdf](LCM_Technical_Disclosure.pdf) for detailed technical disclosure.
+
+---
 
 **CIAF** is an evidence-first AI governance platform that pairs policy-driven controls with cryptographic receipts (Merkle anchors + digital signatures) so teams can prove compliance across 20 industry frameworks. The codebase spans 123 Python files / ~66k lines, with a unified PolicyEnforcement engine, Dataset/Model/Inference lifecycle managers, and CI/CD quality gates.
+
+**Patent-free innovation with bulletproof attribution** - CIAF uses copyright protection, trademark branding, and defensive publication to create stronger commercial protection than traditional patent strategies while eliminating adoption barriers.
 
 **In pilots, CIAF reduced audit prep from 240→36 hours (healthcare) and 320→48 hours (banking) by generating machine-verifiable evidence packs.**
 
@@ -271,7 +292,6 @@ model_anchor = model_manager.register_model(
 
 ### **4. Generate Compliance Reports**
 ```python
-# Automated compliance assessment
 compliance_report = framework.assess_compliance(
     system_id="your_ai_system",
     assessment_type="comprehensive"
@@ -448,15 +468,22 @@ print(f"Regulatory Gaps: {len(compliance_report['recommendations'])}")
 - **Contributing:** [Contribution Guide](CONTRIBUTING.md)
 
 ### **License**
-MIT License - See [LICENSE](LICENSE) for details
+Apache License 2.0 - See [LICENSE](LICENSE) for details
+
+### **Intellectual Property**
+- **Original Author:** Denzil James Greenwood
+- **Trademark Protection:** "Cognitive Insight™" and "LCM™" 
+- **Defensive Publication:** [LCM_Technical_Disclosure.pdf](LCM_Technical_Disclosure.pdf)
+- **Full IP Strategy:** [INTELLECTUAL_PROPERTY.md](INTELLECTUAL_PROPERTY.md)
 
 ### **Citation**
 ```bibtex
 @software{ciaf_framework,
   title={CIAF: Cognitive Insight AI Framework},
-  author={Greenwood, Denzil and Contributors},
+  author={Greenwood, Denzil James and Contributors},
   year={2025},
-  url={https://github.com/DenzilGreenwood/CIAF_Model_Creation}
+  url={https://github.com/DenzilGreenwood/CIAF_Model_Creation},
+  note={Original author of Cognitive Insight™ and LCM™ technologies}
 }
 ```
 

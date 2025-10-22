@@ -310,7 +310,7 @@ class GovernmentAIGovernanceFramework(AIGovernanceFramework):
         
         # Initialize policy enforcement with government-specific regulations
         self.policy_enforcement = PolicyEnforcement(
-            industry='government',
+            industry_type='government',
             regulatory_frameworks=[
                 'Constitutional_Rights', 'Administrative_Procedure_Act',
                 'Equal_Protection_Clause', 'Due_Process_Rights', 'Privacy_Act',

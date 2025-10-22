@@ -59,6 +59,8 @@ except ImportError:
 
 # Core compliance modules
 from .audit_trails import AuditTrailGenerator, ComplianceAuditRecord, AuditTrail
+from .consent import ConsentRecord, ConsentManager, ConsentMigrator
+from .consent_migration import ConsentMigrationEngine
 from .corrective_action_log import (
     ActionStatus,
     ActionType,
@@ -221,6 +223,12 @@ __all__ = [
     "ComplianceAuditRecord",
     "AuditTrailGenerator",
     "AuditTrail",
+    
+    # Consent Management
+    "ConsentRecord",
+    "ConsentManager", 
+    "ConsentMigrator",
+    "ConsentMigrationEngine",
     
     # Regulatory Mapping
     "ComplianceRequirement",

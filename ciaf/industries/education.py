@@ -29,6 +29,10 @@ from typing import List, Dict, Optional, Any, Union
 from enum import Enum
 
 from ciaf.core.interfaces import AIGovernanceFramework
+from ciaf.core.enums import ConsentStatus, ConsentType, ConsentScope
+from ciaf.compliance.consent import ConsentRecord, ConsentMigrator
+from ..compliance.consent import ConsentManager, ConsentRecord, get_consent_manager
+from ..core.enums import ConsentStatus, ConsentType, ConsentScope
 from ciaf.core.policy_enforcement import PolicyEnforcement
 
 class EducationalAIApplication(Enum):
@@ -83,8 +87,8 @@ class StudentPrivacyAssessment:
     coppa_compliance: Dict[str, bool]  # For under-13 students
     gdpr_compliance: Dict[str, bool]   # For EU students
     data_collection_practices: Dict[str, Any]
-    parental_consent_status: Dict[str, bool]
-    student_consent_status: Dict[str, bool]
+    parental_consent_records: Dict[str, ConsentRecord]  # Updated to use ConsentRecord
+    student_consent_records: Dict[str, ConsentRecord]   # Updated to use ConsentRecord
     data_retention_policies: Dict[str, int]  # Retention periods
     third_party_data_sharing: Dict[str, Any]
     educational_records_protection: Dict[str, bool]
@@ -96,6 +100,67 @@ class StudentPrivacyAssessment:
     privacy_risk_assessment: str
     assessment_timestamp: datetime
     privacy_officer_id: str
+    
+    # Backward compatibility for legacy boolean fields
+    _migrator = ConsentMigrator()
+    
+    @property
+    def parental_consent_status(self) -> Dict[str, bool]:
+        """Legacy property for backward compatibility"""
+        return {key: record.status == ConsentStatus.GRANTED 
+                for key, record in self.parental_consent_records.items()}
+    
+    @property 
+    def student_consent_status(self) -> Dict[str, bool]:
+        """Legacy property for backward compatibility"""
+        return {key: record.status == ConsentStatus.GRANTED 
+                for key, record in self.student_consent_records.items()}
+    
+    def update_parental_consent(self, purpose: str, status: ConsentStatus, 
+                              consent_type: ConsentType = ConsentType.PARENTAL,
+                              scope: ConsentScope = ConsentScope.DATA_PROCESSING) -> None:
+        """Update parental consent for a specific purpose"""
+        if purpose not in self.parental_consent_records:
+            self.parental_consent_records[purpose] = ConsentRecord(
+                consent_id=f"parental_{self.student_id}_{purpose}_{int(datetime.now().timestamp())}",
+                data_subject_id=self.student_id,
+                consent_type=consent_type,
+                consent_scope=scope,
+                status=status,
+                purpose=purpose,
+                metadata={"age_group": self.age_group.value}
+            )
+        else:
+            self.parental_consent_records[purpose].status = status
+            self.parental_consent_records[purpose].granted_timestamp = datetime.now(timezone.utc).isoformat()
+    
+    def update_student_consent(self, purpose: str, status: ConsentStatus,
+                             consent_type: ConsentType = ConsentType.EXPLICIT,
+                             scope: ConsentScope = ConsentScope.DATA_PROCESSING) -> None:
+        """Update student consent for a specific purpose"""
+        if purpose not in self.student_consent_records:
+            self.student_consent_records[purpose] = ConsentRecord(
+                consent_id=f"student_{self.student_id}_{purpose}_{int(datetime.now().timestamp())}",
+                data_subject_id=self.student_id,
+                consent_type=consent_type,
+                consent_scope=scope,
+                status=status,
+                purpose=purpose,
+                metadata={"age_group": self.age_group.value}
+            )
+        else:
+            self.student_consent_records[purpose].status = status
+            self.student_consent_records[purpose].granted_timestamp = datetime.now(timezone.utc).isoformat()
+    
+    def migrate_legacy_consent(self, legacy_parental: Dict[str, bool], 
+                             legacy_student: Dict[str, bool]) -> None:
+        """Migrate legacy boolean consent data to ConsentRecord format"""
+        self.parental_consent_records = self._migrator.migrate_boolean_consent(
+            legacy_parental, self.student_id, ConsentType.PARENTAL
+        )
+        self.student_consent_records = self._migrator.migrate_boolean_consent(
+            legacy_student, self.student_id, ConsentType.EXPLICIT
+        )
     
     def calculate_student_privacy_score(self) -> float:
         """Calculate student privacy protection score"""
@@ -405,12 +470,21 @@ class EducationAIGovernanceFramework(AIGovernanceFramework):
             student_id, system_id
         )
         
-        # Check consent status
+        # Check consent status and convert to ConsentRecord format
         parental_consent_status = self._check_parental_consent_status(
             student_id, age_group
         )
         student_consent_status = self._check_student_consent_status(
             student_id, age_group
+        )
+        
+        # Migrate legacy consent data to ConsentRecord format
+        migrator = ConsentMigrator()
+        parental_consent_records = migrator.migrate_boolean_consent(
+            parental_consent_status, student_id, ConsentType.PARENTAL
+        )
+        student_consent_records = migrator.migrate_boolean_consent(
+            student_consent_status, student_id, ConsentType.EXPLICIT
         )
         
         # Check data retention policies
@@ -459,8 +533,8 @@ class EducationAIGovernanceFramework(AIGovernanceFramework):
             coppa_compliance=coppa_compliance,
             gdpr_compliance=gdpr_compliance,
             data_collection_practices=data_collection_practices,
-            parental_consent_status=parental_consent_status,
-            student_consent_status=student_consent_status,
+            parental_consent_records=parental_consent_records,
+            student_consent_records=student_consent_records,
             data_retention_policies=data_retention_policies,
             third_party_data_sharing=third_party_sharing,
             educational_records_protection=educational_records_protection,

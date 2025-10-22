@@ -4,6 +4,12 @@ Adaptive LCM Wrapper
 
 This module provides an adaptive wrapper that can switch between immediate
 and deferred LCM processing based on priority, configuration, and system load.
+
+Copyright (c) 2025 Denzil James Greenwood
+Licensed under the Apache License, Version 2.0
+
+Original author of Lazy Capsule Materialization (LCM)™ process.
+Part of the Cognitive Insight™ AI Framework.
 """
 
 import time

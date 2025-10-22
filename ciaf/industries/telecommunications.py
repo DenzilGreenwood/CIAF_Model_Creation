@@ -18,6 +18,8 @@ from enum import Enum
 
 from ciaf.core.interfaces import AIGovernanceFramework
 from ciaf.core.policy_enforcement import PolicyEnforcement
+from ciaf.core.enums import ConsentStatus, ConsentType, ConsentScope
+from ciaf.compliance.consent import ConsentRecord, ConsentMigrator
 
 class NetworkTechnology(Enum):
     """Network technology types"""
@@ -63,13 +65,46 @@ class CustomerPrivacyAssessment:
     customer_id: str
     data_types_collected: List[str]
     processing_purposes: List[str]
-    consent_status: Dict[str, bool]
+    consent_records: Dict[str, ConsentRecord]  # Updated to use ConsentRecord
     applicable_regulations: List[PrivacyRegulation]
     privacy_controls: Dict[str, bool]
     breach_risk_score: float
     compliance_violations: List[str]
     assessment_timestamp: datetime
     privacy_officer_id: str
+    
+    # Backward compatibility for legacy boolean fields
+    _migrator = ConsentMigrator()
+    
+    @property
+    def consent_status(self) -> Dict[str, bool]:
+        """Legacy property for backward compatibility"""
+        return {key: record.status == ConsentStatus.GRANTED 
+                for key, record in self.consent_records.items()}
+    
+    def update_consent(self, purpose: str, status: ConsentStatus,
+                      consent_type: ConsentType = ConsentType.EXPLICIT,
+                      scope: ConsentScope = ConsentScope.DATA_PROCESSING) -> None:
+        """Update customer consent for a specific purpose"""
+        if purpose not in self.consent_records:
+            self.consent_records[purpose] = ConsentRecord(
+                consent_id=f"telecom_{self.customer_id}_{purpose}_{int(datetime.now().timestamp())}",
+                data_subject_id=self.customer_id,
+                consent_type=consent_type,
+                consent_scope=scope,
+                status=status,
+                purpose=purpose,
+                metadata={"data_types": self.data_types_collected}
+            )
+        else:
+            self.consent_records[purpose].status = status
+            self.consent_records[purpose].granted_timestamp = datetime.now(timezone.utc).isoformat()
+    
+    def migrate_legacy_consent(self, legacy_consent: Dict[str, bool]) -> None:
+        """Migrate legacy boolean consent data to ConsentRecord format"""
+        self.consent_records = self._migrator.migrate_boolean_consent(
+            legacy_consent, self.customer_id, ConsentType.EXPLICIT
+        )
     
     def calculate_privacy_compliance_score(self) -> float:
         """Calculate privacy compliance score"""
@@ -173,9 +208,15 @@ class TelecommunicationsAIGovernanceFramework(AIGovernanceFramework):
     ) -> CustomerPrivacyAssessment:
         """Assess customer privacy and data protection compliance"""
         
-        # Check consent status
+        # Check consent status and convert to ConsentRecord format
         consent_status = self._check_consent_status(
             customer_id, data_types_collected, processing_purposes
+        )
+        
+        # Migrate legacy consent data to ConsentRecord format
+        migrator = ConsentMigrator()
+        consent_records = migrator.migrate_boolean_consent(
+            consent_status, customer_id, ConsentType.EXPLICIT
         )
         
         # Assess privacy controls
@@ -184,7 +225,7 @@ class TelecommunicationsAIGovernanceFramework(AIGovernanceFramework):
         # Calculate breach risk score
         breach_risk_score = self._calculate_breach_risk_score(data_types_collected)
         
-        # Identify compliance violations
+        # Identify compliance violations (using legacy format for compatibility)
         compliance_violations = self._identify_privacy_violations(
             consent_status, applicable_regulations
         )
@@ -194,7 +235,7 @@ class TelecommunicationsAIGovernanceFramework(AIGovernanceFramework):
             customer_id=customer_id,
             data_types_collected=data_types_collected,
             processing_purposes=processing_purposes,
-            consent_status=consent_status,
+            consent_records=consent_records,
             applicable_regulations=applicable_regulations,
             privacy_controls=privacy_controls,
             breach_risk_score=breach_risk_score,

@@ -98,7 +98,6 @@ class AnchorStore(Protocol):
         ...
 
 
-@runtime_checkable
 class AIGovernanceFramework(ABC):
     """
     Abstract Base Class for AI Governance Frameworks
