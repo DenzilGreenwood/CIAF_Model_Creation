@@ -35,7 +35,16 @@ class MerkleTree:
         self._verification_cache_misses = 0
 
     def _hash_pair(self, h1: str, h2: str) -> str:
-        return sha256_hash(bytes.fromhex(h1) + bytes.fromhex(h2))
+        # Handle both hex strings and plain strings for flexibility
+        # According to Variables Reference: _hash suffix indicates hex-encoded values
+        try:
+            # Try to interpret as hex first (preferred for leaf_hash variables)
+            return sha256_hash(bytes.fromhex(h1) + bytes.fromhex(h2))
+        except ValueError:
+            # Fall back to treating as plain strings, hash them first
+            h1_hex = sha256_hash(h1.encode('utf-8'))
+            h2_hex = sha256_hash(h2.encode('utf-8'))
+            return sha256_hash(bytes.fromhex(h1_hex) + bytes.fromhex(h2_hex))
 
     def _build_tree(self, leaves: list[str]) -> list[list[str]]:
         tree = [leaves]

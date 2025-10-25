@@ -1,0 +1,36 @@
+# LaTeX build files
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.synctex(busy)
+*.pdfsync
+*.alg
+*.lof
+*.lot
+*.gls
+*.glo
+*.glg
+*.ist
+*.acn
+*.acr
+*.glsdefs
+*.lol
+*.idx
+*.ilg
+*.ind
+*.nav
+*.snm
+*.vrb
+*.figlist
+*.makefile
+*.fuse_hidden*
+
+
+# bat files
+*.bat

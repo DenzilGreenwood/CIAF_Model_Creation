@@ -55,7 +55,8 @@ class LCMPolicy:
     Now includes protocol implementations for dependency injection.
     """
     
-    # Core policy
+    # Core policy identification (following Variables Reference naming conventions)
+    policy_id: str = "ciaf_default_lcm_policy"
     hash_algorithm: str = "SHA-256"
     canonicalization: str = "json(sorted,utf-8)"
     domains: List[DomainType] = None
@@ -111,6 +112,7 @@ class LCMPolicy:
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for JSON serialization."""
         return {
+            "policy_id": self.policy_id,
             "hash": self.hash_algorithm,
             "canon": self.canonicalization,
             "domains": [d.value for d in self.domains],

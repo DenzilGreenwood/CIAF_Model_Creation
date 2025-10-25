@@ -395,13 +395,14 @@ class EducationAIGovernanceFramework(AIGovernanceFramework):
     """
     
     def __init__(self, educational_institution_id: str, institution_type: str, **kwargs):
-        super().__init__(**kwargs)
+        # Following Variables Reference: organization_id is required by base class
+        super().__init__(organization_id=educational_institution_id, **kwargs)
         self.educational_institution_id = educational_institution_id
         self.institution_type = institution_type  # K-12, higher_ed, corporate_training
         
         # Initialize policy enforcement with education-specific regulations
         self.policy_enforcement = PolicyEnforcement(
-            industry='education',
+            industry_type='education',
             regulatory_frameworks=[
                 'FERPA', 'COPPA', 'IDEA', 'Section_504', 'Title_IX', 'ADA',
                 'GDPR_Education', 'State_Student_Privacy_Laws',

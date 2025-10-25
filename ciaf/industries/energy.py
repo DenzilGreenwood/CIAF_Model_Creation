@@ -81,13 +81,14 @@ class EnergyAIGovernanceFramework(AIGovernanceFramework):
     """
     
     def __init__(self, utility_id: str, grid_region: str, **kwargs):
-        super().__init__(**kwargs)
+        # Following Variables Reference: organization_id is required by base class
+        super().__init__(organization_id=utility_id, **kwargs)
         self.utility_id = utility_id
         self.grid_region = grid_region
         
         # Initialize policy enforcement with energy-specific regulations
         self.policy_enforcement = PolicyEnforcement(
-            industry='energy',
+            industry_type='energy',
             regulatory_frameworks=[
                 'NERC_CIP', 'NERC_BAL', 'FERC_Order_841',
                 'EPA_CAA', 'NRC_10_CFR', 'IEEE_1547'

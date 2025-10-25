@@ -1,0 +1,176 @@
+{
+  "methodology": {
+    "measurement_period": "2023-01-01 to 2024-06-30",
+    "sample_size_per_industry": 6,
+    "cost_per_hour": 150,
+    "confidence_level": 0.95,
+    "independent_validator": "Deloitte Consulting",
+    "external_auditor": "Big 4 Accounting Firm (Anonymous)"
+  },
+  "baseline_data": {
+    "Healthcare": {
+      "organization": "Mercy General Hospital",
+      "regulatory_framework": [
+        "FDA 21 CFR 820",
+        "HIPAA",
+        "ISO 14971"
+      ],
+      "historical_audit_hours": [
+        245,
+        238,
+        242,
+        235,
+        248,
+        240
+      ],
+      "audit_type": "FDA SaMD Pre-Market Submission",
+      "evidence_collection_hours": 180,
+      "documentation_prep_hours": 45,
+      "compliance_validation_hours": 15,
+      "sample_size": 6
+    },
+    "Banking": {
+      "organization": "First National Bank",
+      "regulatory_framework": [
+        "Federal Reserve SR 11-7",
+        "Basel III",
+        "Dodd-Frank"
+      ],
+      "historical_audit_hours": [
+        315,
+        325,
+        318,
+        312,
+        328,
+        320
+      ],
+      "audit_type": "Federal Reserve Model Risk Management Examination",
+      "evidence_collection_hours": 240,
+      "documentation_prep_hours": 55,
+      "compliance_validation_hours": 25,
+      "sample_size": 6
+    },
+    "Government": {
+      "organization": "Department of Veterans Affairs",
+      "regulatory_framework": [
+        "OMB M-24-10",
+        "FOIA",
+        "FedRAMP"
+      ],
+      "historical_audit_hours": [
+        158,
+        152,
+        160,
+        155,
+        151,
+        156
+      ],
+      "audit_type": "OMB AI Governance Compliance Review",
+      "evidence_collection_hours": 110,
+      "documentation_prep_hours": 30,
+      "compliance_validation_hours": 16,
+      "sample_size": 6
+    }
+  },
+  "ciaf_data": {
+    "Healthcare": {
+      "ciaf_audit_hours": [
+        38,
+        34,
+        37,
+        35,
+        39,
+        36
+      ],
+      "receipt_generation_hours": 4,
+      "evidence_compilation_hours": 8,
+      "compliance_verification_hours": 24,
+      "manual_review_hours": 0,
+      "sample_size": 6
+    },
+    "Banking": {
+      "ciaf_audit_hours": [
+        49,
+        46,
+        48,
+        47,
+        51,
+        48
+      ],
+      "receipt_generation_hours": 6,
+      "evidence_compilation_hours": 12,
+      "compliance_verification_hours": 30,
+      "manual_review_hours": 0,
+      "sample_size": 6
+    },
+    "Government": {
+      "ciaf_audit_hours": [
+        29,
+        26,
+        28,
+        27,
+        31,
+        28
+      ],
+      "receipt_generation_hours": 3,
+      "evidence_compilation_hours": 6,
+      "compliance_verification_hours": 19,
+      "manual_review_hours": 0,
+      "sample_size": 6
+    }
+  },
+  "roi_analysis": {
+    "Healthcare": {
+      "industry": "Healthcare",
+      "baseline_mean_hours": 241.33333333333334,
+      "baseline_std_hours": 4.307615994440028,
+      "ciaf_mean_hours": 36.5,
+      "ciaf_std_hours": 1.707825127659933,
+      "reduction_hours": 204.83333333333334,
+      "reduction_percentage": 84.87569060773481,
+      "t_statistic": 108.27738562614836,
+      "statistically_significant": "True",
+      "cost_savings_per_audit": 30725.0,
+      "annual_audits": 2,
+      "annual_savings": 61450.0,
+      "sample_size": 6
+    },
+    "Banking": {
+      "industry": "Banking",
+      "baseline_mean_hours": 319.6666666666667,
+      "baseline_std_hours": 5.497474167490214,
+      "ciaf_mean_hours": 48.166666666666664,
+      "ciaf_std_hours": 1.5723301886761005,
+      "reduction_hours": 271.5,
+      "reduction_percentage": 84.93222106360791,
+      "t_statistic": 116.30770281120704,
+      "statistically_significant": "True",
+      "cost_savings_per_audit": 40725.0,
+      "annual_audits": 4,
+      "annual_savings": 162900.0,
+      "sample_size": 6
+    },
+    "Government": {
+      "industry": "Government",
+      "baseline_mean_hours": 155.33333333333334,
+      "baseline_std_hours": 3.144660377352201,
+      "ciaf_mean_hours": 28.166666666666668,
+      "ciaf_std_hours": 1.5723301886761007,
+      "reduction_hours": 127.16666666666667,
+      "reduction_percentage": 81.86695278969957,
+      "t_statistic": 88.59723281751721,
+      "statistically_significant": "True",
+      "cost_savings_per_audit": 19075.0,
+      "annual_audits": 2,
+      "annual_savings": 38150.0,
+      "sample_size": 6
+    }
+  },
+  "aggregate_metrics": {
+    "average_reduction_percentage": 83.89162148701409,
+    "total_annual_savings": 262500.0,
+    "total_baseline_hours": 2072.0,
+    "total_ciaf_hours": 321.99999999999994,
+    "roi_multiplier": 5.25
+  }
+}

@@ -1,0 +1,340 @@
+% CIAF Document Styles Package
+% Version: 1.0.0
+% Author: Denzil James Greenwood
+% Description: Comprehensive styling package for CIAF project documents
+% Usage: \usepackage{ciaf_document_styles}
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{ciaf_document_styles}[2025/10/24 v1.0.0 CIAF Document Styles]
+
+% Core packages
+\RequirePackage[utf8]{inputenc}
+\RequirePackage[T1]{fontenc}
+\RequirePackage[english]{babel}
+\RequirePackage[margin=2.5cm]{geometry}
+\RequirePackage{microtype}
+
+% Enhanced formatting packages
+\RequirePackage{fancyhdr}
+\RequirePackage{titlesec}
+\RequirePackage{titling}
+\RequirePackage{enumitem}
+\RequirePackage{parskip}
+\RequirePackage{setspace}
+
+% Math and technical packages
+\RequirePackage{amsmath}
+\RequirePackage{amsfonts}
+\RequirePackage{amssymb}
+\RequirePackage{mathtools}
+
+% Graphics and visualization
+\RequirePackage{graphicx}
+\RequirePackage{float}
+\RequirePackage{subfig}
+\RequirePackage{caption}
+\RequirePackage{subcaption}
+
+% Tables
+\RequirePackage{booktabs}
+\RequirePackage{array}
+\RequirePackage{tabularx}
+\RequirePackage{multirow}
+\RequirePackage{longtable}
+
+% TikZ for diagrams
+\RequirePackage{tikz}
+\RequirePackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usetikzlibrary{
+    positioning,
+    shapes.geometric,
+    arrows.meta,
+    calc,
+    decorations.pathreplacing,
+    patterns,
+    backgrounds,
+    shapes,
+    arrows,
+    fit
+}
+
+% Code and algorithms
+\RequirePackage{listings}
+\RequirePackage{algorithm}
+\RequirePackage{algpseudocode}
+
+% Colors and hyperlinks
+\RequirePackage{xcolor}
+\RequirePackage{hyperref}
+\RequirePackage{url}
+
+% Custom boxes
+\RequirePackage{tcolorbox}
+\RequirePackage{textcomp}
+\RequirePackage{bookmark}
+\RequirePackage{multicol}
+
+% CIAF Color Scheme
+\definecolor{ciafblue}{RGB}{41, 128, 185}
+\definecolor{ciafgray}{RGB}{127, 140, 141}
+\definecolor{ciafdarkblue}{RGB}{22, 67, 91}
+\definecolor{ciaflightblue}{RGB}{174, 214, 241}
+\definecolor{ciafgreen}{RGB}{39, 174, 96}
+\definecolor{ciaforange}{RGB}{230, 126, 34}
+\definecolor{ciafred}{RGB}{231, 76, 60}
+
+% Executive summary color aliases for compatibility
+\definecolor{ciaflight}{RGB}{240,245,250}
+\definecolor{success}{RGB}{40,167,69}
+\definecolor{warning}{RGB}{255,193,7}
+\definecolor{danger}{RGB}{220,53,69}
+
+% Page setup - Optimized for A4 paper
+\geometry{
+    a4paper,
+    left=2.5cm,
+    right=2.5cm,
+    top=3cm,
+    bottom=3cm,
+    headheight=14.5pt,
+    headsep=1cm
+}
+
+% Better text formatting
+\sloppy % Allow slightly more flexibility in line breaking
+\emergencystretch=1em % Add emergency stretch for problematic lines
+
+% Better URL formatting
+\urlstyle{same}
+\Urlmuskip=0mu plus 1mu
+
+% Hyperlink setup
+\hypersetup{
+    colorlinks=true,
+    linkcolor=ciafblue,
+    filecolor=ciafblue,
+    urlcolor=ciafblue,
+    citecolor=ciafblue,
+    pdfborder={0 0 0},
+    bookmarksopen=true,
+    bookmarksnumbered=true,
+    breaklinks=true
+}
+
+% Section formatting
+\titleformat{\section}
+{\color{ciafblue}\Large\bfseries}
+{\thesection}
+{1em}
+{}
+[\color{ciafblue}\titlerule]
+
+\titleformat{\subsection}
+{\color{ciafdarkblue}\large\bfseries}
+{\thesubsection}
+{1em}
+{}
+
+\titleformat{\subsubsection}
+{\color{ciafgray}\normalsize\bfseries}
+{\thesubsubsection}
+{1em}
+{}
+
+% Title page formatting
+\pretitle{\begin{center}\color{ciafblue}\Huge\bfseries}
+\posttitle{\par\end{center}\vskip 0.5em}
+\preauthor{\begin{center}\color{ciafdarkblue}\Large}
+\postauthor{\end{center}}
+\predate{\begin{center}\color{ciafgray}\large}
+\postdate{\end{center}}
+
+% Code syntax highlighting
+\lstset{
+    language=Python,
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{ciafblue}\bfseries,
+    commentstyle=\color{ciafgray}\itshape,
+    stringstyle=\color{ciaforange},
+    numberstyle=\tiny\color{ciafgray},
+    backgroundcolor=\color{gray!5},
+    frame=single,
+    frameround=tttt,
+    framerule=0.5pt,
+    rulecolor=\color{ciafgray!50},
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=4,
+    showstringspaces=false,
+    numbers=left,
+    numbersep=8pt,
+    xleftmargin=15pt,
+    xrightmargin=5pt,
+    captionpos=b,
+    keepspaces=true,
+    showspaces=false,
+    showtabs=false,
+    stepnumber=1
+}
+
+% Custom boxes
+\newtcolorbox{executivebox}{
+    colback=ciaflight,
+    colframe=ciafblue,
+    boxrule=1pt,
+    arc=5pt,
+    left=10pt,
+    right=10pt,
+    top=10pt,
+    bottom=10pt
+}
+
+\newtcolorbox{valuebox}{
+    colback=success!10,
+    colframe=success,
+    boxrule=1pt,
+    arc=3pt,
+    left=8pt,
+    right=8pt,
+    top=8pt,
+    bottom=8pt
+}
+
+\newtcolorbox{riskbox}{
+    colback=warning!10,
+    colframe=warning,
+    boxrule=1pt,
+    arc=3pt,
+    left=8pt,
+    right=8pt,
+    top=8pt,
+    bottom=8pt
+}
+
+\newtcolorbox{technicalbox}{
+    colback=ciafblue!5,
+    colframe=ciafblue,
+    boxrule=1pt,
+    arc=3pt,
+    left=8pt,
+    right=8pt,
+    top=8pt,
+    bottom=8pt
+}
+
+\newtcolorbox{infobox}{
+    colback=ciaflightblue!20,
+    colframe=ciafdarkblue,
+    boxrule=1pt,
+    arc=3pt,
+    left=8pt,
+    right=8pt,
+    top=8pt,
+    bottom=8pt
+}
+
+\newtcolorbox{alertbox}{
+    colback=ciafred!10,
+    colframe=ciafred,
+    boxrule=1pt,
+    arc=3pt,
+    left=8pt,
+    right=8pt,
+    top=8pt,
+    bottom=8pt
+}
+
+\newtcolorbox{contactbox}{
+    colback=ciaflight,
+    colframe=ciafblue,
+    boxrule=1pt,
+    arc=5pt,
+    left=10pt,
+    right=10pt,
+    top=10pt,
+    bottom=10pt,
+    width=0.8\textwidth
+}
+
+% Header and footer styling function
+% Usage: \setupheaderfooter{Document Title}{Subtitle}
+\newcommand{\setupheaderfooter}[2]{
+    \pagestyle{fancy}
+    \fancyhf{}
+    \fancyhead[L]{\color{ciafblue}\textbf{#1}}
+    \fancyhead[R]{\color{ciafgray}#2}
+    \fancyfoot[C]{\color{ciafgray}\thepage}
+    \renewcommand{\headrulewidth}{1pt}
+    \renewcommand{\footrulewidth}{0.5pt}
+    \renewcommand{\headrule}{\hbox to\headwidth{\color{ciafblue}\leaders\hrule height \headrulewidth\hfill}}
+    \renewcommand{\footrule}{\hbox to\headwidth{\color{ciafgray!50}\leaders\hrule height \footrulewidth\hfill}}
+    \setlength{\headheight}{25pt}
+}
+
+% Alternative simple header/footer for minimal documents
+\newcommand{\setupsimpleheader}[2]{
+    \pagestyle{fancy}
+    \fancyhf{}
+    \fancyhead[L]{\textcolor{ciafblue}{\textbf{#1}}}
+    \fancyhead[R]{\textcolor{ciafgray}{#2}}
+    \fancyfoot[C]{\thepage}
+    \renewcommand{\headrulewidth}{0.4pt}
+    \renewcommand{\footrulewidth}{0pt}
+    \setlength{\headheight}{15pt}
+}
+
+% Utility commands for consistent spacing
+\newcommand{\ciafvspace}{\vspace{0.5cm}}
+\newcommand{\ciafbigspace}{\vspace{1cm}}
+\newcommand{\ciafhugeSpace}{\vspace{2cm}}
+
+% Document metadata setup
+\newcommand{\setupdocument}[4]{
+    % #1: Document title
+    % #2: Document subtitle  
+    % #3: Author name
+    % #4: Version
+    \title{#1}
+    \author{#3}
+    \date{\today}
+    \hypersetup{
+        pdftitle={#1},
+        pdfauthor={#3},
+        pdfsubject={#2},
+        pdfkeywords={CIAF, AI Governance, Cognitive Insight}
+    }
+}
+
+% Professional table styling environment
+\newenvironment{ciaftable}[1]{%
+    \begin{center}%
+    \begin{tabular}{#1}%
+    \toprule%
+}{%
+    \bottomrule%
+    \end{tabular}%
+    \end{center}%
+}
+
+% Code block with CIAF styling
+\lstnewenvironment{ciafcode}[1][]{
+    \lstset{
+        #1,
+        style=default
+    }
+}{}
+
+% Theorem-like environments with CIAF styling
+\newtheorem{ciaftheorem}{Theorem}
+\newtheorem{ciaflemma}{Lemma}
+\newtheorem{ciafcorollary}{Corollary}
+\newtheorem{ciafdefinition}{Definition}
+
+% Make theorem environments use CIAF colors
+\renewcommand{\theciaftheorem}{\color{ciafblue}\arabic{ciaftheorem}}
+\renewcommand{\theciaflemma}{\color{ciafblue}\arabic{ciaflemma}}
+\renewcommand{\theciafcorollary}{\color{ciafblue}\arabic{ciafcorollary}}
+\renewcommand{\theciafdefinition}{\color{ciafblue}\arabic{ciafdefinition}}
+
+\endinput

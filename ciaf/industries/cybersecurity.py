@@ -400,12 +400,13 @@ class CybersecurityAIGovernanceFramework(AIGovernanceFramework):
     """
     
     def __init__(self, security_organization_id: str, security_clearance_level: str, **kwargs):
-        super().__init__(**kwargs)
+        # Following Variables Reference: organization_id is required by base class
+        super().__init__(organization_id=security_organization_id, **kwargs)
         self.security_organization_id = security_organization_id
         self.security_clearance_level = security_clearance_level
         # Initialize policy enforcement with cybersecurity-specific regulations
         self.policy_enforcement = PolicyEnforcement(
-            industry='cybersecurity',
+            industry_type='cybersecurity',
             regulatory_frameworks=[
                 'NIST_Cybersecurity_Framework', 'ISO_27001_Information_Security', 'GDPR_Biometric_Data',
                 'CCPA_Biometric_Identifiers', 'NIST_800_63_Digital_Identity', 'FIDO_Authentication_Standards',
