@@ -4,129 +4,10 @@
 \usepackage{../styles/ciaf_document_styles}
 
 % Document setup using CIAF styles package
-\setupdocument{CIAF Data Structures Technical Specification}{v1.0.0}
-\setupheaderfooter{CIAF Data Structures Technical Specification}{v1.0.0}
+\setupdocument{CIAF Data Structures: Technical Specification for Lazy Capsule Materialization}{Technical Specification}{Denzil James Greenwood}{v1.0.0}
+\setupheaderfooter{CIAF Data Structures}{Technical Specification}
 
-% Document metadata
-\title{CIAF Data Structures: Technical Specification for Lazy Capsule Materialization}
-\author{Denzil James Greenwood}
-\date{November 2024}
-\usepackage{subcaption}
-
-
-\usepackage{xcolor}
-\usepackage{hyperref}
-\usepackage{url}
-\usepackage{tcolorbox}
-
-% CIAF Color Scheme
-\definecolor{ciafblue}{RGB}{41, 128, 185}
-\definecolor{ciafgray}{RGB}{127, 140, 141}
-\definecolor{ciafdarkblue}{RGB}{22, 67, 91}
-\definecolor{ciaflightblue}{RGB}{174, 214, 241}
-\definecolor{ciafgreen}{RGB}{39, 174, 96}
-\definecolor{ciaforange}{RGB}{230, 126, 34}
-\definecolor{ciafred}{RGB}{231, 76, 60}
-
-% Executive summary color aliases for compatibility
-\definecolor{ciaflight}{RGB}{240,245,250}
-\definecolor{success}{RGB}{40,167,69}
-\definecolor{warning}{RGB}{255,193,7}
-\definecolor{danger}{RGB}{220,53,69}
-
-% Custom boxes
-\newtcolorbox{executivebox}{
-    colback=ciaflight,
-    colframe=ciafblue,
-    boxrule=1pt,
-    arc=5pt,
-    left=10pt,
-    right=10pt,
-    top=10pt,
-    bottom=10pt
-}
-
-\newtcolorbox{valuebox}{
-    colback=success!10,
-    colframe=success,
-    boxrule=1pt,
-    arc=3pt,
-    left=8pt,
-    right=8pt,
-    top=8pt,
-    bottom=8pt
-}
-
-\newtcolorbox{riskbox}{
-    colback=warning!10,
-    colframe=warning,
-    boxrule=1pt,
-    arc=3pt,
-    left=8pt,
-    right=8pt,
-    top=8pt,
-    bottom=8pt
-}
-
-% Hyperlink setup
-\hypersetup{
-    colorlinks=true,
-    linkcolor=ciafblue,
-    filecolor=ciafblue,
-    urlcolor=ciafblue,
-    citecolor=ciafblue,
-    pdfborder={0 0 0},
-    bookmarksopen=true,
-    bookmarksnumbered=true,
-    breaklinks=true
-}
-
-% Better URL formatting
-\urlstyle{same}
-\Urlmuskip=0mu plus 1mu
-
-% Better text formatting
-\sloppy % Allow slightly more flexibility in line breaking
-\emergencystretch=1em % Add emergency stretch for problematic lines
-
-% Header and footer styling
-\pagestyle{fancy}
-\fancyhf{}
-\fancyhead[L]{\color{ciafblue}\textbf{CIAF Data Structures}}
-\fancyhead[R]{\color{ciafgray}Technical Specification}
-\fancyfoot[C]{\color{ciafgray}\thepage}
-\renewcommand{\headrulewidth}{1pt}
-\renewcommand{\footrulewidth}{0.5pt}
-\renewcommand{\headrule}{\hbox to\headwidth{\color{ciafblue}\leaders\hrule height \headrulewidth\hfill}}
-\renewcommand{\footrule}{\hbox to\headwidth{\color{ciafgray!50}\leaders\hrule height \footrulewidth\hfill}}
-\setlength{\headheight}{15pt}
-
-% Section formatting
-\titleformat{\section}
-{\color{ciafblue}\Large\bfseries}
-{\thesection}
-{1em}
-{}
-[\color{ciafblue}\titlerule]
-
-\titleformat{\subsection}
-{\color{ciafdarkblue}\large\bfseries}
-{\thesubsection}
-{1em}
-{}
-
-\titleformat{\subsubsection}
-{\color{ciafgray}\normalsize\bfseries}
-{\thesubsubsection}
-{1em}
-{}
-
-% Title page formatting
-\pretitle{\begin{center}\color{ciafblue}\Huge\bfseries}
-\posttitle{\par\end{center}\vskip 0.5em}
-\preauthor{\begin{center}\color{ciafdarkblue}\Large}
-\postauthor{\end{center}}
-\predate{\begin{center}\color{ciafgray}\large}
+% Document content starts below
 
 % Code listing setup
 \lstset{
@@ -159,17 +40,7 @@
     title=\lstname
 }
 
-% Hyperref setup
-\hypersetup{
-    colorlinks=true,
-    linkcolor=blue,
-    filecolor=magenta,
-    urlcolor=cyan,
-    pdftitle={CIAF Data Structures Technical Specification},
-    pdfauthor={Denzil James Greenwood},
-    pdfsubject={AI Governance Data Structures},
-    pdfkeywords={AI Governance, Data Structures, Lazy Materialization, Cryptographic Auditing}
-}
+
 
 \begin{document}
 
@@ -708,7 +579,7 @@ class LCMInferenceCommitment:
         """Initialize metadata if not provided."""
         if self.metadata is None:
             self.metadata = {
-                "created_at": datetime.now().isoformat(),
+                "created_at": datetime.now(timezone.utc).isoformat(),
                 "algorithm_params": {},
                 "verification_hints": {}
             }
@@ -997,45 +868,75 @@ capsule\_id & anchor.capsule\_id & Unique identifier \\
 
 \subsection{Lifecycle Data Flow}
 
-The complete data flow through the CIAF system demonstrates the relationships between data structures:
+The complete data flow through the CIAF system demonstrates the relationships between data structures. The diagram below shows three distinct phases of the CIAF lifecycle:
+
+\begin{itemize}[itemsep=0pt]
+\item \textbf{Training Phase}: Dataset anchors define model anchors, which are used in training sessions
+\item \textbf{Deployment Phase}: Training sessions create deployment anchors that generate inference receipts
+\item \textbf{Storage \& Access Phase}: Inference receipts produce lightweight receipts that are stored in capsule headers, with materialization and integration processes providing data access
+\end{itemize}
 
 \begin{figure}[H]
 \centering
 \begin{tikzpicture}[
-    node distance=1.2cm and 1.5cm,
-    data/.style={rectangle, draw=green!60, thick, rounded corners=3pt, minimum width=2cm, minimum height=0.8cm, text centered, font=\tiny, fill=green!10, align=center},
-    process/.style={diamond, draw=orange!60, thick, minimum width=1.5cm, minimum height=0.8cm, text centered, font=\tiny, fill=orange!10, align=center},
-    arrow/.style={->, thick, color=gray!70}
+    node distance=2cm and 2.5cm,
+    data/.style={rectangle, draw=ciafblue, thick, rounded corners=3pt, minimum width=2.2cm, minimum height=0.8cm, text centered, font=\scriptsize, fill=ciaflight, align=center},
+    process/.style={diamond, draw=ciaforange, thick, minimum width=1.8cm, minimum height=1cm, text centered, font=\scriptsize, fill=ciaforange!10, align=center, aspect=2},
+    arrow/.style={->, thick, color=ciafblue}
 ]
 
-% Data structures
+% Top row - Data Creation Phase
 \node[data] (dataset) {Dataset\\ Anchor};
 \node[data, right=of dataset] (model) {Model\\ Anchor};
 \node[data, right=of model] (training) {Training\\ Session};
+
+% Middle row - Deployment Phase  
 \node[data, below=of training] (deployment) {Deployment\\ Anchor};
 \node[data, left=of deployment] (inference) {Inference\\ Receipt};
-\node[data, left=of inference] (lightweight) {Lightweight\\ Receipt};
-\node[data, below=of inference] (capsule) {Capsule\\ Header};
 
-% Process nodes
-\node[process, below=of dataset] (materialize) {Materialize};
-\node[process, above=of capsule] (integrate) {Integrate};
+% Bottom left - Output Phase
+\node[data, below=of inference] (lightweight) {Lightweight\\ Receipt};
 
-% Arrows showing data flow
-\draw[arrow] (dataset) -- (model);
-\draw[arrow] (model) -- (training);
-\draw[arrow] (training) -- (deployment);
-\draw[arrow] (deployment) -- (inference);
-\draw[arrow] (inference) -- (lightweight);
-\draw[arrow] (lightweight) -- (materialize);
-\draw[arrow] (materialize) -- (inference);
-\draw[arrow] (inference) -- (integrate);
-\draw[arrow] (integrate) -- (capsule);
+% Bottom right - Storage Phase
+\node[data, right=of lightweight] (capsule) {Capsule\\ Header};
 
-% Background grouping
+% Process nodes positioned to avoid overlaps
+\node[process, below left=1.2cm and 0.8cm of dataset] (materialize) {Materialize};
+\node[process, below right=1.2cm and 0.8cm of capsule] (integrate) {Integrate};
+
+% Primary flow arrows - the main lifecycle
+\draw[arrow] (dataset) -- node[above, font=\tiny] {defines} (model);
+\draw[arrow] (model) -- node[above, font=\tiny] {trains} (training);
+\draw[arrow] (training) -- node[right, font=\tiny] {creates} (deployment);
+\draw[arrow] (deployment) -- node[above, font=\tiny] {generates} (inference);
+\draw[arrow] (inference) -- node[left, font=\tiny] {outputs} (lightweight);
+
+% Secondary flow arrows - storage and materialization
+\draw[arrow] (lightweight) -- node[below, font=\tiny] {stores in} (capsule);
+\draw[arrow] (dataset) -- node[left, font=\tiny] {can} (materialize);
+\draw[arrow] (materialize) -- node[below, font=\tiny] {retrieves} (lightweight);
+\draw[arrow] (capsule) -- node[right, font=\tiny] {can} (integrate);
+\draw[arrow] (integrate) -- node[above right, font=\tiny] {accesses} (inference);
+
+% Phase groupings with better spacing
 \begin{scope}[on background layer]
-\node[rectangle, draw=blue!30, thick, rounded corners=5pt, fit={(dataset) (model) (training)}, fill=blue!5, inner sep=8pt] {};
-\node[rectangle, draw=purple!30, thick, rounded corners=5pt, fit={(deployment) (inference) (lightweight)}, fill=purple!5, inner sep=8pt] {};
+% Training Phase
+\node[rectangle, draw=ciafgreen!40, thick, rounded corners=6pt, 
+      fit={(dataset) (model) (training)}, 
+      fill=ciafgreen!5, inner sep=8pt, 
+      label={[font=\tiny, color=ciafgreen]above:Training Phase}] {};
+      
+% Deployment Phase  
+\node[rectangle, draw=ciafdarkblue!40, thick, rounded corners=6pt, 
+      fit={(deployment) (inference)}, 
+      fill=ciafdarkblue!5, inner sep=8pt,
+      label={[font=\tiny, color=ciafdarkblue]above:Deployment Phase}] {};
+      
+% Storage Phase
+\node[rectangle, draw=ciafred!40, thick, rounded corners=6pt, 
+      fit={(lightweight) (capsule) (materialize) (integrate)}, 
+      fill=ciafred!5, inner sep=8pt,
+      label={[font=\tiny, color=ciafred]below:Storage \& Access Phase}] {};
 \end{scope}
 
 \end{tikzpicture}
@@ -1054,6 +955,8 @@ The cryptographic verification chain demonstrates how data structures maintain i
 \end{align}
 
 Each hash in the chain is computed using SHA-256 with canonical JSON serialization, ensuring that any modification to the data structures is cryptographically detectable.
+
+\newpage
 
 \section{Storage and Serialization Patterns}
 
