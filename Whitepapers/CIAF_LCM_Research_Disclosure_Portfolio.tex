@@ -450,6 +450,10 @@ class EvidenceCaptureEngine:
         return receipt.operation_id
 \end{lstlisting}
 
+\begin{tcolorbox}[colframe=blue!70, colback=green!8, title={\textbf{Implementation Note}}]
+The above \texttt{EvidenceCaptureEngine} represents the conceptual design pattern implemented in the CIAF codebase. The production implementation uses the \texttt{MetadataCapture} class in \texttt{ciaf/metadata\_integration.py} with additional enterprise features including context managers, decorators, performance monitoring, and comprehensive error handling while maintaining the same core functionality and architectural principles.
+\end{tcolorbox}
+
 \subsubsection{Lazy Storage Manager}
 
 The Lazy Storage Manager defers full evidence materialization until audit verification is required:
@@ -585,6 +589,10 @@ Batch Manipulation & Merkle root signing ensures batch integrity with tamper det
 \item \textbf{Verify Signatures:} \texttt{ciaf-cli verify-signatures --evidence evidence.json --pubkey public.pem}
 \end{enumerate}
 \end{infobox}
+
+\begin{tcolorbox}[colframe=blue!70, colback=green!8, title={\textbf{Implementation Note}}]
+The core infrastructure classes \texttt{WORMIntegrityValidator} and \texttt{AuditTrailMaterializer} represent architectural patterns implemented across multiple modules in the CIAF codebase. The production implementation distributes WORM integrity functionality through database triggers and storage policies in \texttt{ciaf/metadata\_storage*.py}, while audit trail materialization is handled by the LCM manager classes and deferred materialization system in \texttt{ciaf/deferred\_lcm.py}.
+\end{tcolorbox}
 
 \subsection{Advanced LCM Manager Ecosystem}
 
@@ -804,6 +812,10 @@ class CIAFCapsuleManager:
         
         return self.capsule_manager.register_header(header)
 \end{lstlisting}
+
+\begin{tcolorbox}[colframe=blue!70, colback=green!8, title={\textbf{Implementation Note}}]
+The \texttt{CIAF*Manager} wrapper classes above represent pedagogical examples showing how to integrate the actual LCM manager classes (\texttt{LCMDatasetFamilyManager}, \texttt{LCMTrainingManager}, \texttt{LCMDeploymentManager}, \texttt{LCMInferenceManager}, \texttt{LCMRootManager}, \texttt{LCMCapsuleManager}) from \texttt{ciaf/lcm/} modules. The production codebase provides the underlying LCM manager classes directly, which can be used as shown in the import statements, without requiring the wrapper layer demonstrated here for educational clarity.
+\end{tcolorbox}
 
 % 4. CIAF Data Structures Specification
 \section{CIAF Data Structures Specification}
@@ -1028,6 +1040,10 @@ class EvidenceItem:
     classification_level: str
 \end{lstlisting}
 
+\begin{tcolorbox}[colframe=blue!70, colback=green!8, title={\textbf{Implementation Note}}]
+The data structure classes \texttt{CapsuleHeader} and \texttt{LightweightReceipt} exist in the production codebase in \texttt{ciaf/lcm/capsule\_headers.py} and \texttt{ciaf/deferred\_lcm.py} respectively. The \texttt{EvidenceItem} class represents a conceptual structure that is implemented through various evidence metadata classes and commitment structures throughout the LCM system, particularly in the metadata integration and storage modules.
+\end{tcolorbox}
+
 \subsection{Canonical JSON Serialization}
 
 CIAF implements RFC 8785-compliant canonical JSON to ensure consistent hashing across platforms:
@@ -1066,7 +1082,17 @@ CIAF implements RFC 8785-compliant canonical JSON to ensure consistent hashing a
 \item \textbf{EXAMPLES} (MAY): Illustrative implementations that demonstrate best practices
 \item \textbf{APPLICATION PROFILES}: Extended features beyond the canonical specification
 \end{itemize}
-This document distinguishes between mandatory normative requirements and optional implementation examples to aid auditors and developers in compliance verification.
+
+\textbf{Pedagogical vs. Production Code:}
+\begin{itemize}
+\item \textbf{Exact Matches:} Core LCM manager classes (LCMDatasetFamilyManager, LCMTrainingManager, etc.) exist exactly as shown
+\item \textbf{Pedagogical Wrappers:} CIAF* wrapper classes demonstrate integration patterns around actual LCM classes
+\item \textbf{Architectural Patterns:} Infrastructure classes represent design patterns implemented across multiple production modules
+\item \textbf{Building Block Examples:} Application classes show how to compose production components for specific use cases
+\item \textbf{Implementation Notes:} Each major section includes explicit mapping between examples and production code locations
+\end{itemize}
+
+This document distinguishes between mandatory normative requirements and optional implementation examples to aid auditors and developers in compliance verification. Code examples prioritize educational clarity over implementation complexity while maintaining architectural accuracy.
 \end{tcolorbox}
 
 \begin{lstlisting}[caption=Canonical JSON Implementation]
@@ -1098,7 +1124,7 @@ def canonical_json(obj: Any) -> str:
 
 \subsection{Comprehensive Compliance Architecture}
 
-CIAF implements a sophisticated compliance automation ecosystem with 25+ specialized modules designed to address the complex regulatory landscape facing AI systems. This system goes far beyond basic audit logging to provide automated regulatory mapping, real-time bias detection, and comprehensive governance workflows.
+CIAF implements a sophisticated compliance automation ecosystem with 24+ specialized compliance modules designed to address the complex regulatory landscape facing AI systems. This system goes far beyond basic audit logging to provide automated regulatory mapping, real-time bias detection, and comprehensive governance workflows.
 
 \subsubsection{Core Compliance Framework}
 
@@ -1623,6 +1649,10 @@ regulatory_report = report_generator.\
 )
 \end{lstlisting}
 
+\begin{tcolorbox}[colframe=blue!70, colback=green!8, title={\textbf{Implementation Note}}]
+The compliance automation classes (\texttt{CIAFAuditSystem}, \texttt{CIAFBiasMonitor}, \texttt{CIAFHumanOversight}, \texttt{CIAFGateOrchestrator}, \texttt{CIAFIncidentManagement}) represent application-layer patterns that can be built using CIAF's core infrastructure. The production codebase provides foundational components like gate protocols in \texttt{ciaf/gates/}, metadata integration in \texttt{ciaf/metadata\_integration.py}, and compliance primitives in \texttt{ciaf/compliance/} modules, which serve as building blocks for implementing these higher-level compliance automation patterns.
+\end{tcolorbox}
+
 % 6. CIAF AI/ML Integration Framework
 \section{CIAF AI/ML Integration Framework}
 
@@ -1912,6 +1942,10 @@ class CIAFMLPipeline:
         }
 \end{lstlisting}
 
+\begin{tcolorbox}[colframe=blue!70, colback=green!8, title={\textbf{Implementation Note}}]
+The AI/ML integration classes (\texttt{CIAFDataProcessor}, \texttt{CIAFExplainabilityManager}, \texttt{CIAFUncertaintyManager}, \texttt{CIAFModelIntegration}, \texttt{CIAFMLPipeline}) demonstrate application patterns built on CIAF's preprocessing protocols. The production implementation provides these capabilities through \texttt{ciaf/preprocessing/} modules, \texttt{ciaf/explainability/}, \texttt{ciaf/uncertainty/}, and wrapper protocols in \texttt{ciaf/wrappers/}, which can be combined to create the integrated systems shown in these examples.
+\end{tcolorbox}
+
 % 7. CIAF Enterprise Architecture
 \section{CIAF Enterprise Architecture}
 
@@ -2195,6 +2229,10 @@ class CIAFMultiTenantManager:
         
         return self.tenant_manager.register_tenant(tenant_ciaf)
 \end{lstlisting}
+
+\begin{tcolorbox}[colframe=blue!70, colback=green!8, title={\textbf{Implementation Note}}]
+The enterprise architecture classes (\texttt{CIAFContainer}, \texttt{CIAFFeatureManager}, \texttt{CIAFEnterpriseCluster}, \texttt{CIAFPerformanceManager}, \texttt{CIAFEnterpriseAPI}, \texttt{CIAFMultiTenantManager}) represent architectural patterns for enterprise deployment. The production codebase provides the underlying protocol-based architecture through \texttt{ciaf/core/} modules and distributed processing capabilities, which can be composed into these enterprise patterns based on specific deployment requirements.
+\end{tcolorbox}
 
 % 8. Cross-Industry Applications
 \section{Cross-Industry Applications}
@@ -2539,6 +2577,14 @@ Energy & NERC CIP & IEC 61850, IEEE 1547 & Smart grid AI security \\
 \caption{CIAF Multi-Framework Regulatory Harmonization}
 \end{table}
 
+\begin{infobox}
+\textbf{Complete Industry Coverage:} The above table shows representative examples. CIAF provides specialized modules for 21 industry sectors including: Banking, Biotechnology, Climate/ESG, Cybersecurity, Defense, Education, Government, Healthcare, Human Resources, Insurance, Legal, Manufacturing, Media, Retail, Telecommunications, Transportation, Foundation Models, AI Supply Chain, Cross-Border operations, and additional regulatory frameworks.
+\end{infobox}
+
+\begin{tcolorbox}[colframe=blue!70, colback=green!8, title={\textbf{Implementation Note}}]
+The industry-specific classes (\texttt{CIAFMedicalAI}, \texttt{CIAFAutonomousVehicle}, \texttt{CIAFFairHiring}, \texttt{CIAFManufacturingAI}, etc.) represent domain-specific application patterns that can be built using CIAF's core compliance and LCM infrastructure. The production codebase provides industry-specific modules in \texttt{ciaf/industries/} with foundational compliance mappings, which serve as building blocks for implementing these specialized AI governance systems across different regulatory environments.
+\end{tcolorbox}
+
 % 9. Security & Verification
 \section{Security \& Verification}
 
@@ -2777,7 +2823,7 @@ The CIAF + LCM framework represents significant advances in several key areas:
 \item \textbf{Evidence Strength Classification:} Formal taxonomy for audit evidence quality assessment
 \end{itemize}
 
-\begin{tcolorbox}[colframe=green!50, colback=green!5, title={\textbf{Reproduce the Demo}}]
+\begin{tcolorbox}[colframe=blue!70, colback=green!8, title={\textbf{Reproduce the Demo}}]
 \textbf{Quick Start Commands (5-minute setup):}
 \begin{lstlisting}[language=bash]
 # 1. Generate lightweight receipt
@@ -2801,7 +2847,7 @@ ciaf compliance-check --framework "EU_AI_Act" --evidence "trail.json"
 \textbf{Practical Contributions}
 \begin{itemize}
 \item \textbf{85\% Storage Reduction:} Demonstrated efficiency gains over traditional audit approaches
-\item \textbf{Automated Compliance Mapping:} Real-time regulatory alignment across 20+ industries
+\item \textbf{Automated Compliance Mapping:} Real-time regulatory alignment across 21 industry sectors
 \item \textbf{Cross-Platform Verification:} RFC 8785 implementation enabling auditor independence
 \item \textbf{Production-Ready Implementation:} Complete codebase with comprehensive test coverage
 \end{itemize}
@@ -3010,7 +3056,29 @@ class ComplianceAssertion:
 \label{fig:merkle_proof}
 \end{figure}
 
-\textbf{Proof Path for E4:} To verify evidence item E4 without materializing the full tree, the verifier needs only: Hash(E3), H1, and H2. The verification algorithm recomputes H4 = Hash(E3 || E4), then H1' = Hash(H3 || H4), then Root' = Hash(H1' || H2), confirming Root' = Root.
+\begin{technicalbox}
+\textbf{Merkle Proof Verification Process}
+
+To verify evidence item E4 belongs to the committed batch without downloading the entire tree, the verifier needs only a minimal \textbf{proof path} consisting of sibling hashes:
+
+\textbf{Required Elements:}
+\begin{itemize}
+\item \textbf{Evidence Item:} E4 (the item being verified)
+\item \textbf{Sibling Hash:} Hash(E3) - E4's direct sibling
+\item \textbf{Uncle Hash:} H3 - the sibling of H4's parent 
+\item \textbf{Uncle Hash:} H2 - the sibling of H1's parent
+\end{itemize}
+
+\textbf{Verification Steps:}
+\begin{enumerate}
+\item \textbf{Compute H4:} Hash(E3 || E4) using E4 and its sibling Hash(E3)
+\item \textbf{Compute H1:} Hash(H3 || H4) using computed H4 and provided H3
+\item \textbf{Compute Root:} Hash(H1 || H2) using computed H1 and provided H2
+\item \textbf{Verify:} Compare computed root with the trusted root hash
+\end{enumerate}
+
+\textbf{Security Property:} If E4 was tampered with, the computed root would differ from the trusted root, proving the evidence was modified. This provides cryptographic proof of integrity with logarithmic verification complexity.
+\end{technicalbox}
 
 \subsection{Audit Trail Flowchart}
 
@@ -3097,6 +3165,45 @@ class ComplianceAssertion:
 \label{fig:audit_flow}
 \end{figure}
 
+\begin{technicalbox}
+\textbf{Audit Trail Flowchart Explanation}
+
+The flowchart illustrates CIAF's dual-mode evidence processing architecture, optimizing for both real-time performance and comprehensive auditability:
+
+\textbf{Evidence Capture Phase:}
+\begin{itemize}
+\item \textbf{AI Operation Initiated:} Any AI system operation (training, inference, evaluation) triggers evidence capture
+\item \textbf{Evidence Capture:} Critical audit data (inputs, outputs, model state, compliance metrics) recorded with timestamps
+\end{itemize}
+
+\textbf{Materialization Decision:}
+\begin{itemize}
+\item \textbf{Immediate Mode:} High-risk operations store complete evidence immediately to WORM storage
+\item \textbf{Lazy Mode:} Routine operations generate lightweight receipts (1-2KB) with cryptographic commitments
+\end{itemize}
+
+\textbf{Storage Strategy:}
+\begin{itemize}
+\item \textbf{WORM Store:} Immutable storage for complete audit evidence with full regulatory compliance
+\item \textbf{Commitment Store:} Efficient storage of cryptographic receipts enabling on-demand materialization
+\end{itemize}
+
+\textbf{Audit Activation:}
+\begin{itemize}
+\item \textbf{No Audit Required:} Lightweight receipts remain stored with minimal overhead
+\item \textbf{Audit Required:} Triggers materialization process reconstructing complete evidence from receipts
+\item \textbf{Cryptographic Verification:} SHA-256 hash chains and Ed25519 signatures validate evidence integrity
+\item \textbf{Audit Report:} Generates comprehensive regulatory compliance documentation
+\end{itemize}
+
+\textbf{Key Advantages:}
+\begin{itemize}
+\item \textbf{85\% Storage Reduction:} Lazy materialization minimizes storage costs during normal operations
+\item \textbf{Regulatory Compliance:} Both modes generate audit evidence meeting strict regulatory requirements
+\item \textbf{Performance Optimization:} Minimal latency impact on AI system operations
+\item \textbf{Cryptographic Integrity:} Tamper-evident audit trails with mathematical proof of integrity
+\end{itemize}
+\end{technicalbox}
 
 \subsection{References}
 
@@ -3138,20 +3245,171 @@ class ComplianceAssertion:
 \end{itemize}
 \end{technicalbox}
 
+\section{Regulatory Framework Coverage}
+
+This document addresses compliance requirements across multiple regulatory frameworks. The following section provides direct links to the regulations, specific articles covered, and CIAF's implementation approach for each framework.
+
+\subsection{European Union Regulations}
+
+\subsubsection{EU AI Act (Regulation 2024/1689)}
+\begin{valuebox}
+\textbf{Official Title:} Regulation (EU) 2024/1689 laying down harmonised rules on artificial intelligence\\
+\textbf{Official Link:} \href{https://eur-lex.europa.eu/eli/reg/2024/1689/oj}{\textcolor{blue}{EUR-Lex Official Publication}}\\
+\textbf{Effective Date:} August 1, 2024 (Full enforcement: August 2026)
+
+\textbf{Key Articles Addressed by CIAF:}
+\begin{itemize}
+\item \textbf{Article 11} - Obligations for high-risk AI systems: CIAF lightweight receipts provide required documentation
+\item \textbf{Article 12} - Quality management systems: Evidence strength classification supports systematic quality control
+\item \textbf{Article 13} - Transparency obligations: Provenance chains enable algorithmic transparency requirements
+\item \textbf{Article 14} - Human oversight requirements: CIAF HITL gates enforce human-in-the-loop compliance
+\item \textbf{Article 15} - Accuracy and robustness: Cryptographic commitments ensure model performance verification
+\end{itemize}
+
+\textbf{CIAF Implementation:} Automated compliance mapping, real-time bias detection, human oversight gates, and cryptographic audit trails meeting EU AI Act requirements for high-risk AI systems.
+\end{valuebox}
+
+\subsubsection{General Data Protection Regulation (GDPR)}
+\begin{technicalbox}
+\textbf{Official Title:} Regulation (EU) 2016/679 on the protection of natural persons\\
+\textbf{Official Link:} \href{https://eur-lex.europa.eu/eli/reg/2016/679/oj}{\textcolor{blue}{EUR-Lex GDPR Text}}\\
+\textbf{Effective Date:} May 25, 2018
+
+\textbf{Key Articles Addressed by CIAF:}
+\begin{itemize}
+\item \textbf{Article 22} - Automated decision-making: XAI integration provides right to explanation
+\item \textbf{Article 25} - Data protection by design: Privacy-preserving audit architecture
+\item \textbf{Article 30} - Records of processing: Comprehensive audit trail generation
+\item \textbf{Article 35} - Data protection impact assessment: Automated DPIA documentation
+\end{itemize}
+
+\textbf{CIAF Implementation:} Privacy-preserving evidence capture, explainable AI compliance, automated DPIA generation, and audit trail protection meeting GDPR transparency requirements.
+\end{technicalbox}
+
+\subsection{United States Regulations}
+
+\subsubsection{NIST AI Risk Management Framework}
+\begin{valuebox}
+\textbf{Official Title:} NIST AI Risk Management Framework (AI RMF 1.0)\\
+\textbf{Official Link:} \href{https://www.nist.gov/itl/ai-risk-management-framework}{\textcolor{blue}{NIST AI RMF Official Page}}\\
+\textbf{Publication Date:} January 26, 2023
+
+\textbf{Key Functions Addressed by CIAF:}
+\begin{itemize}
+\item \textbf{GOVERN-1.1} - AI governance policies: Policy-driven gate configuration
+\item \textbf{MAP-2.3} - Risk measurement and assessment: Evidence strength classification
+\item \textbf{MEASURE-2.1} - Test and validation: Cryptographic verification of model performance
+\item \textbf{MEASURE-4.1} - Harmful bias monitoring: Automated bias detection gates
+\item \textbf{GOVERN-2.1} - Oversight processes: Human-in-the-loop compliance architecture
+\end{itemize}
+
+\textbf{CIAF Implementation:} Risk-based compliance gates, continuous bias monitoring, stakeholder impact assessment, and comprehensive AI lifecycle governance aligned with NIST RMF categories.
+\end{valuebox}
+
+\subsubsection{OMB Memorandum M-24-10}
+\begin{technicalbox}
+\textbf{Official Title:} Advancing Governance, Innovation, and Risk Management for Agency Use of AI\\
+\textbf{Official Link:} \href{https://www.whitehouse.gov/wp-content/uploads/2024/03/M-24-10-Advancing-Governance-Innovation-and-Risk-Management-for-Agency-Use-of-Artificial-Intelligence.pdf}{\textcolor{blue}{White House OMB M-24-10}}\\
+\textbf{Effective Date:} March 28, 2024
+
+\textbf{Key Requirements Addressed by CIAF:}
+\begin{itemize}
+\item \textbf{Section 3} - Minimum practices for AI governance: Comprehensive audit trail generation
+\item \textbf{Section 4} - Safety and security requirements: Cryptographic evidence integrity
+\item \textbf{Section 5} - Transparency and accountability: Public algorithm registry capabilities
+\item \textbf{Section 6} - Continuous monitoring: Real-time performance and bias monitoring
+\end{itemize}
+
+\textbf{CIAF Implementation:} Government-compliant algorithmic transparency, public audit verification, continuous AI system monitoring, and appeals process documentation for contested decisions.
+\end{technicalbox}
+
+\subsection{Industry-Specific Regulations}
+
+\subsubsection{Healthcare: FDA Software as Medical Device (SaMD)}
+\begin{valuebox}
+\textbf{Official Title:} Software as Medical Device (SaMD): Clinical Evaluation Guidance\\
+\textbf{Official Link:} \href{https://www.fda.gov/medical-devices/digital-health-center-excellence/software-medical-device-samd}{\textcolor{blue}{FDA SaMD Guidance}}\\
+\textbf{Updates:} Ongoing (AI/ML guidance updated 2021-2024)
+
+\textbf{Key Requirements Addressed by CIAF:}
+\begin{itemize}
+\item \textbf{Clinical Validation:} Cryptographic evidence of AI model performance on clinical data
+\item \textbf{Risk Classification:} Automated IEC 62304 risk assessment and documentation
+\item \textbf{Change Control:} Immutable audit trail of model updates and revalidation
+\item \textbf{Post-Market Surveillance:} Real-world performance monitoring with regulatory reporting
+\end{itemize}
+
+\textbf{CIAF Implementation:} Medical device compliance automation, clinical validation evidence capture, FDA 510(k) documentation support, and post-market surveillance integration.
+\end{valuebox}
+
+\subsubsection{Financial Services: Fair Credit Reporting Act (FCRA)}
+\begin{technicalbox}
+\textbf{Official Title:} Fair Credit Reporting Act (15 U.S.C. §1681)\\
+\textbf{Official Link:} \href{https://www.ftc.gov/legal-library/browse/statutes/fair-credit-reporting-act}{\textcolor{blue}{FTC FCRA Information}}\\
+\textbf{AI Guidance:} Updated with algorithmic decision-making requirements
+
+\textbf{Key Requirements Addressed by CIAF:}
+\begin{itemize}
+\item \textbf{Section 615} - Adverse action notices: Automated explanation generation for AI decisions
+\item \textbf{Section 604} - Permissible purposes: Purpose-binding evidence in audit trails
+\item \textbf{Section 611} - Dispute procedures: Auditable review process for contested AI decisions
+\item \textbf{Section 605} - Accuracy requirements: Model performance verification and bias monitoring
+\end{itemize}
+
+\textbf{CIAF Implementation:} Fair lending transparency, automated adverse action documentation, algorithmic bias detection, and dispute resolution audit trails for financial AI systems.
+\end{technicalbox}
+
+\subsubsection{International Standards}
+
+\begin{valuebox}
+\textbf{ISO/IEC 23053:2022} - Framework for AI risk management\\
+\textbf{Link:} \href{https://www.iso.org/standard/74438.html}{\textcolor{blue}{ISO 23053 Standard}}\\
+\textbf{Coverage:} Risk assessment methodologies, governance structures, continuous monitoring
+
+\textbf{ISO/IEC 23894:2023} - AI risk management process\\
+\textbf{Link:} \href{https://www.iso.org/standard/77304.html}{\textcolor{blue}{ISO 23894 Standard}}\\
+\textbf{Coverage:} Systematic risk management, stakeholder engagement, documentation requirements
+
+\textbf{ISO/IEC 42001:2023} - AI management systems\\
+\textbf{Link:} \href{https://www.iso.org/standard/81230.html}{\textcolor{blue}{ISO 42001 Standard}}\\
+\textbf{Coverage:} Management system requirements, organizational governance, continual improvement
+\end{valuebox}
+
+\subsection{Emerging Regulatory Developments}
+
+\begin{infobox}
+\textbf{Regulatory Tracking:} CIAF continuously monitors emerging regulations including:
+\begin{itemize}
+\item \textbf{California SB-1001:} Bot disclosure requirements for AI systems
+\item \textbf{UK AI White Paper:} Principles-based regulatory approach for AI governance
+\item \textbf{Singapore Model AI Governance:} Voluntary AI governance framework and implementation guidance
+\item \textbf{China AI Regulation:} Draft measures for algorithmic recommendation and deep synthesis
+\item \textbf{Canada AIDA:} Proposed Artificial Intelligence and Data Act requirements
+\end{itemize}
+
+The CIAF framework is designed to adapt to evolving regulatory requirements through its modular compliance architecture and policy-driven configuration system.
+\end{infobox}
+
 \vfill
 
 \begin{center}
 \textcolor{ciafgray}{\rule{0.8\textwidth}{0.4pt}}\\
-\vspace{0.5cm}
+\vspace{0.3cm}
+\textbf{AI Assistance Disclosure}\\
+\vspace{0.2cm}
+This research work utilized artificial intelligence tools as assistants in the development process. AI assistance was employed for code creation, documentation drafting, and technical writing support. The author maintained oversight throughout the entire process and takes full responsibility for the final code, documentation, and research content. All AI-generated content was reviewed, edited, and validated by the author to ensure accuracy, originality, and alignment with research objectives.\\
+\vspace{0.3cm}
+\textcolor{ciafgray}{\rule{0.8\textwidth}{0.4pt}}\\
+\vspace{0.3cm}
 \textbf{License \& Citation}\\
 \vspace{0.3cm}
 © 2025 Denzil James Greenwood. All rights reserved.\\
 \textbf{Software:} Licensed under Apache 2.0 • \textbf{Documentation:} Licensed under CC BY 4.0\\
-\textbf{Trademarks:} Cognitive Insight™ and LCM™ are protected marks\\
+\textbf{Trademarks:} Cognitive Insight™ and LCM™ are unregistered trademarks used in connection with ongoing research on verifiable AI governance and auditability.\\
 \vspace{0.2cm}
 \textbf{Suggested Citation:}\\
 \textit{Greenwood, D.J. (2025). CIAF + LCM Research Disclosure Portfolio: Cognitive Insight Audit Framework with Lazy Capsule Materialization. Independent Research Publication. Available at: https://github.com/DenzilGreenwood/CIAF\_Model\_Creation}\\
-\vspace{0.3cm}
+\vspace{0.25cm}
 \textbf{Academic Citation (BibTeX):}\\
 \begin{verbatim}
 @techreport{greenwood2025ciaf,
@@ -3165,20 +3423,20 @@ class ComplianceAssertion:
   note={Apache 2.0 Licensed}
 }
 \end{verbatim}
-\vspace{0.5cm}
+\vspace{0.25cm}
 \textcolor{ciafgray}{\rule{0.8\textwidth}{0.4pt}}\\
-\vspace{0.5cm}
+\vspace{0.4cm}
 \textbf{Contact Information}\\
-\vspace{0.3cm}
+\vspace{0.25cm}
 Denzil James Greenwood | Independent Researcher\\
-Email: research@cognitiveinsight.ai\\
-LinkedIn: /in/denzil-greenwood\\
+Email: Founder@cognitiveinsight.ai\\
+LinkedIn: www.linkedin.com/in/denzil-james-greenwood\\
 Website: CognitiveInsight.ai\\
 Repository: github.com/DenzilGreenwood/CIAF\_Model\_Creation\\
-\vspace{0.3cm}
+\vspace{0.25cm}
 \textit{Open to collaboration, peer review, and funded research opportunities}\\
-\vspace{0.5cm}
-\textcolor{ciafgray}{\rule{0.8\textwidth}{0.4pt}}
+\vspace{0.4cm}
+\textcolor{ciafgray}{\rule{0.8\textwidth}{0.25pt}}
 \end{center}
 
 \end{document}

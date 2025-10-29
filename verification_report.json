@@ -1,0 +1,69 @@
+{
+  "total_checks": 6,
+  "verified": 1,
+  "partial": 2,
+  "not_found": 3,
+  "overall_accuracy": 0.16666666666666666,
+  "results": [
+    {
+      "paper_reference": "Section 3.1, Lines 424-512",
+      "file_path": "ciaf\\deferred_lcm.py",
+      "line_range": null,
+      "class_name": "LazyCapsuleMaterializer",
+      "method_name": null,
+      "verification_status": "NOT_FOUND",
+      "accuracy_score": 0.0,
+      "notes": "Class not found in expected file"
+    },
+    {
+      "paper_reference": "Section 4.2, Lines 926-955",
+      "file_path": "ciaf\\enhanced_receipts.py",
+      "line_range": null,
+      "class_name": "LightweightReceipt",
+      "method_name": null,
+      "verification_status": "NOT_FOUND",
+      "accuracy_score": 0.0,
+      "notes": "LightweightReceipt dataclass not found"
+    },
+    {
+      "paper_reference": "Section 5.1, Lines 1120-1150",
+      "file_path": "ciaf\\compliance",
+      "line_range": null,
+      "class_name": null,
+      "method_name": null,
+      "verification_status": "VERIFIED",
+      "accuracy_score": 1.0,
+      "notes": "Compliance module directory structure exists"
+    },
+    {
+      "paper_reference": "Section 5.4, Lines 1290-1320",
+      "file_path": "ciaf\\gates",
+      "line_range": null,
+      "class_name": "ComplianceGate",
+      "method_name": null,
+      "verification_status": "NOT_FOUND",
+      "accuracy_score": 0.0,
+      "notes": "protocols.py file not found in gates directory"
+    },
+    {
+      "paper_reference": "Executive Overview, Lines 287-295",
+      "file_path": "ciaf\\cli.py",
+      "line_range": null,
+      "class_name": null,
+      "method_name": null,
+      "verification_status": "PARTIAL",
+      "accuracy_score": 0.0,
+      "notes": "Found 0/4 commands: []"
+    },
+    {
+      "paper_reference": "Section 8, Lines 2250-2500",
+      "file_path": "ciaf\\industries",
+      "line_range": null,
+      "class_name": null,
+      "method_name": null,
+      "verification_status": "PARTIAL",
+      "accuracy_score": 0.0,
+      "notes": "Found 0/4 industry modules: []"
+    }
+  ]
+}
