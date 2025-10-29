@@ -120,6 +120,7 @@ Repository = "https://github.com/DenzilGreenwood/CIAF_Model_Creation.git"
 "Bug Tracker" = "https://github.com/DenzilGreenwood/CIAF_Model_Creation/issues"
 
 [project.scripts]
+ciaf = "ciaf.cli:main"
 ciaf-verify = "scripts.ciaf_verify:main"
 ciaf-validate = "scripts.validate_frameworks:main"
 ciaf-demo = "examples.demo_runner:main"

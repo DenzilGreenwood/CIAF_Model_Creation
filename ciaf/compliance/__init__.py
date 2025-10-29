@@ -57,6 +57,33 @@ try:
 except ImportError:
     PROTOCOL_IMPLEMENTATIONS_AVAILABLE = False
 
+# Advanced regulatory and cryptoeconomic frameworks
+try:
+    from .advanced_regulatory_mapping import (
+        RegulatoryMappingFramework,
+        RegulatoryFramework,
+        ComplianceLevel as AdvancedComplianceLevel,
+        RegulatoryRequirement,
+        ComplianceMapping,
+    )
+    ADVANCED_REGULATORY_AVAILABLE = True
+except ImportError:
+    ADVANCED_REGULATORY_AVAILABLE = False
+
+try:
+    from .trust_boundaries import (
+        CryptoeconomicFramework,
+        EntityType,
+        TrustLevel,
+        JurisdictionType,
+        SigningEntity,
+        TrustBoundary,
+        CrossJurisdictionProof,
+    )
+    TRUST_BOUNDARIES_AVAILABLE = True
+except ImportError:
+    TRUST_BOUNDARIES_AVAILABLE = False
+
 # Core compliance modules
 from .audit_trails import AuditTrailGenerator, ComplianceAuditRecord, AuditTrail
 from .consent import ConsentRecord, ConsentManager, ConsentMigrator
@@ -344,10 +371,24 @@ __all__ = [
     
     # Feature availability flags
     "PROTOCOL_IMPLEMENTATIONS_AVAILABLE",
+    "ADVANCED_REGULATORY_AVAILABLE",
+    "TRUST_BOUNDARIES_AVAILABLE",
     "HUMAN_OVERSIGHT_AVAILABLE",
     "WEB_DASHBOARD_AVAILABLE",
     "ROBUSTNESS_TESTING_AVAILABLE",
-] + (["HumanOversightEngine",
+] + (["RegulatoryMappingFramework",
+    "RegulatoryFramework",
+    "AdvancedComplianceLevel", 
+    "RegulatoryRequirement",
+    "ComplianceMapping"] if ADVANCED_REGULATORY_AVAILABLE else []) + (
+    ["CryptoeconomicFramework",
+    "EntityType",
+    "TrustLevel",
+    "JurisdictionType",
+    "SigningEntity",
+    "TrustBoundary",
+    "CrossJurisdictionProof"] if TRUST_BOUNDARIES_AVAILABLE else []) + (
+    ["HumanOversightEngine",
     "OversightAlert", 
     "OversightReview",
     "AlertType",

@@ -1,0 +1,14 @@
+{
+  "features": {
+    "age": 35,
+    "income": 75000,
+    "credit_score": 720,
+    "employment_years": 8,
+    "loan_amount": 250000
+  },
+  "metadata": {
+    "source": "loan_application_system",
+    "timestamp": "2024-10-29T10:30:00Z",
+    "request_id": "loan_app_12345"
+  }
+}

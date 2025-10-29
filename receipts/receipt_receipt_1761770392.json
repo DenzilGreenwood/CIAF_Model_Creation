@@ -1,0 +1,58 @@
+{
+  "receipt_id": "receipt_1761770392",
+  "ciaf_version": "1.2.0",
+  "operation_type": "inference",
+  "timestamp": "2025-10-29T15:39:52.299429",
+  "model_anchor": {
+    "model_path": "model.pkl",
+    "model_hash": "c2a700c51c48af511f6f6db7f6e34bf817530b01e11719c8176460b74bab158a",
+    "model_type": "scikit-learn/pickle"
+  },
+  "input_hash": "c1327c1381fa66b6780de27600238ceb1b386a45678e088b2decfd6df05fbc1f",
+  "prediction": {
+    "prediction_class": "class_1",
+    "confidence_score": 0.89,
+    "probabilities": {
+      "class_0": 0.11,
+      "class_1": 0.89
+    },
+    "model_info": {
+      "model_file": "model.pkl",
+      "input_features": 2
+    }
+  },
+  "prediction_hash": "245d17c087abcf11e7cc3ef6f058f65b6293ea6f401adab2324ad647772d41ab",
+  "governance_metadata": {
+    "policies_applied": [
+      "POL-001",
+      "POL-002",
+      "POL-003",
+      "INF-001",
+      "INF-015"
+    ],
+    "compliance_frameworks": [
+      "NIST_AI_RMF",
+      "EU_AI_ACT"
+    ],
+    "bias_checks": {
+      "demographic_parity": 0.95,
+      "equalized_odds": 0.92,
+      "calibration": 0.88,
+      "fairness_score": 0.91
+    },
+    "model_performance": {
+      "confidence": 0.89,
+      "uncertainty": 0.11
+    },
+    "regulatory_compliance": {
+      "gdpr_compliant": true,
+      "explainability_required": true,
+      "human_oversight": false
+    }
+  },
+  "cryptographic_seal": {
+    "signature_algorithm": "Ed25519",
+    "hash_algorithm": "SHA-256"
+  },
+  "signature": "sig_1602b8b9199ae694a614623d4aae2f41"
+}

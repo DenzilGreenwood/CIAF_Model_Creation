@@ -1,0 +1,31 @@
+{
+  "ciaf_version": "1.2.0",
+  "batch_id": "batch_1761770710",
+  "created_timestamp": "2025-10-29T15:45:10.256635",
+  "receipt_count": 1,
+  "merkle_tree": {
+    "root_hash": "70fc929c4c100a1b46663ed88f5cf3c5eea58f75ee1f0ff9cf3aa0e064cee39d",
+    "levels": [
+      [
+        "70fc929c4c100a1b46663ed88f5cf3c5eea58f75ee1f0ff9cf3aa0e064cee39d"
+      ]
+    ],
+    "leaf_count": 1
+  },
+  "root_hash": "70fc929c4c100a1b46663ed88f5cf3c5eea58f75ee1f0ff9cf3aa0e064cee39d",
+  "receipts_metadata": [
+    {
+      "receipt_id": "receipt_1761770392",
+      "leaf_hash": "70fc929c4c100a1b46663ed88f5cf3c5eea58f75ee1f0ff9cf3aa0e064cee39d",
+      "leaf_index": 0
+    }
+  ],
+  "verification_instructions": {
+    "algorithm": "SHA-256 Merkle Tree",
+    "verification_steps": [
+      "1. Locate receipt in tree using leaf_index",
+      "2. Follow proof_path to reconstruct root",
+      "3. Compare computed root with batch root_hash"
+    ]
+  }
+}

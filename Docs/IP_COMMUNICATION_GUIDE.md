@@ -20,7 +20,7 @@ CIAF uses a proven combination of copyright protection, trademark branding, and 
    - Industry-standard license trusted by enterprises
 
 2. **Trademark Protection**
-   - "Cognitive Insight™" and "LCM™" are protected brand names
+   - Trademarks: Cognitive Insight™ and LCM™ are unregistered trademarks used in connection with ongoing research on verifiable AI governance and auditability.
    - Prevents competitors from using confusingly similar names
    - Creates exclusive commercial branding rights
    - Much cheaper and faster to defend than patents
@@ -59,7 +59,7 @@ CIAF uses a proven combination of copyright protection, trademark branding, and 
 **"Core innovations are protected through established prior art"**
 
 - **Cannot Patent:** Key LCM innovations are publicly disclosed (defensive publication)
-- **Cannot Copy Branding:** Trademark protection on "Cognitive Insight™" and "LCM™"
+- **Cannot Copy Branding:** Trademarks: Cognitive Insight™ and LCM™ are unregistered trademarks used in connection with ongoing research on verifiable AI governance and auditability.
 - **Must Attribute:** Any derivative work requires author credit
 - **Market Recognition:** Denzil James Greenwood recognized as original innovator
 
