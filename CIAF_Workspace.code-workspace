@@ -1,0 +1,61 @@
+{
+    "folders": [
+        {
+            "name": "CIAF Model Creation",
+            "path": "."
+        }
+    ],
+    "settings": {
+        // Inherit from .vscode/settings.json but can override here
+        "python.defaultInterpreterPath": "D:/python312/python.exe",
+        "files.autoSave": "onFocusChange",
+        "editor.minimap.enabled": true,
+        "editor.minimap.showSlider": "always",
+        "breadcrumbs.enabled": true,
+        "explorer.confirmDelete": false,
+        "explorer.confirmDragAndDrop": false,
+        // CIAF Specific Workspace Settings
+        "ciaf.workspace.type": "development",
+        "ciaf.workspace.version": "1.2.0",
+        "ciaf.workspace.features": [
+            "compliance",
+            "explainability",
+            "uncertainty",
+            "preprocessing",
+            "metadata_tags"
+        ]
+    },
+    "extensions": {
+        "recommendations": [
+            "ms-python.python",
+            "ms-python.debugpy",
+            "ms-toolsai.jupyter",
+            "james-yu.latex-workshop",
+            "eamodio.gitlens",
+            "github.copilot",
+            "github.copilot-chat",
+            "ms-python.black-formatter",
+            "ms-python.flake8",
+            "ms-python.mypy-type-checker"
+        ]
+    },
+    "tasks": {
+        "version": "2.0.0",
+        "tasks": [
+            {
+                "label": "CIAF: Quick Setup",
+                "type": "shell",
+                "command": "powershell",
+                "args": [
+                    "-Command",
+                    "Write-Host 'Setting up CIAF workspace...' -ForegroundColor Green; pip install -e .; Write-Host 'CIAF setup complete!' -ForegroundColor Green"
+                ],
+                "group": "build",
+                "presentation": {
+                    "echo": true,
+                    "reveal": "always"
+                }
+            }
+        ]
+    }
+}

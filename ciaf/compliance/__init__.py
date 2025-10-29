@@ -146,6 +146,16 @@ from .bias_validator import (
     BiasAssessment as BiasValidatorAssessment,
     generate_bias_report,
 )
+from .citation_anchor import (
+    CitationAnchor,
+    CitationMetadata,
+    UsageRecord,
+    ComplianceCheck,
+    CitationType,
+    LicenseType,
+    UsageType,
+    CitationValidator,
+)
 
 # Enterprise-Grade Advanced Features
 try:
@@ -279,6 +289,16 @@ __all__ = [
     "BiasResult",
     "BiasValidatorAssessment",
     "generate_bias_report",
+    
+    # Citation Anchor System
+    "CitationAnchor",
+    "CitationMetadata",
+    "UsageRecord",
+    "ComplianceCheck",
+    "CitationType",
+    "LicenseType",
+    "UsageType",
+    "CitationValidator",
     
     # Corrective Actions
     "ActionStatus",

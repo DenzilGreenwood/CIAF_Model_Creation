@@ -1,0 +1,233 @@
+{
+  "metadata": {
+    "version": "v2.0",
+    "prompt_set_hash": "8cfc0d33c01800ee",
+    "total_questions": 85,
+    "categories": [
+      "risk_management",
+      "compliance",
+      "technical",
+      "scenario",
+      "corporate_governance",
+      "audit",
+      "financial_reporting"
+    ],
+    "generation_seed": 42,
+    "description": "Sample subset for quick evaluation testing",
+    "sample_size": 20
+  },
+  "questions": [
+    {
+      "question": "Can you describe what are the principles of financial reporting?",
+      "category": "financial_reporting",
+      "expected_keywords": [
+        "accuracy",
+        "completeness",
+        "transparency",
+        "timeliness"
+      ],
+      "variation_of": "What are the principles of financial reporting?"
+    },
+    {
+      "question": "Please explain what is substantive testing?",
+      "category": "audit",
+      "expected_keywords": [
+        "evidence",
+        "assertions",
+        "verification",
+        "balances"
+      ],
+      "variation_of": "What is substantive testing?"
+    },
+    {
+      "question": "Define anti-money laundering controls.",
+      "category": "compliance",
+      "expected_keywords": [
+        "detection",
+        "reporting",
+        "suspicious",
+        "transactions"
+      ]
+    },
+    {
+      "question": "What is regulatory compliance?",
+      "category": "compliance",
+      "expected_keywords": [
+        "laws",
+        "regulations",
+        "adherence",
+        "requirements"
+      ]
+    },
+    {
+      "question": "Please explain how should audit findings be reported?",
+      "category": "audit",
+      "expected_keywords": [
+        "management",
+        "board",
+        "remediation",
+        "timing"
+      ],
+      "variation_of": "How should audit findings be reported?"
+    },
+    {
+      "question": "What is fair value measurement?",
+      "category": "financial_reporting",
+      "expected_keywords": [
+        "market",
+        "inputs",
+        "assumptions",
+        "hierarchy"
+      ]
+    },
+    {
+      "question": "What is COSO framework?",
+      "category": "technical",
+      "expected_keywords": [
+        "internal",
+        "controls",
+        "framework",
+        "effectiveness"
+      ]
+    },
+    {
+      "question": "Please explain what is operational risk?",
+      "category": "risk_management",
+      "expected_keywords": [
+        "processes",
+        "systems",
+        "people",
+        "events"
+      ],
+      "variation_of": "What is operational risk?"
+    },
+    {
+      "question": "Can you describe what is fair value measurement?",
+      "category": "financial_reporting",
+      "expected_keywords": [
+        "market",
+        "inputs",
+        "assumptions",
+        "hierarchy"
+      ],
+      "variation_of": "What is fair value measurement?"
+    },
+    {
+      "question": "Can you describe what is the three lines of defense model?",
+      "category": "risk_management",
+      "expected_keywords": [
+        "operational",
+        "oversight",
+        "assurance",
+        "defense"
+      ],
+      "variation_of": "What is the three lines of defense model?"
+    },
+    {
+      "question": "Please explain what are contingent liabilities?",
+      "category": "financial_reporting",
+      "expected_keywords": [
+        "possible",
+        "obligations",
+        "outcome",
+        "disclosure"
+      ],
+      "variation_of": "What are contingent liabilities?"
+    },
+    {
+      "question": "Can you describe what is substantive testing?",
+      "category": "audit",
+      "expected_keywords": [
+        "evidence",
+        "assertions",
+        "verification",
+        "balances"
+      ],
+      "variation_of": "What is substantive testing?"
+    },
+    {
+      "question": "Can you describe what is operational risk?",
+      "category": "risk_management",
+      "expected_keywords": [
+        "processes",
+        "systems",
+        "people",
+        "events"
+      ],
+      "variation_of": "What is operational risk?"
+    },
+    {
+      "question": "Can you describe define audit independence.",
+      "category": "audit",
+      "expected_keywords": [
+        "objectivity",
+        "impartiality",
+        "conflicts",
+        "professional"
+      ],
+      "variation_of": "Define audit independence."
+    },
+    {
+      "question": "Define enterprise risk management.",
+      "category": "risk_management",
+      "expected_keywords": [
+        "identification",
+        "assessment",
+        "mitigation",
+        "monitoring"
+      ]
+    },
+    {
+      "question": "How should compliance monitoring be conducted?",
+      "category": "compliance",
+      "expected_keywords": [
+        "testing",
+        "reporting",
+        "assessment",
+        "controls"
+      ]
+    },
+    {
+      "question": "Can you describe define materiality in accounting.",
+      "category": "financial_reporting",
+      "expected_keywords": [
+        "significance",
+        "decisions",
+        "users",
+        "threshold"
+      ],
+      "variation_of": "Define materiality in accounting."
+    },
+    {
+      "question": "Explain GDPR compliance obligations.",
+      "category": "technical",
+      "expected_keywords": [
+        "privacy",
+        "consent",
+        "processing",
+        "rights"
+      ]
+    },
+    {
+      "question": "Can you describe what is the role of independent directors?",
+      "category": "corporate_governance",
+      "expected_keywords": [
+        "objectivity",
+        "oversight",
+        "independence",
+        "conflicts"
+      ],
+      "variation_of": "What is the role of independent directors?"
+    },
+    {
+      "question": "What are the key elements of board composition?",
+      "category": "corporate_governance",
+      "expected_keywords": [
+        "diversity",
+        "skills",
+        "independence",
+        "size"
+      ]
+    }
+  ]
+}

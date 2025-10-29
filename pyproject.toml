@@ -1,0 +1,264 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ciaf-framework"
+version = "1.2.0"
+description = "Cognitive Insight Audit Framework (CIAF) - Evidence-First AI Governance Platform"
+readme = "README.md"
+license = {text = "Apache-2.0"}
+authors = [
+    {name = "Denzil James Greenwood", email = "denzil.greenwood@cognitiveinsight.ai"}
+]
+maintainers = [
+    {name = "Denzil James Greenwood", email = "denzil.greenwood@cognitiveinsight.ai"}
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Security :: Cryptography",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: System :: Logging",
+    "Topic :: System :: Monitoring"
+]
+keywords = [
+    "ai-governance", 
+    "compliance", 
+    "cryptographic-audit", 
+    "machine-learning", 
+    "regulatory-framework",
+    "lazy-capsule-materialization",
+    "evidence-first",
+    "merkle-trees",
+    "digital-signatures"
+]
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.21.0",
+    "pandas>=1.3.0", 
+    "scikit-learn>=1.0.0",
+    "cryptography>=3.4.8",
+    "pycryptodome>=3.15.0",
+    "pydantic>=1.8.0",
+    "typing-extensions>=4.0.0",
+    "torch>=1.11.0",
+    "transformers>=4.20.0",
+    "datasets>=2.0.0",
+    "huggingface-hub>=0.8.0",
+    "merkletools>=1.0.3",
+    "ecdsa>=0.17.0",
+    "python-jose>=3.3.0",
+    "fastapi>=0.75.0",
+    "uvicorn>=0.17.0",
+    "requests>=2.27.0",
+    "jsonschema>=4.0.0",
+    "marshmallow>=3.15.0",
+    "rich>=12.0.0",
+    "click>=8.0.0",
+    "tqdm>=4.62.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=6.2.0",
+    "pytest-cov>=3.0.0",
+    "pytest-asyncio>=0.18.0",
+    "black>=22.0.0",
+    "flake8>=4.0.0",
+    "mypy>=0.950",
+    "isort>=5.10.0",
+    "bandit>=1.7.0",
+    "pre-commit>=2.17.0"
+]
+docs = [
+    "sphinx>=4.5.0",
+    "sphinx-rtd-theme>=1.0.0",
+    "myst-parser>=0.17.0",
+    "sphinx-autodoc-typehints>=1.17.0"
+]
+jupyter = [
+    "jupyter>=1.0.0",
+    "jupyterlab>=3.3.0",
+    "ipykernel>=6.9.0",
+    "ipywidgets>=7.6.0",
+    "matplotlib>=3.5.0",
+    "seaborn>=0.11.0",
+    "plotly>=5.6.0"
+]
+enterprise = [
+    "flask>=2.0.0",
+    "dash>=2.3.0",
+    "streamlit>=1.8.0",
+    "prometheus-client>=0.13.0",
+    "structlog>=22.1.0"
+]
+cloud = [
+    "boto3>=1.21.0",
+    "azure-storage-blob>=12.9.0",
+    "google-cloud-storage>=2.1.0"
+]
+ml-frameworks = [
+    "tensorflow>=2.8.0",
+    "xgboost>=1.5.0",
+    "lightgbm>=3.3.0",
+    "catboost>=1.0.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/DenzilGreenwood/CIAF_Model_Creation"
+Documentation = "https://ciaf-framework.readthedocs.io/"
+Repository = "https://github.com/DenzilGreenwood/CIAF_Model_Creation.git"
+"Bug Tracker" = "https://github.com/DenzilGreenwood/CIAF_Model_Creation/issues"
+
+[project.scripts]
+ciaf-verify = "scripts.ciaf_verify:main"
+ciaf-validate = "scripts.validate_frameworks:main"
+ciaf-demo = "examples.demo_runner:main"
+
+[tool.setuptools.packages.find]
+include = ["ciaf*", "validation*", "compliance*"]
+exclude = ["tests*", "benchmarks*", "docs*"]
+
+[tool.setuptools.package-data]
+ciaf = ["py.typed", "schemas/*.json", "templates/*.yaml"]
+compliance = ["policies/*.json", "mappings/*.csv"]
+
+# Black Configuration
+[tool.black]
+line-length = 100
+target-version = ['py310', 'py311', 'py312']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+# isort Configuration
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 100
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+
+# MyPy Configuration
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = [
+    "transformers.*",
+    "torch.*",
+    "tensorflow.*",
+    "sklearn.*",
+    "merkletools.*",
+    "ecdsa.*"
+]
+ignore_missing_imports = true
+
+# Pytest Configuration
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q --strict-markers --strict-config"
+testpaths = ["tests", "validation"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+    "compliance: marks tests as compliance tests",
+    "security: marks tests as security tests",
+    "performance: marks tests as performance tests"
+]
+filterwarnings = [
+    "error",
+    "ignore::UserWarning",
+    "ignore::DeprecationWarning",
+    "ignore::PendingDeprecationWarning"
+]
+
+# Coverage Configuration
+[tool.coverage.run]
+source = ["ciaf", "validation", "compliance"]
+omit = [
+    "*/tests/*",
+    "*/test_*.py",
+    "*/__pycache__/*",
+    "*/venv/*",
+    "*/virtualenv/*"
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:"
+]
+ignore_errors = true
+
+[tool.coverage.html]
+directory = "htmlcov"
+
+# Bandit Security Configuration
+[tool.bandit]
+exclude_dirs = ["tests", "build", "dist"]
+skips = ["B101", "B601"]  # Skip assert_used and shell injection (for controlled cases)
+
+# Flake8 Configuration (in setup.cfg format)
+[tool.flake8]
+max-line-length = 100
+extend-ignore = ["E203", "W503", "E501"]
+exclude = [
+    ".git",
+    "__pycache__",
+    "build",
+    "dist",
+    ".eggs",
+    "*.egg-info",
+    ".venv",
+    ".tox"
+]
+per-file-ignores = [
+    "__init__.py:F401",
+    "tests/*:S101"
+]

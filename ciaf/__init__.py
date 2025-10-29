@@ -10,7 +10,7 @@ you may not use this file except in compliance with the License.
 You may obtain a copy of the License at:
     http://www.apache.org/licenses/LICENSE-2.0
 
-Original author of Cognitive Insight™ AI Framework and 
+Original author of Cognitive Insight™ AI Framework and
 Lazy Capsule Materialization (LCM)™ process.
 
 Created: 2025-09-09
@@ -48,6 +48,7 @@ from .metadata_storage import (
     save_pipeline_metadata,
 )
 from .provenance import ModelAggregationAnchor, ProvenanceCapsule, TrainingSnapshot
+
 # Simulation and wrappers
 from .simulation import MLFrameworkSimulator, MockLLM
 from .wrappers import CIAFModelWrapper
@@ -61,19 +62,15 @@ except ImportError:
 
 # Deferred LCM components (high-performance processing)
 try:
-    from .deferred_lcm import (
-        LightweightReceipt,
-        ReceiptQueue, 
-        DeferredLCMProcessor,
-        ReceiptHasher
-    )
+    from .deferred_lcm import LightweightReceipt, ReceiptQueue, DeferredLCMProcessor, ReceiptHasher
     from .adaptive_lcm import (
         LCMMode,
         InferencePriority,
         AdaptiveLCMConfig,
         SystemMonitor,
-        AdaptiveLCMWrapper
+        AdaptiveLCMWrapper,
     )
+
     DEFERRED_LCM_AVAILABLE = True
 except ImportError:
     DEFERRED_LCM_AVAILABLE = False
@@ -90,12 +87,20 @@ except ImportError:
 # Enhanced validation and determinism components
 try:
     from .evidence_strength import EvidenceStrength, EvidenceTracker, get_evidence_tracker
-    from .determinism_metadata import DeterminismMetadata, capture_determinism_metadata, set_reproducible_seeds
+    from .determinism_metadata import (
+        DeterminismMetadata,
+        capture_determinism_metadata,
+        set_reproducible_seeds,
+    )
     from .enhanced_receipts import (
-        TrainingReceipt, InferenceReceipt, ReceiptValidator,
-        create_training_receipt, create_inference_receipt
+        TrainingReceipt,
+        InferenceReceipt,
+        ReceiptValidator,
+        create_training_receipt,
+        create_inference_receipt,
     )
     from .crypto_health import crypto_health_check, generate_secure_salt, generate_unique_nonce
+
     ENHANCED_VALIDATION_AVAILABLE = True
 except ImportError:
     ENHANCED_VALIDATION_AVAILABLE = False
@@ -118,11 +123,17 @@ except ImportError:
 try:
     from . import compliance
     from .compliance import AuditTrailGenerator, AuditTrail
+
     # New enterprise compliance features
     try:
-        from .compliance.human_oversight import HumanOversightEngine, OversightAlert, OversightReview
+        from .compliance.human_oversight import (
+            HumanOversightEngine,
+            OversightAlert,
+            OversightReview,
+        )
         from .compliance.web_dashboard import CIAFDashboard, create_dashboard
         from .compliance.robustness_testing import RobustnessTestSuite, TestResult, RobustnessReport
+
         ENTERPRISE_COMPLIANCE_AVAILABLE = True
     except ImportError:
         ENTERPRISE_COMPLIANCE_AVAILABLE = False
@@ -133,29 +144,51 @@ except ImportError:
 
 try:
     from . import explainability
+
     EXPLAINABILITY_AVAILABLE = True
 except ImportError:
     EXPLAINABILITY_AVAILABLE = False
 
 try:
     from . import uncertainty
+
     UNCERTAINTY_AVAILABLE = True
 except ImportError:
     UNCERTAINTY_AVAILABLE = False
 
 try:
     from . import preprocessing
+
     PREPROCESSING_AVAILABLE = True
 except ImportError:
     PREPROCESSING_AVAILABLE = False
 
 try:
     from . import metadata_tags
+
     METADATA_TAGS_AVAILABLE = True
 except ImportError:
     METADATA_TAGS_AVAILABLE = False
 
-__version__ = "1.1.0"
+# Gates system (compliance automation)
+try:
+    from . import gates
+    from .gates import (
+        GateOrchestrator,
+        PolicyManager,
+        GateStatus,
+        Stage,
+        OperationContext,
+        ComplianceGate,
+        GateResult,
+        BiasGate,
+    )
+
+    GATES_AVAILABLE = True
+except ImportError:
+    GATES_AVAILABLE = False
+
+__version__ = "1.2.0"
 __all__ = [
     # Core components
     "CryptoUtils",
@@ -176,7 +209,7 @@ __all__ = [
     # Deferred LCM components
     "LightweightReceipt",
     "ReceiptQueue",
-    "DeferredLCMProcessor", 
+    "DeferredLCMProcessor",
     "ReceiptHasher",
     "LCMMode",
     "InferencePriority",
@@ -185,7 +218,7 @@ __all__ = [
     "AdaptiveLCMWrapper",
     # Enhanced validation and determinism
     "EvidenceStrength",
-    "EvidenceTracker", 
+    "EvidenceTracker",
     "get_evidence_tracker",
     "DeterminismMetadata",
     "capture_determinism_metadata",
@@ -196,14 +229,14 @@ __all__ = [
     "create_training_receipt",
     "create_inference_receipt",
     "crypto_health_check",
-    "generate_secure_salt", 
+    "generate_secure_salt",
     "generate_unique_nonce",
     # Enhanced audit components
     "AuditTrailGenerator",
     "AuditTrail",
     # Enterprise compliance features (if available)
     "HumanOversightEngine",
-    "OversightAlert", 
+    "OversightAlert",
     "OversightReview",
     "CIAFDashboard",
     "create_dashboard",
@@ -226,16 +259,26 @@ __all__ = [
     "create_model_manager",
     "create_compliance_tracker",
     "quick_log",
+    # Compliance Gates System
+    "GateOrchestrator",
+    "PolicyManager",
+    "GateStatus",
+    "Stage",
+    "OperationContext",
+    "ComplianceGate",
+    "GateResult",
+    "BiasGate",
     # Feature availability flags
     "COMPLIANCE_AVAILABLE",
     "ENTERPRISE_COMPLIANCE_AVAILABLE",
     "ENHANCED_WRAPPER_AVAILABLE",
     "DEFERRED_LCM_AVAILABLE",
     "ENHANCED_VALIDATION_AVAILABLE",
-    "EXPLAINABILITY_AVAILABLE", 
+    "EXPLAINABILITY_AVAILABLE",
     "UNCERTAINTY_AVAILABLE",
     "PREPROCESSING_AVAILABLE",
     "METADATA_TAGS_AVAILABLE",
+    "GATES_AVAILABLE",
 ]
 
 # Export enhanced API methods

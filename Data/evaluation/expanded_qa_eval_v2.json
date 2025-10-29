@@ -1,0 +1,923 @@
+{
+  "metadata": {
+    "version": "v2.0",
+    "prompt_set_hash": "8cfc0d33c01800ee",
+    "total_questions": 85,
+    "categories": [
+      "risk_management",
+      "compliance",
+      "technical",
+      "scenario",
+      "corporate_governance",
+      "audit",
+      "financial_reporting"
+    ],
+    "generation_seed": 42,
+    "description": "Expanded governance/regulatory QA evaluation set"
+  },
+  "questions": [
+    {
+      "question": "Can you describe what are the principles of financial reporting?",
+      "category": "financial_reporting",
+      "expected_keywords": [
+        "accuracy",
+        "completeness",
+        "transparency",
+        "timeliness"
+      ],
+      "variation_of": "What are the principles of financial reporting?"
+    },
+    {
+      "question": "Please explain what is substantive testing?",
+      "category": "audit",
+      "expected_keywords": [
+        "evidence",
+        "assertions",
+        "verification",
+        "balances"
+      ],
+      "variation_of": "What is substantive testing?"
+    },
+    {
+      "question": "Define anti-money laundering controls.",
+      "category": "compliance",
+      "expected_keywords": [
+        "detection",
+        "reporting",
+        "suspicious",
+        "transactions"
+      ]
+    },
+    {
+      "question": "What is regulatory compliance?",
+      "category": "compliance",
+      "expected_keywords": [
+        "laws",
+        "regulations",
+        "adherence",
+        "requirements"
+      ]
+    },
+    {
+      "question": "Please explain how should audit findings be reported?",
+      "category": "audit",
+      "expected_keywords": [
+        "management",
+        "board",
+        "remediation",
+        "timing"
+      ],
+      "variation_of": "How should audit findings be reported?"
+    },
+    {
+      "question": "What is fair value measurement?",
+      "category": "financial_reporting",
+      "expected_keywords": [
+        "market",
+        "inputs",
+        "assumptions",
+        "hierarchy"
+      ]
+    },
+    {
+      "question": "What is COSO framework?",
+      "category": "technical",
+      "expected_keywords": [
+        "internal",
+        "controls",
+        "framework",
+        "effectiveness"
+      ]
+    },
+    {
+      "question": "Please explain what is operational risk?",
+      "category": "risk_management",
+      "expected_keywords": [
+        "processes",
+        "systems",
+        "people",
+        "events"
+      ],
+      "variation_of": "What is operational risk?"
+    },
+    {
+      "question": "Can you describe what is fair value measurement?",
+      "category": "financial_reporting",
+      "expected_keywords": [
+        "market",
+        "inputs",
+        "assumptions",
+        "hierarchy"
+      ],
+      "variation_of": "What is fair value measurement?"
+    },
+    {
+      "question": "Can you describe what is the three lines of defense model?",
+      "category": "risk_management",
+      "expected_keywords": [
+        "operational",
+        "oversight",
+        "assurance",
+        "defense"
+      ],
+      "variation_of": "What is the three lines of defense model?"
+    },
+    {
+      "question": "Please explain what are contingent liabilities?",
+      "category": "financial_reporting",
+      "expected_keywords": [
+        "possible",
+        "obligations",
+        "outcome",
+        "disclosure"
+      ],
+      "variation_of": "What are contingent liabilities?"
+    },
+    {
+      "question": "Can you describe what is substantive testing?",
+      "category": "audit",
+      "expected_keywords": [
+        "evidence",
+        "assertions",
+        "verification",
+        "balances"
+      ],
+      "variation_of": "What is substantive testing?"
+    },
+    {
+      "question": "Can you describe what is operational risk?",
+      "category": "risk_management",
+      "expected_keywords": [
+        "processes",
+        "systems",
+        "people",
+        "events"
+      ],
+      "variation_of": "What is operational risk?"
+    },
+    {
+      "question": "Can you describe define audit independence.",
+      "category": "audit",
+      "expected_keywords": [
+        "objectivity",
+        "impartiality",
+        "conflicts",
+        "professional"
+      ],
+      "variation_of": "Define audit independence."
+    },
+    {
+      "question": "Define enterprise risk management.",
+      "category": "risk_management",
+      "expected_keywords": [
+        "identification",
+        "assessment",
+        "mitigation",
+        "monitoring"
+      ]
+    },
+    {
+      "question": "How should compliance monitoring be conducted?",
+      "category": "compliance",
+      "expected_keywords": [
+        "testing",
+        "reporting",
+        "assessment",
+        "controls"
+      ]
+    },
+    {
+      "question": "Can you describe define materiality in accounting.",
+      "category": "financial_reporting",
+      "expected_keywords": [
+        "significance",
+        "decisions",
+        "users",
+        "threshold"
+      ],
+      "variation_of": "Define materiality in accounting."
+    },
+    {
+      "question": "Explain GDPR compliance obligations.",
+      "category": "technical",
+      "expected_keywords": [
+        "privacy",
+        "consent",
+        "processing",
+        "rights"
+      ]
+    },
+    {
+      "question": "Can you describe what is the role of independent directors?",
+      "category": "corporate_governance",
+      "expected_keywords": [
+        "objectivity",
+        "oversight",
+        "independence",
+        "conflicts"
+      ],
+      "variation_of": "What is the role of independent directors?"
+    },
+    {
+      "question": "What are the key elements of board composition?",
+      "category": "corporate_governance",
+      "expected_keywords": [
+        "diversity",
+        "skills",
+        "independence",
+        "size"
+      ]
+    },
+    {
+      "question": "Please explain what is fair value measurement?",
+      "category": "financial_reporting",
+      "expected_keywords": [
+        "market",
+        "inputs",
+        "assumptions",
+        "hierarchy"
+      ],
+      "variation_of": "What is fair value measurement?"
+    },
+    {
+      "question": "What are KYC requirements?",
+      "category": "compliance",
+      "expected_keywords": [
+        "customer",
+        "identity",
+        "verification",
+        "due diligence"
+      ]
+    },
+    {
+      "question": "Can you describe how should revenue be recognized?",
+      "category": "financial_reporting",
+      "expected_keywords": [
+        "performance",
+        "obligations",
+        "control",
+        "timing"
+      ],
+      "variation_of": "How should revenue be recognized?"
+    },
+    {
+      "question": "Can you describe how should audit findings be reported?",
+      "category": "audit",
+      "expected_keywords": [
+        "management",
+        "board",
+        "remediation",
+        "timing"
+      ],
+      "variation_of": "How should audit findings be reported?"
+    },
+    {
+      "question": "What is IFRS?",
+      "category": "technical",
+      "expected_keywords": [
+        "standards",
+        "reporting",
+        "international",
+        "consistency"
+      ]
+    },
+    {
+      "question": "Can you describe what is internal audit?",
+      "category": "audit",
+      "expected_keywords": [
+        "independent",
+        "assurance",
+        "advisory",
+        "governance"
+      ],
+      "variation_of": "What is internal audit?"
+    },
+    {
+      "question": "Please explain what are the primary responsibilities of a board of directors?",
+      "category": "corporate_governance",
+      "expected_keywords": [
+        "oversight",
+        "strategy",
+        "risk",
+        "compliance",
+        "stakeholder"
+      ],
+      "variation_of": "What are the primary responsibilities of a board of directors?"
+    },
+    {
+      "question": "Please explain define anti-money laundering controls.",
+      "category": "compliance",
+      "expected_keywords": [
+        "detection",
+        "reporting",
+        "suspicious",
+        "transactions"
+      ],
+      "variation_of": "Define anti-money laundering controls."
+    },
+    {
+      "question": "Can you describe define anti-money laundering controls.",
+      "category": "compliance",
+      "expected_keywords": [
+        "detection",
+        "reporting",
+        "suspicious",
+        "transactions"
+      ],
+      "variation_of": "Define anti-money laundering controls."
+    },
+    {
+      "question": "Please explain what is the purpose of data governance?",
+      "category": "compliance",
+      "expected_keywords": [
+        "quality",
+        "privacy",
+        "security",
+        "management"
+      ],
+      "variation_of": "What is the purpose of data governance?"
+    },
+    {
+      "question": "Can you describe what is regulatory compliance?",
+      "category": "compliance",
+      "expected_keywords": [
+        "laws",
+        "regulations",
+        "adherence",
+        "requirements"
+      ],
+      "variation_of": "What is regulatory compliance?"
+    },
+    {
+      "question": "Can you describe how should credit risk be managed?",
+      "category": "risk_management",
+      "expected_keywords": [
+        "assessment",
+        "limits",
+        "monitoring",
+        "mitigation"
+      ],
+      "variation_of": "How should credit risk be managed?"
+    },
+    {
+      "question": "What is operational risk?",
+      "category": "risk_management",
+      "expected_keywords": [
+        "processes",
+        "systems",
+        "people",
+        "events"
+      ]
+    },
+    {
+      "question": "What is internal audit?",
+      "category": "audit",
+      "expected_keywords": [
+        "independent",
+        "assurance",
+        "advisory",
+        "governance"
+      ]
+    },
+    {
+      "question": "Can you describe what are contingent liabilities?",
+      "category": "financial_reporting",
+      "expected_keywords": [
+        "possible",
+        "obligations",
+        "outcome",
+        "disclosure"
+      ],
+      "variation_of": "What are contingent liabilities?"
+    },
+    {
+      "question": "Please explain what is the role of independent directors?",
+      "category": "corporate_governance",
+      "expected_keywords": [
+        "objectivity",
+        "oversight",
+        "independence",
+        "conflicts"
+      ],
+      "variation_of": "What is the role of independent directors?"
+    },
+    {
+      "question": "Please explain how should compliance monitoring be conducted?",
+      "category": "compliance",
+      "expected_keywords": [
+        "testing",
+        "reporting",
+        "assessment",
+        "controls"
+      ],
+      "variation_of": "How should compliance monitoring be conducted?"
+    },
+    {
+      "question": "How should a board respond to a major cybersecurity incident?",
+      "category": "scenario",
+      "expected_keywords": [
+        "incident",
+        "response",
+        "disclosure",
+        "assessment"
+      ]
+    },
+    {
+      "question": "Can you describe what are the primary responsibilities of a board of directors?",
+      "category": "corporate_governance",
+      "expected_keywords": [
+        "oversight",
+        "strategy",
+        "risk",
+        "compliance",
+        "stakeholder"
+      ],
+      "variation_of": "What are the primary responsibilities of a board of directors?"
+    },
+    {
+      "question": "Please explain define enterprise risk management.",
+      "category": "risk_management",
+      "expected_keywords": [
+        "identification",
+        "assessment",
+        "mitigation",
+        "monitoring"
+      ],
+      "variation_of": "Define enterprise risk management."
+    },
+    {
+      "question": "Can you describe what are kyc requirements?",
+      "category": "compliance",
+      "expected_keywords": [
+        "customer",
+        "identity",
+        "verification",
+        "due diligence"
+      ],
+      "variation_of": "What are KYC requirements?"
+    },
+    {
+      "question": "What is the purpose of data governance?",
+      "category": "compliance",
+      "expected_keywords": [
+        "quality",
+        "privacy",
+        "security",
+        "management"
+      ]
+    },
+    {
+      "question": "Please explain how should credit risk be managed?",
+      "category": "risk_management",
+      "expected_keywords": [
+        "assessment",
+        "limits",
+        "monitoring",
+        "mitigation"
+      ],
+      "variation_of": "How should credit risk be managed?"
+    },
+    {
+      "question": "Please explain what is internal audit?",
+      "category": "audit",
+      "expected_keywords": [
+        "independent",
+        "assurance",
+        "advisory",
+        "governance"
+      ],
+      "variation_of": "What is internal audit?"
+    },
+    {
+      "question": "What is the three lines of defense model?",
+      "category": "risk_management",
+      "expected_keywords": [
+        "operational",
+        "oversight",
+        "assurance",
+        "defense"
+      ]
+    },
+    {
+      "question": "Can you describe define corporate governance.",
+      "category": "corporate_governance",
+      "expected_keywords": [
+        "control",
+        "direction",
+        "accountability",
+        "stakeholders"
+      ],
+      "variation_of": "Define corporate governance."
+    },
+    {
+      "question": "What is the role of independent directors?",
+      "category": "corporate_governance",
+      "expected_keywords": [
+        "objectivity",
+        "oversight",
+        "independence",
+        "conflicts"
+      ]
+    },
+    {
+      "question": "Please explain what are internal controls?",
+      "category": "audit",
+      "expected_keywords": [
+        "processes",
+        "procedures",
+        "effectiveness",
+        "objectives"
+      ],
+      "variation_of": "What are internal controls?"
+    },
+    {
+      "question": "How should revenue be recognized?",
+      "category": "financial_reporting",
+      "expected_keywords": [
+        "performance",
+        "obligations",
+        "control",
+        "timing"
+      ]
+    },
+    {
+      "question": "What steps should management take when regulatory violations are identified?",
+      "category": "scenario",
+      "expected_keywords": [
+        "reporting",
+        "remediation",
+        "compliance",
+        "monitoring"
+      ]
+    },
+    {
+      "question": "How should executive compensation be governed?",
+      "category": "corporate_governance",
+      "expected_keywords": [
+        "performance",
+        "alignment",
+        "transparency",
+        "committee"
+      ]
+    },
+    {
+      "question": "Please explain what are the principles of financial reporting?",
+      "category": "financial_reporting",
+      "expected_keywords": [
+        "accuracy",
+        "completeness",
+        "transparency",
+        "timeliness"
+      ],
+      "variation_of": "What are the principles of financial reporting?"
+    },
+    {
+      "question": "How should credit risk be managed?",
+      "category": "risk_management",
+      "expected_keywords": [
+        "assessment",
+        "limits",
+        "monitoring",
+        "mitigation"
+      ]
+    },
+    {
+      "question": "Please explain define materiality in accounting.",
+      "category": "financial_reporting",
+      "expected_keywords": [
+        "significance",
+        "decisions",
+        "users",
+        "threshold"
+      ],
+      "variation_of": "Define materiality in accounting."
+    },
+    {
+      "question": "Can you describe what is the purpose of data governance?",
+      "category": "compliance",
+      "expected_keywords": [
+        "quality",
+        "privacy",
+        "security",
+        "management"
+      ],
+      "variation_of": "What is the purpose of data governance?"
+    },
+    {
+      "question": "Please explain how should executive compensation be governed?",
+      "category": "corporate_governance",
+      "expected_keywords": [
+        "performance",
+        "alignment",
+        "transparency",
+        "committee"
+      ],
+      "variation_of": "How should executive compensation be governed?"
+    },
+    {
+      "question": "What are the principles of financial reporting?",
+      "category": "financial_reporting",
+      "expected_keywords": [
+        "accuracy",
+        "completeness",
+        "transparency",
+        "timeliness"
+      ]
+    },
+    {
+      "question": "How should audit findings be reported?",
+      "category": "audit",
+      "expected_keywords": [
+        "management",
+        "board",
+        "remediation",
+        "timing"
+      ]
+    },
+    {
+      "question": "What are the primary responsibilities of a board of directors?",
+      "category": "corporate_governance",
+      "expected_keywords": [
+        "oversight",
+        "strategy",
+        "risk",
+        "compliance",
+        "stakeholder"
+      ]
+    },
+    {
+      "question": "Please explain define audit independence.",
+      "category": "audit",
+      "expected_keywords": [
+        "objectivity",
+        "impartiality",
+        "conflicts",
+        "professional"
+      ],
+      "variation_of": "Define audit independence."
+    },
+    {
+      "question": "What are internal controls?",
+      "category": "audit",
+      "expected_keywords": [
+        "processes",
+        "procedures",
+        "effectiveness",
+        "objectives"
+      ]
+    },
+    {
+      "question": "How should a company handle conflicts of interest involving senior executives?",
+      "category": "scenario",
+      "expected_keywords": [
+        "disclosure",
+        "recusal",
+        "independent",
+        "review"
+      ]
+    },
+    {
+      "question": "Please explain what are kyc requirements?",
+      "category": "compliance",
+      "expected_keywords": [
+        "customer",
+        "identity",
+        "verification",
+        "due diligence"
+      ],
+      "variation_of": "What are KYC requirements?"
+    },
+    {
+      "question": "What is substantive testing?",
+      "category": "audit",
+      "expected_keywords": [
+        "evidence",
+        "assertions",
+        "verification",
+        "balances"
+      ]
+    },
+    {
+      "question": "What should be done if internal controls are found to be ineffective?",
+      "category": "scenario",
+      "expected_keywords": [
+        "design",
+        "implementation",
+        "testing",
+        "improvement"
+      ]
+    },
+    {
+      "question": "Can you describe what are internal controls?",
+      "category": "audit",
+      "expected_keywords": [
+        "processes",
+        "procedures",
+        "effectiveness",
+        "objectives"
+      ],
+      "variation_of": "What are internal controls?"
+    },
+    {
+      "question": "Please explain what is the three lines of defense model?",
+      "category": "risk_management",
+      "expected_keywords": [
+        "operational",
+        "oversight",
+        "assurance",
+        "defense"
+      ],
+      "variation_of": "What is the three lines of defense model?"
+    },
+    {
+      "question": "What are contingent liabilities?",
+      "category": "financial_reporting",
+      "expected_keywords": [
+        "possible",
+        "obligations",
+        "outcome",
+        "disclosure"
+      ]
+    },
+    {
+      "question": "Please explain how should revenue be recognized?",
+      "category": "financial_reporting",
+      "expected_keywords": [
+        "performance",
+        "obligations",
+        "control",
+        "timing"
+      ],
+      "variation_of": "How should revenue be recognized?"
+    },
+    {
+      "question": "Can you describe define risk appetite.",
+      "category": "risk_management",
+      "expected_keywords": [
+        "tolerance",
+        "objectives",
+        "acceptable",
+        "level"
+      ],
+      "variation_of": "Define risk appetite."
+    },
+    {
+      "question": "Define risk appetite.",
+      "category": "risk_management",
+      "expected_keywords": [
+        "tolerance",
+        "objectives",
+        "acceptable",
+        "level"
+      ]
+    },
+    {
+      "question": "A company discovers potential fraud in its operations. What should the audit committee do?",
+      "category": "scenario",
+      "expected_keywords": [
+        "investigation",
+        "board",
+        "external",
+        "remediation"
+      ]
+    },
+    {
+      "question": "What is Basel III?",
+      "category": "technical",
+      "expected_keywords": [
+        "capital",
+        "requirements",
+        "liquidity",
+        "banking"
+      ]
+    },
+    {
+      "question": "Please explain define corporate governance.",
+      "category": "corporate_governance",
+      "expected_keywords": [
+        "control",
+        "direction",
+        "accountability",
+        "stakeholders"
+      ],
+      "variation_of": "Define corporate governance."
+    },
+    {
+      "question": "Define audit independence.",
+      "category": "audit",
+      "expected_keywords": [
+        "objectivity",
+        "impartiality",
+        "conflicts",
+        "professional"
+      ]
+    },
+    {
+      "question": "Can you describe how should executive compensation be governed?",
+      "category": "corporate_governance",
+      "expected_keywords": [
+        "performance",
+        "alignment",
+        "transparency",
+        "committee"
+      ],
+      "variation_of": "How should executive compensation be governed?"
+    },
+    {
+      "question": "Define materiality in accounting.",
+      "category": "financial_reporting",
+      "expected_keywords": [
+        "significance",
+        "decisions",
+        "users",
+        "threshold"
+      ]
+    },
+    {
+      "question": "Please explain what are the key elements of board composition?",
+      "category": "corporate_governance",
+      "expected_keywords": [
+        "diversity",
+        "skills",
+        "independence",
+        "size"
+      ],
+      "variation_of": "What are the key elements of board composition?"
+    },
+    {
+      "question": "Can you describe define enterprise risk management.",
+      "category": "risk_management",
+      "expected_keywords": [
+        "identification",
+        "assessment",
+        "mitigation",
+        "monitoring"
+      ],
+      "variation_of": "Define enterprise risk management."
+    },
+    {
+      "question": "Please explain define risk appetite.",
+      "category": "risk_management",
+      "expected_keywords": [
+        "tolerance",
+        "objectives",
+        "acceptable",
+        "level"
+      ],
+      "variation_of": "Define risk appetite."
+    },
+    {
+      "question": "Please explain what is regulatory compliance?",
+      "category": "compliance",
+      "expected_keywords": [
+        "laws",
+        "regulations",
+        "adherence",
+        "requirements"
+      ],
+      "variation_of": "What is regulatory compliance?"
+    },
+    {
+      "question": "Can you describe how should compliance monitoring be conducted?",
+      "category": "compliance",
+      "expected_keywords": [
+        "testing",
+        "reporting",
+        "assessment",
+        "controls"
+      ],
+      "variation_of": "How should compliance monitoring be conducted?"
+    },
+    {
+      "question": "Define corporate governance.",
+      "category": "corporate_governance",
+      "expected_keywords": [
+        "control",
+        "direction",
+        "accountability",
+        "stakeholders"
+      ]
+    },
+    {
+      "question": "Can you describe what are the key elements of board composition?",
+      "category": "corporate_governance",
+      "expected_keywords": [
+        "diversity",
+        "skills",
+        "independence",
+        "size"
+      ],
+      "variation_of": "What are the key elements of board composition?"
+    },
+    {
+      "question": "Define Sarbanes-Oxley Act requirements.",
+      "category": "technical",
+      "expected_keywords": [
+        "disclosure",
+        "controls",
+        "certification",
+        "auditor"
+      ]
+    }
+  ]
+}

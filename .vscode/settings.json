@@ -1,0 +1,171 @@
+{
+    // Python Configuration
+    "python.defaultInterpreterPath": "D:/python312/python.exe",
+    "python.pythonPath": "D:/python312/python.exe",
+    "python.terminal.activateEnvironment": true,
+    "python.terminal.activateEnvInCurrentTerminal": true,
+    // Code Formatting & Linting
+    "python.formatting.provider": "black",
+    "python.formatting.blackArgs": [
+        "--line-length=100",
+        "--target-version=py310"
+    ],
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": true,
+    "python.linting.flake8Args": [
+        "--max-line-length=100",
+        "--ignore=E203,W503"
+    ],
+    "python.linting.mypyEnabled": true,
+    "python.linting.mypyArgs": [
+        "--ignore-missing-imports",
+        "--strict-optional"
+    ],
+    "python.linting.banditEnabled": true,
+    "python.linting.banditArgs": [
+        "-r",
+        "ciaf/"
+    ],
+    // Testing Configuration
+    "python.testing.pytestEnabled": true,
+    "python.testing.pytestArgs": [
+        "tests/",
+        "-v",
+        "--tb=short",
+        "--cov=ciaf",
+        "--cov-report=html",
+        "--cov-report=term"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.autoTestDiscoverOnSaveEnabled": true,
+    // IntelliSense & Analysis
+    "python.analysis.typeCheckingMode": "strict",
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.completeFunctionParens": true,
+    "python.analysis.autoSearchPaths": true,
+    "python.analysis.extraPaths": [
+        "./ciaf",
+        "./validation",
+        "./examples"
+    ],
+    // File Associations
+    "files.associations": {
+        "*.py": "python",
+        "*.ipynb": "jupyter-notebook",
+        "*.tex": "latex",
+        "*.sty": "latex",
+        "Makefile": "makefile",
+        "*.md": "markdown"
+    },
+    // Editor Configuration
+    "editor.rulers": [
+        100
+    ],
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit",
+        "source.fixAll.flake8": "explicit"
+    },
+    "editor.insertSpaces": true,
+    "editor.tabSize": 4,
+    "editor.detectIndentation": false,
+    // Jupyter Notebook Configuration
+    "jupyter.askForKernelRestart": false,
+    "jupyter.alwaysTrustNotebooks": true,
+    "jupyter.enableExtendedKernelCompletions": true,
+    "jupyter.generateSVGPlots": true,
+    "notebook.cellToolbarLocation": {
+        "default": "right",
+        "jupyter-notebook": "left"
+    },
+    // Git Configuration
+    "git.enableSmartCommit": true,
+    "git.confirmSync": false,
+    "git.autofetch": true,
+    "git.autoStash": true,
+    // File Explorer
+    "explorer.excludeGitIgnore": true,
+    "files.exclude": {
+        "**/__pycache__": true,
+        "**/*.pyc": true,
+        "**/.pytest_cache": true,
+        "**/.coverage": true,
+        "**/htmlcov": true,
+        "**/*.egg-info": true,
+        "**/.mypy_cache": true,
+        "**/*.aux": true,
+        "**/*.bbl": true,
+        "**/*.blg": true,
+        "**/*.fdb_latexmk": true,
+        "**/*.fls": true,
+        "**/*.log": true,
+        "**/*.out": true,
+        "**/*.toc": true,
+        "**/*.synctex.gz": true
+    },
+    // LaTeX Configuration
+    "latex-workshop.latex.tools": [
+        {
+            "name": "pdflatex",
+            "command": "pdflatex",
+            "args": [
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "%DOC%"
+            ]
+        }
+    ],
+    "latex-workshop.latex.recipes": [
+        {
+            "name": "pdflatex",
+            "tools": [
+                "pdflatex"
+            ]
+        }
+    ],
+    // Terminal Configuration
+    "terminal.integrated.defaultProfile.windows": "PowerShell",
+    "terminal.integrated.profiles.windows": {
+        "PowerShell": {
+            "source": "PowerShell",
+            "icon": "terminal-powershell"
+        },
+        "Command Prompt": {
+            "path": "C:\\Windows\\System32\\cmd.exe",
+            "args": [],
+            "icon": "terminal-cmd"
+        },
+        "Python": {
+            "path": "D:/python312/python.exe",
+            "icon": "snake"
+        }
+    },
+    // AI Agent Automation
+    "ciaf.autoValidation": true,
+    "ciaf.complianceChecking": true,
+    "ciaf.autoTesting": true,
+    // Search Configuration
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/bower_components": true,
+        "**/*.code-search": true,
+        "**/build": true,
+        "**/dist": true,
+        "**/__pycache__": true,
+        "**/.pytest_cache": true,
+        "**/htmlcov": true
+    },
+    // Security
+    "security.workspace.trust.untrustedFiles": "open",
+    "security.workspace.trust.banner": "never",
+    // Workspace specific settings
+    "ciaf.frameworkPath": "./ciaf",
+    "ciaf.dataPath": "./Data",
+    "ciaf.docsPath": "./Docs",
+    "ciaf.examplesPath": "./examples",
+    "ciaf.validationPath": "./validation",
+    "jupyter.interactiveWindow.textEditor.executeSelection": true
+}

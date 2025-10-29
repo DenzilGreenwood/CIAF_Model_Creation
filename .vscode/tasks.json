@@ -1,0 +1,319 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "CIAF: Install Dependencies",
+            "type": "shell",
+            "command": "pip",
+            "args": [
+                "install",
+                "-e",
+                "."
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "CIAF: Run All Tests",
+            "type": "shell",
+            "command": "python",
+            "args": [
+                "-m",
+                "pytest",
+                "tests/",
+                "-v",
+                "--tb=short",
+                "--cov=ciaf",
+                "--cov-report=html"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "CIAF: Healthcare Demo",
+            "type": "shell",
+            "command": "python",
+            "args": [
+                "examples/golden_paths/healthcare_samd_demo.py"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "CIAF: Banking Demo",
+            "type": "shell",
+            "command": "python",
+            "args": [
+                "examples/golden_paths/banking_sr11_7_demo.py"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "CIAF: Government Demo",
+            "type": "shell",
+            "command": "python",
+            "args": [
+                "examples/golden_paths/government_omb_m24_10_demo.py"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "CIAF: Citation Anchor Demo",
+            "type": "shell",
+            "command": "python",
+            "args": [
+                "examples/citation_anchor_demo.py"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "CIAF: Run All Demos",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "CIAF: Healthcare Demo",
+                "CIAF: Banking Demo",
+                "CIAF: Government Demo"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "CIAF: Verify Receipts",
+            "type": "shell",
+            "command": "python",
+            "args": [
+                "scripts/ciaf-verify",
+                "examples/receipts/",
+                "--full-audit"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "CIAF: Validate Frameworks",
+            "type": "shell",
+            "command": "python",
+            "args": [
+                "scripts/validate_frameworks.py"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "CIAF: Validate Regulatory Mappings",
+            "type": "shell",
+            "command": "python",
+            "args": [
+                "scripts/validate_regulatory_mappings.py"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "CIAF: Code Quality Check",
+            "type": "shell",
+            "command": "powershell",
+            "args": [
+                "-Command",
+                "mypy ciaf/ --ignore-missing-imports; bandit -r ciaf/ -f json -o security-report.json; python -m pytest --cov=ciaf --cov-report=html --cov-report=term"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": [
+                "$python"
+            ]
+        },
+        {
+            "label": "CIAF: Format Code",
+            "type": "shell",
+            "command": "powershell",
+            "args": [
+                "-Command",
+                "black ciaf/; isort ciaf/"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "CIAF: ROI Benchmarks",
+            "type": "shell",
+            "command": "python",
+            "args": [
+                "benchmarks/audit-time/ciaf_roi_analysis.py"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "CIAF: Generate Investor Package",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "CIAF: ROI Benchmarks",
+                "CIAF: Verify Receipts",
+                "CIAF: Run All Demos"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "CIAF: Start Documentation Server",
+            "type": "shell",
+            "command": "python",
+            "args": [
+                "-m",
+                "http.server",
+                "8000"
+            ],
+            "options": {
+                "cwd": "./Docs"
+            },
+            "group": "build",
+            "isBackground": true,
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "CIAF: Clean Build Artifacts",
+            "type": "shell",
+            "command": "powershell",
+            "args": [
+                "-Command",
+                "Get-ChildItem -Path . -Recurse -Name '__pycache__' | Remove-Item -Recurse -Force; Get-ChildItem -Path . -Recurse -Name '*.pyc' | Remove-Item -Force; Get-ChildItem -Path . -Recurse -Name '.pytest_cache' | Remove-Item -Recurse -Force; Remove-Item -Path '.coverage', 'htmlcov', 'security-report.json', 'validation_report.json' -Force -ErrorAction SilentlyContinue"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "CIAF: Fix Citation Anchor Error",
+            "type": "shell",
+            "command": "python",
+            "args": [
+                "-c",
+                "import sys; sys.path.insert(0, '.'); from ciaf.compliance import AuditTrailGenerator; print('AuditTrailGenerator signature:', AuditTrailGenerator.__init__.__annotations__)"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "CIAF: AI Agent Workflow",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "CIAF: Install Dependencies",
+                "CIAF: Validate Frameworks",
+                "CIAF: Code Quality Check",
+                "CIAF: Run All Tests",
+                "CIAF: Run All Demos"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        }
+    ]
+}

@@ -1,0 +1,201 @@
+The AI
+RMF should be universally applicable to any AI technology and to context-specific
+use cases. These tasks are carried out by AI actors who are
+responsible for operating the AI system and working with others to regularly assess system
+output and impacts. Like most risk management approaches, they are
+outcome-based rather than prescriptive and are often structured around a Core set of func-
+tions, categories, and subcategories. Other AI actors may provide formal or quasi-formal norms or guidance for specifying
+and managing AI risks. • Difficulty in performing regular AI-based software testing, or determining what to
+test, since AI systems are not subject to the same controls as traditional code devel-
+opment. The GOVERN function also creates
+mechanisms for organizations to make their decision-making processes more explicit, to
+help counter systemic biases. Use clear and plain language that is understandable by a broad audience, including
+senior executives, government officials, non-governmental organization leadership,
+and those who are not AI professionals – while still of sufficient technical depth to
+be useful to practitioners. Human Factors tasks and activities are found throughout the dimensions of the AI life-
+cycle. Be easily usable and fit well with other aspects of risk management. Data about the fre-
+quency and rationale with which humans overrule AI system output in deployed systems
+may be useful to collect and analyze. • Increased opacity and concerns about reproducibility. • Higher degree of difficulty in predicting failure modes for emergent properties of
+large-scale pre-trained models. Be law- and regulation-agnostic. Governance and Oversight tasks are assumed by AI actors with management, fiduciary,
+and legal authority and responsibility for the organization in which an AI system is de-
+Page 36
+NIST AI 100-1 AI RMF 1. While there are significant differences between these
+frameworks based on the domain addressed – and because AI risk management calls for
+addressing many other types of risks – frameworks like those mentioned above may inform
+security and privacy considerations in the MAP, MEASURE, and MANAGE functions of the
+AI RMF. Human factors professionals provide multidisciplinary skills and perspectives
+to understand context of use, inform interdisciplinary and demographic diversity, engage
+in consultative processes, design and evaluate user experience, perform human-centered
+evaluation and testing, and inform impact assessments. Representing complex human phenomena with mathematical models can come at the
+cost of removing necessary context. Identifying contextual factors in the MAP
+function will assist AI actors in determining the level of risk and potential management
+efforts. Additional AI Actors
+Third-party entities include providers, developers, vendors, and evaluators of data, al-
+gorithms, models, and/or systems and related services for another organization or the or-
+ganization’s customers or clients. Both AI and traditional software technologies and systems are subject to rapid innovation. The AI RMF strives to:
+1. Page 42
+This publication is available free of charge from:. They can include trade associations, standards developing or-
+ganizations, advocacy groups, researchers, environmental groups, and civil society
+organizations. 0
+AI RMF cross-sectoral profiles cover risks of models or applications that can be used across
+use cases or sectors. Page 39
+NIST AI 100-1 AI RMF 1. The AI RMF should allow for communication of AI risks
+across an organization, between organizations, with customers, and to the public at
+large. Additionally, harmful bias and other data quality issues
+can affect AI system trustworthiness, which could lead to negative impacts. Biases can stem from
+end-user decision-making tasks and be introduced across the AI lifecycle via human
+assumptions, expectations, and decisions during design and modeling tasks. 0
+• Computational costs for developing AI systems and their impact on the environment
+and planet. Use of the
+Framework should be intuitive and readily adaptable as part of an organization’s
+broader risk management strategy and processes. Be useful to a wide range of perspectives, sectors, and technology domains. 0
+signed, developed, and/or deployed. The GOVERN function provides organizations with the opportunity to clarify and define
+the roles and responsibilities for the humans in the Human-AI team configurations and
+those who are overseeing the AI system performance. For example, pre-trained
+models and transfer learning can advance research and increase accuracy and resilience
+when compared to other models and approaches. Page 41
+NIST AI 100-1 AI RMF 1. Technology advances should be monitored and deployed to take advantage of those devel-
+opments and work towards a future of AI that is both trustworthy and responsible. AI
+actors in this category include system integrators, software developers, end users, oper-
+ators and practitioners, evaluators, and domain experts with expertise in human factors,
+socio-cultural analysis, and governance. Issues that merit further consideration and research include:
+1. These frameworks have some
+features in common with the AI RMF. • AI system dependency and reliance on data for training tasks, combined with in-
+creased volume and complexity typically associated with such data. • AI system scale and complexity (many systems contain billions or even trillions of
+decision points) housed within more traditional software applications. These actors
+are parties that are concerned with the impact and sustainability of the organization as a
+whole. AI actors called out in the AI RMF who perform human factors tasks and
+activities can assist technical teams by anchoring in design and development practices to
+user intentions and representatives of the broader AI community, and societal values. The AI RMF
+should offer taxonomy, terminology, definitions, metrics, and characterizations for
+AI risk. AI actors such as impact assessors and evaluators
+provide technical, human factor, socio-cultural, and legal expertise. Page 40
+NIST AI 100-1 AI RMF 1. Page 34
+NIST AI 100-1 AI RMF 1. Operation and Monitoring tasks are performed in the Application Context/Operate and
+Monitor phase of the lifecycle in Figure 2. • TEVV tasks for design, planning, and data may center on internal and external vali-
+dation of assumptions for system design, data collection, and measurements relative
+to the intended context of deployment or application. Be risk-based, resource-efficient, pro-innovation, and voluntary. Cross-sectoral profiles can also cover how to govern, map, measure,
+and manage risks for activities or business processes common across sectors such as the
+use of large language models, cloud-based services or acquisition. AI risk management approaches for human-AI configurations will be augmented by on-
+going research and evaluation. This Framework does not prescribe profile templates, allowing for flexibility in implemen-
+tation. The GOVERN and MAP functions describe the importance of interdisciplinarity and demo-
+graphically diverse teams and utilizing feedback from potentially impacted individuals and
+communities. Affected individuals/communities encompass all individuals, groups, communities, or
+organizations directly or indirectly affected by AI systems or decisions based on the output
+of AI systems. The general public is most likely to directly experience positive and negative impacts of
+AI technologies. • Datasets used to train AI systems may become detached from their original and in-
+tended context or may become stale or outdated relative to deployment context. Presenting AI system information to humans is complex. AI Deployment actors are responsible for contextual decisions relating to how
+the AI system is used to assure deployment of the system into production. Privacy and cybersecurity risk management considerations and approaches are applicable
+in the design, development, deployment, evaluation, and use of AI systems. Systemic biases at the organizational
+level can influence how teams are structured and who controls the decision-making
+processes throughout the AI lifecycle. Key AI actors responsible for AI governance include
+organizational management, senior leadership, and the Board of Directors. • Intentional or unintentional changes during training may fundamentally alter AI sys-
+tem performance. • AI systems may require more frequent maintenance and triggers for conducting cor-
+rective maintenance due to data, model, or concept drift. Many of the data-driven approaches that AI systems rely on attempt to convert or represent
+individual and social observational and decision-making practices into measurable quanti-
+ties. Provide common language and understanding to manage AI risks. They are provided here as a reference. They include human-centered design practices and methodologies, promoting the
+active involvement of end users and other interested parties and relevant AI actors, incor-
+porating context-specific norms and values in system design, evaluating and adapting end
+user experiences, and broad integration of humans and human dynamics in all phases of the
+AI lifecycle. Some AI systems may not require human oversight,
+such as models used to improve video compression. They are carried out by AI actors who examine the AI system or its
+components, or detect and remediate problems. , UX/UI
+design), governance experts, data engineers, data providers, system funders, product man-
+agers, third-party entities, evaluators, and legal and privacy governance. AI actors who are domain
+experts can provide essential guidance for AI system design and development, and inter-
+pret outputs in support of work performed by TEVV and AI impact assessment teams. Be outcome-focused and non-prescriptive. These biases can also influence downstream
+decisions by end users, decision makers, and policy makers and may lead to negative
+impacts. These individuals or groups interact with an AI system in a specific context. These
+actors further help to incorporate context-specific norms and values in system design and
+evaluate end user experiences – in conjunction with AI systems. The AI RMF provides opportunities to clearly define and differentiate the
+various human roles and responsibilities when using, interacting with, or managing AI
+systems. Other systems may specifically
+require human oversight. The MAP function suggests opportunities to define and document processes for operator
+and practitioner proficiency with AI system performance and trustworthiness concepts, and
+to define relevant technical standards and certifications. Human-AI configurations can span
+from fully autonomous to fully manual. Human-AI interaction results vary. For example, existing frameworks and guidance
+are unable to:
+• adequately manage the problem of harmful bias in AI systems;
+• confront the challenging risks related to generative AI;
+• comprehensively address security concerns related to evasion, model extraction, mem-
+bership inference, availability, or other machine learning attacks;
+• account for the complex attack surface of AI systems or other security abuses enabled
+by AI systems; and
+• consider risks associated with third-party AI technologies, transfer learning, and off-
+label use where AI systems may be trained for decision-making outside an organiza-
+tion’s security controls or trained in one domain and then “fine-tuned” for another. Human roles and responsibilities in decision making and overseeing AI systems
+need to be clearly defined and differentiated. Decisions that go into the design, development, deployment, evaluation, and use
+of AI systems reflect systemic and human cognitive biases. • TEVV tasks for operations involve ongoing monitoring for periodic updates, testing,
+and subject matter expert (SME) recalibration of models, the tracking of incidents
+or errors reported and their management, the detection of emergent properties and
+related impacts, and processes for redress and response. At the same time, guidance available before publication of this AI RMF does not compre-
+hensively address many AI system risks. AI actors bring their
+cognitive biases, both individual and group, into the process. It should be consistent or aligned
+with other approaches to managing AI risks. Tasks
+can be incorporated into a phase as early as design, where tests are planned in accordance
+with the design requirement. • Underdeveloped software testing standards and inability to document AI-based prac-
+tices to the standard expected of traditionally engineered software for all but the
+simplest of cases. End users of an AI system are the individuals or groups that use the system for specific
+purposes. Privacy and
+cybersecurity risks are also considered as part of broader enterprise risk management con-
+siderations, which may incorporate AI risks. As part of the effort to address AI trustworthi-
+ness characteristics such as “Secure and Resilient” and “Privacy-Enhanced,” organizations
+may consider leveraging available standards and guidance that provide broad guidance to
+organizations to reduce security and privacy risks, such as, but not limited to, the NIST Cy-
+bersecurity Framework, the NIST Privacy Framework, the NIST Risk Management Frame-
+work, and the Secure Software Development Framework. Procurement tasks are conducted by AI actors with financial, legal, or policy management
+authority for acquisition of AI models, products, or services from a third-party developer,
+vendor, or contractor. The Framework should support organizations’
+abilities to operate under applicable domestic and international legal or regulatory
+regimes. AI Development tasks are performed during the AI Model phase of the lifecycle in Figure
+2. Be consensus-driven and developed and regularly updated through an open, trans-
+parent process. Related tasks
+include piloting the system, checking compatibility with legacy systems, ensuring regu-
+latory compliance, managing organizational change, and evaluating user experience. • Use of pre-trained models that can advance research and improve performance can
+also increase levels of statistical uncertainty and cause issues with bias management,
+scientific validity, and reproducibility. AI systems also bring a set of
+risks that are not comprehensively addressed by current risk frameworks and approaches. This loss of context may in turn make it difficult to
+understand individual and societal impacts that are key to AI risk management efforts. 0
+Appendix A:
+Descriptions of AI Actor Tasks from Figures 2 and 3
+AI Design tasks are performed during the Application Context and Data and Input phases
+of the AI lifecycle in Figure 2. Domain Expert tasks involve input from multidisciplinary practitioners or scholars who
+provide knowledge or expertise in – and about – an industry sector, economic sector, con-
+text, or application area where an AI system is being used. • Inability to predict or detect the side effects of AI-based systems beyond statistical
+measures. By definition, they are external to the design, devel-
+opment, or deployment team of the organization that acquires its technologies or services. The technologies acquired from third-party entities may be complex or opaque, and risk
+tolerances may not align with the deploying or operating organization. AI actors in this category include
+machine learning experts, data scientists, developers, third-party entities, legal and privacy
+governance experts, and experts in the socio-cultural and contextual factors associated with
+the deployment setting. End
+users can range in competency from AI experts to first-time technology end users. AI Development actors provide the initial infrastructure of AI systems and are responsi-
+ble for model building and interpretation tasks, which involve the creation, selection, cali-
+bration, training, and/or testing of models or algorithms. AI Deployment tasks are performed during the Task and Output phase of the lifecycle in
+Figure 2. Implementing MAP function cat-
+egories and subcategories may help organizations improve their internal competency for
+analyzing context, identifying procedural and system limitations, exploring and examining
+impacts of AI-based systems in the real world, and evaluating decision-making processes
+throughout the AI lifecycle. For example, the degree to which humans are empowered
+and incentivized to challenge AI system output requires further studies. , model building) include model validation and
+assessment. AI actors in this category include system operators, domain experts, AI
+designers, users who interpret or incorporate the output of AI systems, product developers,
+evaluators and auditors, compliance experts, organizational management, and members of
+the research community. These attributes have remained intact and were used to guide the AI RMF’s devel-
+opment. Third-party entities are responsible for AI design and
+development tasks, in whole or in part. They may provide the motivation for actions taken by the AI actors. 0
+Appendix C:
+AI Risk Management and Human-AI Interaction
+Organizations that design, develop, or deploy AI systems for use in operational settings
+may enhance their AI risk management by understanding current limitations of human-
+AI interaction. Test, Evaluation, Verification, and Validation (TEVV) tasks are performed throughout
+the AI lifecycle. 0
+Appendix D:
+Attributes of the AI RMF
+NIST described several key attributes of the AI RMF when work on the Framework first
+began. AI systems can autonomously make deci-
+sions, defer decision making to a human expert, or be used by a human decision
+maker as an additional opinion. NIST AI 100-1 AI RMF 1. Humans perceive and
+derive meaning from AI system output and explanations in different ways, reflecting
+different individual preferences, traits, and skills. These
+biases, which are not necessarily always harmful, may be exacerbated by AI system
+opacity and the resulting lack of transparency.

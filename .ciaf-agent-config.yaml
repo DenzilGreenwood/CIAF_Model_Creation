@@ -1,0 +1,325 @@
+# CIAF AI Agent Configuration
+# This file configures automated workflows for AI agents working with the CIAF framework
+
+ai_agent:
+  # Agent Configuration
+  name: "CIAF Development Agent"
+  version: "1.2.0"
+  description: "Automated AI agent for CIAF framework development and compliance validation"
+  
+  # Workspace Configuration
+  workspace:
+    root: "D:/Github/CognitiveInsight/CIAF_Model_Creation"
+    python_executable: "D:/python312/python.exe"
+    main_module: "ciaf"
+    
+  # Automation Workflows
+  workflows:
+    
+    # Development Workflow
+    development:
+      description: "Standard development workflow for CIAF agents"
+      steps:
+        - name: "validate_environment"
+          command: "python -c 'import sys; print(f\"Python {sys.version}\")'"
+          required: true
+          
+        - name: "install_dependencies"
+          command: "pip install -e ."
+          required: true
+          timeout: 300
+          
+        - name: "code_quality_check"
+          command: "python -m mypy ciaf/ --ignore-missing-imports"
+          required: false
+          continue_on_error: true
+          
+        - name: "security_scan"
+          command: "python -m bandit -r ciaf/ -f json -o security-report.json"
+          required: false
+          continue_on_error: true
+          
+        - name: "run_tests"
+          command: "python -m pytest tests/ -v --tb=short"
+          required: true
+          timeout: 600
+          
+        - name: "validate_frameworks"
+          command: "python scripts/validate_frameworks.py"
+          required: true
+          
+    # Compliance Workflow
+    compliance:
+      description: "Compliance validation workflow"
+      steps:
+        - name: "framework_validation"
+          command: "python scripts/validate_frameworks.py"
+          required: true
+          
+        - name: "regulatory_mapping_validation"
+          command: "python scripts/validate_regulatory_mappings.py"
+          required: true
+          
+        - name: "citation_anchor_validation"
+          command: "python examples/citation_anchor_demo.py"
+          required: true
+          
+        - name: "compliance_tests"
+          command: "python -m pytest tests/ -m compliance -v"
+          required: true
+          
+    # Demo Workflow
+    demo:
+      description: "Run all demonstration scenarios"
+      steps:
+        - name: "healthcare_demo"
+          command: "python examples/golden_paths/healthcare_samd_demo.py"
+          required: false
+          
+        - name: "banking_demo"
+          command: "python examples/golden_paths/banking_sr11_7_demo.py"
+          required: false
+          
+        - name: "government_demo"
+          command: "python examples/golden_paths/government_omb_m24_10_demo.py"
+          required: false
+          
+        - name: "citation_demo"
+          command: "python examples/citation_anchor_demo.py"
+          required: false
+          
+    # Investor Package Workflow
+    investor_package:
+      description: "Generate complete investor due diligence package"
+      steps:
+        - name: "run_benchmarks"
+          command: "python benchmarks/audit-time/ciaf_roi_analysis.py"
+          required: true
+          
+        - name: "verify_receipts"
+          command: "python scripts/ciaf-verify examples/receipts/ --full-audit"
+          required: false
+          continue_on_error: true
+          
+        - name: "generate_documentation"
+          command: "sphinx-build -b html docs/ docs/_build/html"
+          required: false
+          continue_on_error: true
+          
+        - name: "package_artifacts"
+          script: |
+            mkdir -p investor_package
+            cp README.md investor_package/
+            cp docs/compliance_cross_walk.csv investor_package/ 2>/dev/null || true
+            cp ciaf_roi_analysis_data.json investor_package/ 2>/dev/null || true
+            cp -r examples/receipts investor_package/ 2>/dev/null || true
+          required: true
+
+  # Monitoring and Health Checks
+  health_checks:
+    
+    # Python Environment Health
+    python_environment:
+      command: "python -c 'import ciaf; print(f\"CIAF version: {ciaf.__version__}\")'"
+      interval: "startup"
+      timeout: 30
+      
+    # Cryptographic Health
+    crypto_health:
+      command: "python -c 'from ciaf.crypto_health import crypto_health_check; print(crypto_health_check())'"
+      interval: "daily"
+      timeout: 60
+      
+    # Framework Integrity
+    framework_integrity:
+      command: "python scripts/validate_frameworks.py --health-check"
+      interval: "startup"
+      timeout: 120
+      
+    # Dependency Vulnerabilities
+    security_check:
+      command: "python -m safety check"
+      interval: "weekly"
+      timeout: 180
+      continue_on_error: true
+
+  # Error Handling and Recovery
+  error_handling:
+    
+    # Common Error Patterns
+    patterns:
+      - error: "ModuleNotFoundError"
+        solution: "run_workflow"
+        workflow: "development"
+        step: "install_dependencies"
+        
+      - error: "TypeError.*AuditTrailGenerator.*missing.*required.*argument"
+        solution: "fix_citation_anchor"
+        command: "python -c 'from ciaf.compliance.citation_anchor import fix_audit_trail_generator; fix_audit_trail_generator()'"
+        
+      - error: "ImportError.*ciaf"
+        solution: "reinstall_package"
+        command: "pip install -e . --force-reinstall"
+        
+      - error: "PermissionError"
+        solution: "check_permissions"
+        message: "Please ensure you have write permissions to the workspace directory"
+        
+    # Recovery Actions
+    recovery:
+      clean_workspace:
+        description: "Clean all build artifacts and caches"
+        commands:
+          - "find . -name '__pycache__' -type d -exec rm -rf {} + 2>/dev/null || true"
+          - "find . -name '*.pyc' -delete 2>/dev/null || true"
+          - "rm -rf .pytest_cache htmlcov .coverage build dist *.egg-info"
+          
+      reset_environment:
+        description: "Reset Python environment and reinstall dependencies"
+        commands:
+          - "pip uninstall ciaf-framework -y"
+          - "pip install -e ."
+          - "pre-commit install"
+
+  # Agent Capabilities
+  capabilities:
+    
+    # Code Analysis
+    code_analysis:
+      - "static_analysis"
+      - "type_checking" 
+      - "security_scanning"
+      - "dependency_checking"
+      - "code_formatting"
+      
+    # Testing
+    testing:
+      - "unit_tests"
+      - "integration_tests"
+      - "compliance_tests"
+      - "security_tests"
+      - "performance_tests"
+      
+    # Compliance
+    compliance:
+      - "framework_validation"
+      - "regulatory_mapping"
+      - "citation_tracking"
+      - "audit_trail_generation"
+      - "evidence_collection"
+      
+    # Documentation
+    documentation:
+      - "api_documentation"
+      - "compliance_reports"
+      - "investor_packages"
+      - "demo_scenarios"
+      - "troubleshooting_guides"
+
+  # Integration Points
+  integrations:
+    
+    # VS Code
+    vscode:
+      tasks_file: ".vscode/tasks.json"
+      launch_file: ".vscode/launch.json"
+      settings_file: ".vscode/settings.json"
+      
+    # Git
+    git:
+      pre_commit_hooks: ".pre-commit-config.yaml"
+      ignore_file: ".gitignore"
+      
+    # CI/CD
+    github_actions:
+      workflows_dir: ".github/workflows"
+      
+    # Documentation
+    documentation:
+      source_dir: "Docs"
+      build_dir: "docs/_build"
+      
+  # Notification Settings
+  notifications:
+    
+    # Success Notifications
+    success:
+      workflow_complete: true
+      tests_passed: true
+      compliance_validated: true
+      
+    # Warning Notifications  
+    warnings:
+      security_issues: true
+      dependency_vulnerabilities: true
+      compliance_gaps: true
+      
+    # Error Notifications
+    errors:
+      workflow_failed: true
+      tests_failed: true
+      build_errors: true
+      
+  # Performance Settings
+  performance:
+    
+    # Parallel Execution
+    parallel_jobs: 4
+    
+    # Timeouts (seconds)
+    timeouts:
+      short: 60
+      medium: 300
+      long: 600
+      
+    # Memory Limits
+    memory_limits:
+      test_execution: "2GB"
+      code_analysis: "1GB"
+      documentation_build: "512MB"
+
+  # Logging Configuration
+  logging:
+    level: "INFO"
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    
+    # Log Files
+    files:
+      main: "logs/ai-agent.log"
+      error: "logs/ai-agent-errors.log"
+      audit: "logs/ai-agent-audit.log"
+      
+    # Rotation
+    rotation:
+      max_size: "10MB"
+      backup_count: 5
+      
+  # Security Settings
+  security:
+    
+    # Sensitive Data Patterns
+    sensitive_patterns:
+      - "api_key"
+      - "secret"
+      - "password"
+      - "token"
+      - "private_key"
+      
+    # Allowed Executables
+    allowed_executables:
+      - "python"
+      - "pip"
+      - "git"
+      - "pre-commit"
+      - "pytest"
+      - "mypy"
+      - "black"
+      - "isort"
+      - "bandit"
+      
+    # File Access Restrictions
+    restricted_paths:
+      - "/etc"
+      - "/usr/local"
+      - "~/.ssh"
+      - "~/.aws"

@@ -1,0 +1,39 @@
+The Framework should provide a catalog
+of outcomes and approaches rather than prescribe one-size-fits-all requirements. Page 38
+NIST AI 100-1 AI RMF 1. Take advantage of and foster greater awareness of existing standards, guidelines, best
+practices, methodologies, and tools for managing AI risks – as well as illustrate the
+need for additional, improved resources. Page 37
+NIST AI 100-1 AI RMF 1. Under certain conditions – for example, in
+perceptual-based judgment tasks – the AI part of the human-AI interaction can am-
+plify human biases, leading to more biased decisions than the AI or human alone. These individuals do not necessarily interact with the deployed system or
+application. The AI RMF should be readily updated as technology, under-
+standing, and approaches to AI trustworthiness and uses of AI change and as stake-
+holders learn from implementing AI risk management generally and this framework
+in particular. All stakeholders should have the opportunity to contribute to the AI
+RMF’s development. Some AI system features that present risks also can be beneficial. This
+group can include individuals, communities, and consumers associated with the context in
+which an AI system is developed or deployed. 0
+and validation tasks are distinct from those who perform test and evaluation actions. Tasks include ar-
+ticulating and documenting the system’s concept and objectives, underlying assumptions,
+context, and requirements; gathering and cleaning data; and documenting the metadata
+and characteristics of the dataset. AI actors in this category include data scientists, do-
+main experts, socio-cultural analysts, experts in the field of diversity, equity, inclusion,
+and accessibility, members of impacted communities, human factors experts (e. When these variations are judiciously taken into account in organizing human-AI
+teams, however, they can result in complementarity and improved overall perfor-
+mance. Ideally, AI actors carrying out verification
+Page 35
+NIST AI 100-1 AI RMF 1. • TEVV tasks for development (i. AI Impact Assessment tasks include assessing and evaluating requirements for AI system
+accountability, combating harmful bias, examining impacts of AI systems, product safety,
+liability, and security, among others. 0
+Appendix B:
+How AI Risks Differ from Traditional Software Risks
+As with traditional software, risks from AI-based technology can be bigger than an en-
+terprise, span organizations, and lead to societal impacts. Compared to traditional software, AI-specific risks that are new or increased include the
+following:
+• The data used for building an AI system may not be a true or appropriate representa-
+tion of the context or intended use of the AI system, and the ground truth may either
+not exist or not be available. • Privacy risk due to enhanced data aggregation capability for AI systems. AI Design actors create the concept and objectives of AI
+systems and are responsible for the planning, design, and data collection and processing
+tasks of the AI system so that the AI system is lawful and fit-for-purpose. • TEVV tasks for deployment include system validation and integration in production,
+with testing, and recalibration for systems and process integration, user experience,
+and compliance with existing legal, regulatory, and ethical specifications.
