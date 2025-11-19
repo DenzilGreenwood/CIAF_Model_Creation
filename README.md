@@ -4,7 +4,8 @@
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Type Checked](https://img.shields.io/badge/type--checked-mypy-blue.svg)](http://mypy-lang.org/)
 [![Security](https://img.shields.io/badge/security-bandit-yellow.svg)](https://bandit.readthedocs.io/)
-[![License](https://img.shields.io/badge/license-Apache%202.0-green.svg)](LICENSE)
+[![License](https://img.shields.io/badge/license-BUSL--1.1-blue.svg)](LICENSE)
+[![Commercial](https://img.shields.io/badge/commercial-license%20available-green.svg)](LICENSE.COMMERCIAL)
 
 ---
 
@@ -12,13 +13,38 @@
 
 **Cognitive Insight™** and **Lazy Capsule Materialization (LCM)™** are original works created by **Denzil James Greenwood**.
 The core concepts, schemas, and cryptographic structures are disclosed publicly to establish authorship and
-enable transparent adoption for verifiable AI governance. This repository and its contents are licensed under
-the Apache License 2.0 for educational and research purposes.
+enable transparent adoption for verifiable AI governance.
 
-**© 2025 Denzil James Greenwood.** Original author of the Cognitive Insight Audit Framework (CIAF) and Lazy Capsule Materialization (LCM) process. All rights reserved except as provided under the Apache 2.0 License.
+**© 2025 Denzil James Greenwood.** Original author of the Cognitive Insight Audit Framework (CIAF) and Lazy Capsule Materialization (LCM) process. All rights reserved.
+
+### 📜 Dual Licensing Model
+
+CIAF uses a **dual-license structure** to protect innovation while enabling research:
+
+**1. Business Source License 1.1 (BUSL-1.1)** - Default License
+- ✅ **Research & Academic Use:** Freely available for non-commercial research, academic study, and open source contributions
+- ✅ **Evaluation Period:** 90-day trial for production evaluation
+- ✅ **Personal & Educational Use:** Unrestricted for learning and non-commercial projects
+- ❌ **Commercial Use Restricted:** Revenue-generating deployments, SaaS offerings, and production use beyond 90 days require a commercial license
+- 🔄 **Automatic Conversion:** Converts to Apache 2.0 on **January 1, 2029** (4-year protection period)
+
+**2. Commercial License** - For Production & Enterprise Use
+- ✅ **Full Commercial Rights:** Unlimited production deployments and revenue-generating use
+- ✅ **Priority Support & SLAs:** Guaranteed response times, direct engineering access
+- ✅ **Security & Legal Protection:** Priority patches, indemnification, warranty coverage
+- ✅ **Flexible Tiers:** Startup ($5K/year), Professional ($25K/year), Enterprise (custom pricing)
+- 📧 **Get Started:** licensing@cognitiveinsight.ai | [View Commercial Terms →](LICENSE.COMMERCIAL)
+
+**Why This Model?**
+- **Research-Friendly:** Academic institutions and researchers can use CIAF without restrictions
+- **IP Protection:** Prevents competitors from offering CIAF as a commercial service without contributing back
+- **Sustainable Development:** Commercial licensing funds continued innovation and maintenance
+- **Time-Limited Monopoly:** Automatic Apache 2.0 conversion ensures eventual full open source status
+
+**Proven Model:** Used successfully by HashiCorp (Terraform, Vault), MariaDB, Couchbase, Sentry, and Elastic to balance community access with commercial sustainability.
 
 - **No patent claims are asserted, and no patent restrictions apply.**
-- **Attribution is required for reuse or derivative works.**
+- **Attribution is required for all uses (research and commercial).**
 - **Trademark protection applies to "Cognitive Insight™" and "LCM™" brand names.**
 
 **Defensive Publication:** This repository serves as a public disclosure establishing prior art for the LCM process and cryptographic audit structures. See [LCM_Technical_Disclosure.pdf](LCM_Technical_Disclosure.pdf) for detailed technical disclosure.
@@ -468,7 +494,14 @@ print(f"Regulatory Gaps: {len(compliance_report['recommendations'])}")
 - **Contributing:** [Contribution Guide](CONTRIBUTING.md)
 
 ### **License**
-Apache License 2.0 - See [LICENSE](LICENSE) for details
+Licensed under the **Business Source License 1.1 (BUSL-1.1)**. See [LICENSE](LICENSE) for complete terms.
+
+- **Non-Commercial Use:** Freely available for research, academic study, evaluation, and open source contributions
+- **Commercial Use:** Requires separate commercial license - contact licensing@cognitiveinsight.ai
+- **Automatic Conversion:** Becomes Apache 2.0 on January 1, 2029
+- **Commercial Licensing:** See [LICENSE.COMMERCIAL](LICENSE.COMMERCIAL) for enterprise terms and pricing
+
+**Need a Commercial License?** Contact licensing@cognitiveinsight.ai for Startup, Professional, or Enterprise tiers.
 
 ### **Intellectual Property**
 - **Original Author:** Denzil James Greenwood
