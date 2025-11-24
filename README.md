@@ -32,7 +32,7 @@ CIAF uses a **dual-license structure** to protect innovation while enabling rese
 - ✅ **Full Commercial Rights:** Unlimited production deployments and revenue-generating use
 - ✅ **Priority Support & SLAs:** Guaranteed response times, direct engineering access
 - ✅ **Security & Legal Protection:** Priority patches, indemnification, warranty coverage
-- ✅ **Flexible Tiers:** Startup ($5K/year), Professional ($25K/year), Enterprise (custom pricing)
+- ✅ **Flexible Tiers:** Multiple tiers available for startups, professionals, and enterprises
 - 📧 **Get Started:** licensing@cognitiveinsight.ai | [View Commercial Terms →](LICENSE.COMMERCIAL)
 
 **Why This Model?**
@@ -489,9 +489,7 @@ print(f"Regulatory Gaps: {len(compliance_report['recommendations'])}")
 ## 📞 **Contact & Contributing**
 
 - **Technical Issues:** [GitHub Issues](https://github.com/DenzilGreenwood/CIAF_Model_Creation/issues)
-- **Commercial Inquiries:** enterprise@ciaf.ai
-- **Security Reports:** security@ciaf.ai (GPG key available)
-- **Contributing:** [Contribution Guide](CONTRIBUTING.md)
+- **Contact Information:** founder@cognitiveinsight.ai 
 
 ### **License**
 Licensed under the **Business Source License 1.1 (BUSL-1.1)**. See [LICENSE](LICENSE) for complete terms.
@@ -507,7 +505,7 @@ Licensed under the **Business Source License 1.1 (BUSL-1.1)**. See [LICENSE](LIC
 - **Original Author:** Denzil James Greenwood
 - **Trademark Protection:** "Cognitive Insight™" and "LCM™" 
 - **Defensive Publication:** [LCM_Technical_Disclosure.pdf](LCM_Technical_Disclosure.pdf)
-- **Full IP Strategy:** [INTELLECTUAL_PROPERTY.md](INTELLECTUAL_PROPERTY.md)
+
 
 ### **Citation**
 ```bibtex

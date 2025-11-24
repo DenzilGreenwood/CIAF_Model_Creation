@@ -25,7 +25,7 @@ from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from .constants import SALT_LENGTH, PBKDF2_ITERATIONS, KDF_DKLEN
 
 
-def make_aad(dataset_anchor_hex: str, capsule_id: str, policy_id: str) -> bytes:
+def create_aad(dataset_anchor_hex: str, capsule_id: str, policy_id: str) -> bytes:
     """
     Create Additional Authenticated Data (AAD) for AEAD encryption.
     

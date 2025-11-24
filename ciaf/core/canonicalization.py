@@ -555,7 +555,7 @@ class CapsuleBuilder:
         return capsule
 
 
-def make_anchor(
+def create_anchor(
     root: str,
     policy: Policy,
     signer: Signer,

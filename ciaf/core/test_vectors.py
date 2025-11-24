@@ -14,7 +14,7 @@ from dataclasses import dataclass, asdict
 from datetime import datetime, timezone
 from typing import Dict, List, Any
 
-from .canonicalization import canonical_json, canonicalize_and_hash, make_anchor, Policy
+from .canonicalization import canonical_json, canonicalize_and_hash, create_anchor, Policy
 from .crypto import sha256_hash, compute_hash
 from .determinism import DeterministicClock, canonical_timestamp
 from .enums import HashAlgorithm, RecordType
@@ -249,7 +249,7 @@ class CIAFTestVectors:
             original_timestamp = canonical_timestamp
             
             try:
-                anchor = make_anchor(root, policy, signer)
+                anchor = create_anchor(root, policy, signer)
                 
                 vectors.append(TestVector(
                     name=f"anchor_test_{i+1}",

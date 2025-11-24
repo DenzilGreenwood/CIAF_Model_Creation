@@ -20,7 +20,7 @@ from ..core import CryptoUtils, MerkleTree, derive_model_anchor, derive_master_a
 from ..core.canonicalization import (
     Policy, RecordType, AnchorRecord, Receipt, Signer, WORMMerkleTree, CapsuleBuilder,
     canonical_json, canonicalize_and_hash, validate_required_fields, 
-    enrich_metadata_with_defaults, make_anchor, HashAlgorithm
+    enrich_metadata_with_defaults, create_anchor, HashAlgorithm
 )
 from ..provenance import ModelAggregationAnchor, ProvenanceCapsule, TrainingSnapshot
 from ..simulation import MLFrameworkSimulator
@@ -273,7 +273,7 @@ class CIAFFramework:
         root = self.ledger.append_leaf(leaf_hash, metadata)
         
         # Step 3: Create signed anchor
-        anchor = make_anchor(root, self.policy, self.anchor_signer)
+        anchor = create_anchor(root, self.policy, self.anchor_signer)
         
         # Step 4: Append anchor to WORM log
         self.ledger.append_anchor(anchor)

@@ -41,7 +41,7 @@ from .crypto import (
     derive_capsule_anchor,
     to_hex,
     from_hex,
-    make_aad,
+    create_aad,d,
     generate_master_password,
 )
 
@@ -58,8 +58,8 @@ from .canonicalization import (
     canonicalize_and_hash,
     validate_required_fields,
     enrich_metadata_with_defaults,
-    make_anchor,
-    REQUIRED_FIELDS
+    create_anchor,
+    REQUIRED_FIELDS,
 )
 from .merkle import MerkleTree
 
@@ -186,7 +186,7 @@ __all__ = [
     "derive_capsule_anchor",
     "to_hex",
     "from_hex",
-    "make_aad",
+    "create_aad",
     # Canonicalization and anchoring
     "Policy",
     "AnchorRecord",
@@ -198,7 +198,7 @@ __all__ = [
     "canonicalize_and_hash",
     "validate_required_fields",
     "enrich_metadata_with_defaults",
-    "make_anchor",
+    "create_anchor",
     "REQUIRED_FIELDS",
     # Merkle
     "MerkleTree",
