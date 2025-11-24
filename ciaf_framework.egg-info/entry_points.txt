@@ -1,0 +1,5 @@
+[console_scripts]
+ciaf = ciaf.cli:main
+ciaf-demo = examples.demo_runner:main
+ciaf-validate = scripts.validate_frameworks:main
+ciaf-verify = scripts.ciaf_verify:main

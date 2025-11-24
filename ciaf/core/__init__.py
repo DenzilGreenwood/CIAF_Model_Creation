@@ -41,7 +41,7 @@ from .crypto import (
     derive_capsule_anchor,
     to_hex,
     from_hex,
-    create_aad,d,
+    create_aad,
     generate_master_password,
 )
 

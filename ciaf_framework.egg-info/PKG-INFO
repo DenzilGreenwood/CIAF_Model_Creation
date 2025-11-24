@@ -1,3 +1,96 @@
+Metadata-Version: 2.4
+Name: ciaf-framework
+Version: 1.2.0
+Summary: Cognitive Insight Audit Framework (CIAF) - Evidence-First AI Governance Platform
+Author-email: Denzil James Greenwood <denzil.greenwood@cognitiveinsight.ai>
+Maintainer-email: Denzil James Greenwood <denzil.greenwood@cognitiveinsight.ai>
+License: BUSL-1.1
+Project-URL: Homepage, https://github.com/DenzilGreenwood/CIAF_Model_Creation
+Project-URL: Documentation, https://ciaf-framework.readthedocs.io/
+Project-URL: Repository, https://github.com/DenzilGreenwood/CIAF_Model_Creation.git
+Project-URL: Bug Tracker, https://github.com/DenzilGreenwood/CIAF_Model_Creation/issues
+Keywords: ai-governance,compliance,cryptographic-audit,machine-learning,regulatory-framework,lazy-capsule-materialization,evidence-first,merkle-trees,digital-signatures
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: Other/Proprietary License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Classifier: Topic :: Security :: Cryptography
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: System :: Logging
+Classifier: Topic :: System :: Monitoring
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+License-File: LICENSE.COMMERCIAL
+License-File: NOTICE
+Requires-Dist: numpy>=1.21.0
+Requires-Dist: pandas>=1.3.0
+Requires-Dist: scikit-learn>=1.0.0
+Requires-Dist: cryptography>=3.4.8
+Requires-Dist: pycryptodome>=3.15.0
+Requires-Dist: pydantic>=1.8.0
+Requires-Dist: typing-extensions>=4.0.0
+Requires-Dist: torch>=1.11.0
+Requires-Dist: transformers>=4.20.0
+Requires-Dist: datasets>=2.0.0
+Requires-Dist: huggingface-hub>=0.8.0
+Requires-Dist: merkletools>=1.0.3
+Requires-Dist: ecdsa>=0.17.0
+Requires-Dist: python-jose>=3.3.0
+Requires-Dist: fastapi>=0.75.0
+Requires-Dist: uvicorn>=0.17.0
+Requires-Dist: requests>=2.27.0
+Requires-Dist: jsonschema>=4.0.0
+Requires-Dist: marshmallow>=3.15.0
+Requires-Dist: rich>=12.0.0
+Requires-Dist: click>=8.0.0
+Requires-Dist: tqdm>=4.62.0
+Provides-Extra: dev
+Requires-Dist: pytest>=6.2.0; extra == "dev"
+Requires-Dist: pytest-cov>=3.0.0; extra == "dev"
+Requires-Dist: pytest-asyncio>=0.18.0; extra == "dev"
+Requires-Dist: black>=22.0.0; extra == "dev"
+Requires-Dist: flake8>=4.0.0; extra == "dev"
+Requires-Dist: mypy>=0.950; extra == "dev"
+Requires-Dist: isort>=5.10.0; extra == "dev"
+Requires-Dist: bandit>=1.7.0; extra == "dev"
+Requires-Dist: pre-commit>=2.17.0; extra == "dev"
+Provides-Extra: docs
+Requires-Dist: sphinx>=4.5.0; extra == "docs"
+Requires-Dist: sphinx-rtd-theme>=1.0.0; extra == "docs"
+Requires-Dist: myst-parser>=0.17.0; extra == "docs"
+Requires-Dist: sphinx-autodoc-typehints>=1.17.0; extra == "docs"
+Provides-Extra: jupyter
+Requires-Dist: jupyter>=1.0.0; extra == "jupyter"
+Requires-Dist: jupyterlab>=3.3.0; extra == "jupyter"
+Requires-Dist: ipykernel>=6.9.0; extra == "jupyter"
+Requires-Dist: ipywidgets>=7.6.0; extra == "jupyter"
+Requires-Dist: matplotlib>=3.5.0; extra == "jupyter"
+Requires-Dist: seaborn>=0.11.0; extra == "jupyter"
+Requires-Dist: plotly>=5.6.0; extra == "jupyter"
+Provides-Extra: enterprise
+Requires-Dist: flask>=2.0.0; extra == "enterprise"
+Requires-Dist: dash>=2.3.0; extra == "enterprise"
+Requires-Dist: streamlit>=1.8.0; extra == "enterprise"
+Requires-Dist: prometheus-client>=0.13.0; extra == "enterprise"
+Requires-Dist: structlog>=22.1.0; extra == "enterprise"
+Provides-Extra: cloud
+Requires-Dist: boto3>=1.21.0; extra == "cloud"
+Requires-Dist: azure-storage-blob>=12.9.0; extra == "cloud"
+Requires-Dist: google-cloud-storage>=2.1.0; extra == "cloud"
+Provides-Extra: ml-frameworks
+Requires-Dist: tensorflow>=2.8.0; extra == "ml-frameworks"
+Requires-Dist: xgboost>=1.5.0; extra == "ml-frameworks"
+Requires-Dist: lightgbm>=3.3.0; extra == "ml-frameworks"
+Requires-Dist: catboost>=1.0.0; extra == "ml-frameworks"
+Dynamic: license-file
+
 # CIAF: Evidence-First AI Governance Platform
 ## Cryptographic Auditability Across 20 Industry Verticals
 
