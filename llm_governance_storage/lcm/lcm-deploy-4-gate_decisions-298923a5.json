@@ -1,0 +1,12 @@
+{
+  "capsule_id": "lcm-deploy-4-gate_decisions-298923a5",
+  "capsule_type": "gate_decisions",
+  "anchor_id": "deploy-48bb4141553ae0ec",
+  "event_count": 1,
+  "compressed_size_bytes": 258,
+  "uncompressed_size_bytes": 539,
+  "compression_ratio": 2.0891472868217056,
+  "merkle_root": "298923a5120f20fb831c044d45365f79960b7bfef33af1bedaa35726f81dce07",
+  "created_at": "2025-11-24T19:49:29.201457",
+  "metadata": {}
+}

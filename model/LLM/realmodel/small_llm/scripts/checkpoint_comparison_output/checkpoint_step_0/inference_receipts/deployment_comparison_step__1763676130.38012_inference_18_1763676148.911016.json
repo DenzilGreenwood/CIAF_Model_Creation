@@ -1,0 +1,23 @@
+{
+  "receipt_id": "deployment_comparison_step__1763676130.38012_inference_18_1763676148.911016",
+  "deployment_anchor_id": "deployment_comparison_step__1763676130.38012",
+  "timestamp": "2025-11-20T16:02:28.911016Z",
+  "input_hash": "0f76e2395773ab84606af6c25c5e9171ba0f74172c7c819fb74c2ddbf6a39b0f",
+  "output_hash": "bfc1980e6dea86af000cade822409e942d669c6a40e6f847999fe1359e9c3de7",
+  "prompt_length": 58,
+  "generation_length": 585,
+  "generation_params": {
+    "max_length": 100,
+    "temperature": 0.8,
+    "top_k": 50,
+    "category": "SUMMARY",
+    "checkpoint_step": 0
+  },
+  "confidence_score": 0.85,
+  "compliance_assertions": [
+    "non_clinical_use",
+    "no_pii_input",
+    "no_pii_output"
+  ],
+  "commitment_hash": "bcdfb2cf8e2dc9dc4141c2a01d27b1c57ac779baf76bb82230b18c9f66d02e2c"
+}

@@ -133,6 +133,17 @@
     bottom=8pt
 }
 
+\newtcolorbox{contactbox}{
+    colback=ciaflight,
+    colframe=ciafblue,
+    boxrule=1pt,
+    arc=3pt,
+    left=10pt,
+    right=10pt,
+    top=10pt,
+    bottom=10pt
+}
+
 \begin{document}
 
 % Title page
@@ -279,7 +290,7 @@ Our innovative approach provides:
 \begin{itemize}
     \item Tamper-evident records of all lifecycle operations
     \item RFC 3161 timestamping for temporal integrity
-    \item Compressed evidence packages achieving 85\%+ size reduction
+    \item Compressed evidence packages achieving 85\%+ size reduction by storing lightweight receipts (500 bytes) instead of complete audit evidence (50 KB) during normal operations
 \end{itemize}
 
 \subsubsection{Multi-Party Validation}

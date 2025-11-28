@@ -1,0 +1,20 @@
+{
+  "deployment_id": "deployment_comparison_step__1763676150.571941",
+  "model_version_anchor_id": "comparison_step_0_20251120_100230",
+  "deployment_timestamp": "2025-11-20T16:02:30.571941Z",
+  "deployment_config": {
+    "device": "cuda",
+    "checkpoint_path": "D:\\Github\\Test\\small_llm\\scripts\\training_output\\checkpoints\\final_model.pt",
+    "checkpoint_step": 0,
+    "tokenizer_anchor_id": "tokenizer_GPT2_BPE_1763675932.514846_6b86b273",
+    "inference_type": "checkpoint_comparison"
+  },
+  "compliance_policy": [
+    "Research Use Only",
+    "Evaluation"
+  ],
+  "use_restrictions": [
+    "No production deployment",
+    "Comparison analysis only"
+  ]
+}

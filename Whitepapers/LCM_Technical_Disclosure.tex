@@ -1416,10 +1416,10 @@ Materialization Rate & 100\% & 5\% typical & 95\% reduction \\
 
 \textbf{Performance Analysis Notes:}
 \begin{itemize}
-\item Storage reduction achieved through lightweight receipts ($\sim$500 bytes) vs. complete evidence ($\sim$50KB)
+\item Storage reduction achieved through \textbf{lightweight receipts} ($\sim$500 bytes) \textbf{replacing immediate storage of complete evidence} ($\sim$50KB). The 85\% reduction comes from deferred evidence materialization, not from Merkle anchoring or WORM compression.
 \item Evidence generation speed improvement eliminates audit-related latency in real-time AI systems
 \item Verification time remains equivalent, ensuring no compromise in security validation performance
-\item Low materialization rate (typically <5\%) reflects actual audit access patterns in enterprise environments
+\item Low materialization rate (typically <5\%) reflects actual audit access patterns in enterprise environments. Organizations with higher audit rates would see proportionally reduced storage savings.
 \end{itemize}
 
 \subsection{Computational Complexity}
@@ -1501,9 +1501,9 @@ Ed25519 provides 128-bit security level with the following properties:
 The LCM framework demonstrates significant quantifiable improvements in critical performance metrics:
 
 \begin{itemize}
-\item \textbf{Storage Reduction:} Achieves 85\% reduction in annual storage requirements for audit evidence through lightweight receipt generation instead of immediate complete evidence storage
+\item \textbf{Storage Reduction:} Achieves 85\% reduction in annual storage requirements by storing lightweight receipts (500 bytes) instead of complete audit evidence packages (50 KB) during normal operations. Complete evidence is materialized on-demand when audits occur (typically <5\% of operations). The savings are proportional to the volume of operations and materialization rate.
 \item \textbf{Speed Enhancement:} Evidence generation time improves from 50ms/operation (traditional) to 1ms/operation (LCM), delivering 50x performance improvement
-\item \textbf{Computational Complexity:} Receipt generation complexity dominated by hash computation at $O(|D|)$ where $|D|$ is input data size, with highly efficient batch verification at $O(\log n)$ through Merkle tree structures
+\item \textbf{Computational Complexity:} Receipt generation complexity dominated by hash computation at $O(|D|)$ where $|D|$ is input data size, with highly efficient batch verification at $O(\log n)$ through Merkle tree structures. Merkle trees provide verification efficiency; the primary storage reduction comes from deferred materialization.
 \end{itemize}
 
 \subsubsection{Cryptographic Rigor}
@@ -1774,7 +1774,7 @@ class CloudStorageBackend:
 
 \subsection{WORM Storage Integration}
 
-For enterprise deployments requiring regulatory compliance and audit trail immutability, LCM integrates with Write-Once-Read-Many (WORM) storage systems.
+For enterprise deployments requiring regulatory compliance and audit trail immutability, LCM integrates with Write-Once-Read-Many (WORM) storage systems. WORM provides immutability guarantees for stored data; the 85\% storage reduction comes from storing lightweight receipts in WORM rather than complete evidence packages, not from WORM compression technology itself.
 
 \begin{lstlisting}[language=Python, caption=WORM-Enabled LCM Implementation]
 from ciaf.core.worm_store import create_sqlite_worm_store, DurableWORMMerkleTree

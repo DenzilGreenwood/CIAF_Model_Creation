@@ -1,0 +1,12 @@
+{
+  "capsule_id": "lcm-inferenc-inference_logs-36b1f38a",
+  "capsule_type": "inference_logs",
+  "anchor_id": "inference-f84925149caab4a1",
+  "event_count": 2,
+  "compressed_size_bytes": 315,
+  "uncompressed_size_bytes": 611,
+  "compression_ratio": 1.9396825396825397,
+  "merkle_root": "36b1f38a03b4151b5c858dfa6eac71d35f0a5bd6a73a739a32ceaab399bebc3e",
+  "created_at": "2025-11-24T19:49:29.203457",
+  "metadata": {}
+}

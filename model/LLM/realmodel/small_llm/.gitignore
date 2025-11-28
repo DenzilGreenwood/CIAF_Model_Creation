@@ -1,0 +1,101 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+.venv/
+venv/
+ENV/
+env/
+
+# PyTorch Models & Checkpoints
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+
+# Training Output Directories
+scripts/training_output/
+scripts/test_output/
+scripts/inference_output/
+training_output/
+test_output/
+inference_output/
+checkpoints/
+logs/
+runs/
+
+# Data Cache
+data/cache/
+*.cache
+.datasets/
+.huggingface/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs and Metrics
+*.log
+*.csv
+*.json.bak
+training_metrics/
+inference_metrics/
+
+# Temporary Files
+*.tmp
+*.temp
+tmp/
+temp/
+
+# OS Files
+Thumbs.db
+desktop.ini
+
+# CIAF Anchors (may want to version these selectively)
+# Uncomment if you want to ignore anchors:
+# anchors/
+# *_anchor.json
+# inference_receipts/
+
+# Large Result Files
+results/
+outputs/
+inference_results.json
+inference_results_detailed.json
+
+# Environment Variables
+.env
+.env.local
+
+# Test Files (optional - comment out if you want to track test results)
+test_results/

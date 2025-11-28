@@ -1,0 +1,12 @@
+{
+  "capsule_id": "lcm-dataset--gate_decisions-bcb275b3",
+  "capsule_type": "gate_decisions",
+  "anchor_id": "dataset-9eacdbc5f422ce6c",
+  "event_count": 3,
+  "compressed_size_bytes": 441,
+  "uncompressed_size_bytes": 1682,
+  "compression_ratio": 3.8140589569161,
+  "merkle_root": "bcb275b308866c45d77ff1e33839c1856e11bae1842a7a014800b058367f157c",
+  "created_at": "2025-11-24T19:48:53.520175",
+  "metadata": {}
+}

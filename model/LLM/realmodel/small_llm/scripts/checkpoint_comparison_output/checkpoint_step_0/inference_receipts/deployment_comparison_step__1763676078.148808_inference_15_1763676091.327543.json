@@ -1,0 +1,23 @@
+{
+  "receipt_id": "deployment_comparison_step__1763676078.148808_inference_15_1763676091.327543",
+  "deployment_anchor_id": "deployment_comparison_step__1763676078.148808",
+  "timestamp": "2025-11-20T16:01:31.327543Z",
+  "input_hash": "eee22262dfea7279b52667de0f38fa7f6656397897af73adf33b62f45a841bc7",
+  "output_hash": "6db48d464477a33421432fd890c34d943ab338d3271a4f384417cb93309829ab",
+  "prompt_length": 50,
+  "generation_length": 402,
+  "generation_params": {
+    "max_length": 100,
+    "temperature": 0.8,
+    "top_k": 50,
+    "category": "CONVERSATION",
+    "checkpoint_step": 0
+  },
+  "confidence_score": 0.85,
+  "compliance_assertions": [
+    "non_clinical_use",
+    "no_pii_input",
+    "no_pii_output"
+  ],
+  "commitment_hash": "8fc6fff8117a52c6766b89a43820fd62c50485216ba602496eb4aead7462bf1d"
+}

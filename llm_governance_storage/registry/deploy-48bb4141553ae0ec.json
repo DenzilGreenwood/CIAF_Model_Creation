@@ -1,0 +1,70 @@
+{
+  "anchor_id": "deploy-48bb4141553ae0ec",
+  "anchor_type": "deployment",
+  "created_at": "2025-11-24T19:49:29.200457",
+  "metadata": {},
+  "gate_status": {
+    "DeploymentGate": "approved"
+  },
+  "gate_receipts": {
+    "DeploymentGate": "64d87aec1a7d07ab"
+  },
+  "parent_anchors": [
+    "training-2e71764bde56346c",
+    "eval-49e68bb292fc6677"
+  ],
+  "lcm_capsule_id": null,
+  "model_anchor_id": "training-2e71764bde56346c",
+  "evaluation_anchor_ids": [
+    "eval-49e68bb292fc6677"
+  ],
+  "deployment_config": {
+    "environment": "production",
+    "safety_stack": {
+      "input_filters": [
+        "toxicity",
+        "prompt_injection"
+      ],
+      "output_filters": [
+        "toxicity",
+        "pii"
+      ]
+    },
+    "monitoring": {
+      "enabled": true,
+      "metrics": [
+        "latency",
+        "throughput",
+        "error_rate"
+      ]
+    },
+    "rollback_plan": {
+      "enabled": true,
+      "conditions": [
+        "error_rate > 0.05",
+        "latency > 1000ms"
+      ]
+    }
+  },
+  "environment": "production",
+  "endpoint_url": null,
+  "deployment_timestamp": "2025-11-24T19:49:29.200457",
+  "safety_stack_config": {
+    "input_filters": [
+      "toxicity",
+      "prompt_injection"
+    ],
+    "output_filters": [
+      "toxicity",
+      "pii"
+    ]
+  },
+  "monitoring_config": {
+    "enabled": true,
+    "metrics": [
+      "latency",
+      "throughput",
+      "error_rate"
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "capsule_id": "lcm-eval-49e-gate_decisions-6cea3df4",
+  "capsule_type": "gate_decisions",
+  "anchor_id": "eval-49e68bb292fc6677",
+  "event_count": 2,
+  "compressed_size_bytes": 390,
+  "uncompressed_size_bytes": 1278,
+  "compression_ratio": 3.276923076923077,
+  "merkle_root": "6cea3df4a5006f30a1c1a0bf2f631ba03fa9f7cc0e368f2f0d78e95a730bfcbc",
+  "created_at": "2025-11-24T19:48:54.138615",
+  "metadata": {}
+}

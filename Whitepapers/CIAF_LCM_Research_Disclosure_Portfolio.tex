@@ -277,7 +277,7 @@ The Cognitive Insight Audit Framework (CIAF) with Lazy Capsule Materialization (
 \textbf{Core Innovation:} CIAF + LCM delivers \textbf{cryptographically verifiable, deferred-evidence audit trails} for AI systems ensuring compliance with the EU AI Act and NIST AI RMF through:
 
 \begin{itemize}
-\item \textbf{Approximately 85\% storage reduction} through lazy materialization protocols
+\item \textbf{Approximately 85\% storage reduction} through lazy materialization protocols—storing lightweight receipts (500 bytes) instead of complete evidence (50 KB) during normal operations, with on-demand materialization when audits occur
 \item \textbf{Automated compliance mapping} across 20+ industry verticals
 \item \textbf{Cross-platform verification} via canonical JSON serialization (RFC 8785)
 \item \textbf{Real-time regulatory alignment} with evolving AI governance requirements
@@ -398,9 +398,10 @@ CIAF implements a five-layer architecture optimized for regulatory compliance an
 \begin{valuebox}
 \textbf{1. Storage Efficiency Innovation}
 \begin{itemize}
-\item Approximately 85\% reduction in audit storage requirements
-\item Lazy materialization protocols for on-demand evidence reconstruction
-\item Cryptographic commitment schemes enabling deferred verification
+\item Approximately 85\% reduction in audit storage requirements by replacing complete evidence packages (50 KB) with lightweight receipts (500 bytes) during normal operations
+\item Lazy materialization protocols for on-demand evidence reconstruction when audits occur (typically <5\% of operations)
+\item Cryptographic commitment schemes enabling deferred verification while maintaining full audit trail integrity
+\item Savings proportional to operation volume and materialization rate
 \end{itemize}
 
 \textbf{2. Automated Compliance Mapping}

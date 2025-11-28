@@ -1,0 +1,33 @@
+{
+  "anchor_id": "inference-f84925149caab4a1",
+  "anchor_type": "inference_session",
+  "created_at": "2025-11-24T19:49:29.202457",
+  "metadata": {},
+  "gate_status": {
+    "AuthGate": "approved",
+    "PromptGate": "approved",
+    "OutputSafetyGate": "approved",
+    "LoggingGate": "approved"
+  },
+  "gate_receipts": {
+    "AuthGate": "54952c7c7e809e7e",
+    "PromptGate": "05439a809e7bf6f1",
+    "OutputSafetyGate": "684a053ec5005520",
+    "LoggingGate": "ddac02b49dffa0c5"
+  },
+  "parent_anchors": [
+    "deploy-48bb4141553ae0ec"
+  ],
+  "lcm_capsule_id": null,
+  "deployment_anchor_id": "deploy-48bb4141553ae0ec",
+  "request_id": "f84925149caab4a1",
+  "prompt_hash": "4cfe9da88a46b25c99779fd3b169b2fcb5b73efb0587ca35e0e8acad3c24bd5b",
+  "response_hash": "c6eb9fd92130c11d2547ab0bfa7ebcd13e65839b7c3ea350d2d5d6078c0b54c2",
+  "gate_decisions": {},
+  "performance_metrics": {
+    "latency_ms": 150.0,
+    "tokens_generated": 100
+  },
+  "safety_flags": [],
+  "timestamp": "2025-11-24T19:49:29.202457"
+}

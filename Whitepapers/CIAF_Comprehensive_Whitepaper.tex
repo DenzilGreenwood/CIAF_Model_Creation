@@ -448,7 +448,7 @@ class LightweightReceipt:
 
 \subsubsection{Storage Efficiency Analysis}
 
-Theoretical analysis of LCM storage efficiency demonstrates significant reductions compared to traditional audit approaches:
+Theoretical analysis of LCM storage efficiency demonstrates significant reductions compared to traditional audit approaches. The 85\% reduction comes from storing lightweight receipts instead of complete evidence during normal operations, with on-demand materialization when audits occur.
 
 \textbf{Traditional Audit Approach:}
 \begin{itemize}
@@ -467,8 +467,10 @@ Theoretical analysis of LCM storage efficiency demonstrates significant reductio
 
 \textbf{Storage Reduction Analysis:}
 \begin{itemize}
-\item \textbf{Annual blended:} 85\% reduction (2.7TB vs 18.25TB)
+\item \textbf{Annual blended:} 85\% reduction (2.7TB vs 18.25TB) from deferred materialization
 \item \textbf{Daily best-case:} 95\% reduction at 5\% materialization rate (2.5GB vs 50GB)
+\item \textbf{Proportional savings:} Higher audit rates reduce savings proportionally; 20\% materialization yields $\sim$70\% reduction
+\item \textbf{Primary mechanism:} Receipts (500 bytes) replace complete evidence (50 KB); Merkle trees provide verification efficiency, not primary storage reduction
 \end{itemize}
 
 \subsection{Cryptographic Verification Chain}

@@ -1,0 +1,12 @@
+{
+  "capsule_id": "lcm-training-training_logs-00b80c53",
+  "capsule_type": "training_logs",
+  "anchor_id": "training-2e71764bde56346c",
+  "event_count": 10,
+  "compressed_size_bytes": 352,
+  "uncompressed_size_bytes": 2457,
+  "compression_ratio": 6.980113636363637,
+  "merkle_root": "00b80c534b718b198ea9733debd5b4196ad1924ed9d6ad2787aeaf7c7b8465b8",
+  "created_at": "2025-11-24T19:49:29.198457",
+  "metadata": {}
+}

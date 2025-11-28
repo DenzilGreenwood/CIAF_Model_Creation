@@ -1,0 +1,12 @@
+{
+  "capsule_id": "lcm-model-a2-gate_decisions-4cb39848",
+  "capsule_type": "gate_decisions",
+  "anchor_id": "model-a2d2e125f06e803f",
+  "event_count": 1,
+  "compressed_size_bytes": 266,
+  "uncompressed_size_bytes": 556,
+  "compression_ratio": 2.0902255639097747,
+  "merkle_root": "4cb39848cd02fd758cce6322d04fdba8c975e127c8f0dd0e28d505156175b3b0",
+  "created_at": "2025-11-24T19:48:54.134615",
+  "metadata": {}
+}

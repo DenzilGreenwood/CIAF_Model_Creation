@@ -1,0 +1,84 @@
+# .gitignore for Language Model Project
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+
+# PyTorch
+*.pt
+*.pth
+*.ckpt
+
+# Model files
+checkpoints/
+demo_checkpoints/
+demo_model/
+deployed_model/
+production_model/
+*.onnx
+
+# Tokenizer files
+tokenizer.json
+vocab.json
+merges.txt
+
+# Data files
+*.txt
+*.npy
+data/
+datasets/
+
+# Logs
+*.log
+logs/
+tensorboard/
+wandb/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Documentation
+docs/_build/
+
+# Temporary files
+tmp/
+temp/
+*.tmp

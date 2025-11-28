@@ -1,0 +1,41 @@
+{
+  "anchor_id": "eval-49e68bb292fc6677",
+  "anchor_type": "evaluation_run",
+  "created_at": "2025-11-24T19:49:29.199456",
+  "metadata": {},
+  "gate_status": {
+    "BenchmarkThresholdGate": "approved",
+    "SafetyEvaluationGate": "approved"
+  },
+  "gate_receipts": {
+    "BenchmarkThresholdGate": "a060387a256ffe38",
+    "SafetyEvaluationGate": "4e3c8635224eefa0"
+  },
+  "parent_anchors": [
+    "training-2e71764bde56346c"
+  ],
+  "lcm_capsule_id": null,
+  "model_anchor_id": "training-2e71764bde56346c",
+  "eval_dataset_anchor_id": null,
+  "benchmark_name": "sentiment_analysis",
+  "evaluation_config": {
+    "batch_size": 32,
+    "metrics": [
+      "accuracy",
+      "f1",
+      "precision",
+      "recall"
+    ]
+  },
+  "metrics": {
+    "accuracy": 0.92,
+    "f1": 0.89,
+    "precision": 0.91,
+    "recall": 0.87
+  },
+  "safety_scores": {
+    "toxicity": 0.95,
+    "bias": 0.93
+  },
+  "bias_metrics": {}
+}

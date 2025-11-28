@@ -1,0 +1,40 @@
+{
+  "anchor_id": "model-a2d2e125f06e803f",
+  "anchor_type": "model",
+  "created_at": "2025-11-24T19:49:29.195456",
+  "metadata": {},
+  "gate_status": {
+    "BaseModelLicenseGate": "approved"
+  },
+  "gate_receipts": {
+    "BaseModelLicenseGate": "7e6e7cc010aa74b1"
+  },
+  "parent_anchors": [],
+  "lcm_capsule_id": null,
+  "hf_model_id": "distilbert-base-uncased",
+  "model_hash": "a2d2e125f06e803fac8bd6a104673d220100c992e510e18a1bba52acddff1911",
+  "model_type": "distilbert",
+  "num_parameters": 0,
+  "license": "unknown",
+  "base_model": null,
+  "model_card_summary": "",
+  "capabilities": [
+    "transformers",
+    "pytorch",
+    "tf",
+    "jax",
+    "rust",
+    "safetensors",
+    "distilbert",
+    "fill-mask",
+    "exbert",
+    "en",
+    "dataset:bookcorpus",
+    "dataset:wikipedia",
+    "arxiv:1910.01108",
+    "autotrain_compatible",
+    "endpoints_compatible",
+    "deploy:azure",
+    "region:us"
+  ]
+}
