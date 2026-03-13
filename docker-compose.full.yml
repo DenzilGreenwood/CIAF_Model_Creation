@@ -1,0 +1,111 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database for Proof Store
+  postgres:
+    image: postgres:14-alpine
+    container_name: ciaf-postgres
+    environment:
+      POSTGRES_DB: ciaf_proofs
+      POSTGRES_USER: ciaf_verification
+      POSTGRES_PASSWORD: ciaf_secure_password_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ciaf_verification -d ciaf_proofs"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - ciaf-network
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: ciaf-redis
+    command: redis-server --maxmemory 512mb --maxmemory-policy allkeys-lru
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - ciaf-network
+
+  # CIAF Verification Microservice (Backend)
+  verification-service:
+    build:
+      context: .
+      dockerfile: ciaf/verification/Dockerfile
+    container_name: ciaf-verification
+    environment:
+      DATABASE_URL: postgresql+asyncpg://ciaf_verification:ciaf_secure_password_dev@postgres:5432/ciaf_proofs
+      REDIS_URL: redis://redis:6379/0
+      SERVICE_HOST: 0.0.0.0
+      SERVICE_PORT: 8001
+      ENVIRONMENT: development
+      LOG_LEVEL: INFO
+    ports:
+      - "8001:8001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - ciaf-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # CIAF FRONTEND (React)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: ciaf-frontend
+    environment:
+      VITE_API_BASE_URL: http://verification-service:8001
+    ports:
+      - "3000:3000"
+    depends_on:
+      - verification-service
+    networks:
+      - ciaf-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+
+  # pgAdmin for Database Management (Optional)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: ciaf-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@ciaf.io
+      PGADMIN_DEFAULT_PASSWORD: admin_password
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - ciaf-network
+    profiles:
+      - debug
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  ciaf-network:
+    driver: bridge
