@@ -1,0 +1,595 @@
+openapi: 3.0.0
+info:
+  title: CIAF Verification Microservice
+  description: |
+    External verification of AI-generated outputs using cryptographic proofs.
+
+    **Base URL:** `http://localhost:8001` (dev) or `https://verify.ciaf.io` (prod)
+
+    **Authentication:** Bearer token in Authorization header
+  version: 0.1.0
+  contact:
+    name: CIAF Development Team
+    url: https://github.com/anthropics/CIAF-Models
+  license:
+    name: BUSL-1.1 (converts to Apache 2.0 on Jan 1, 2029)
+    url: https://github.com/anthropics/CIAF-Models/blob/main/LICENSE
+
+servers:
+  - url: http://localhost:8001
+    description: Development server
+  - url: https://verify.ciaf.io
+    description: Production server
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: API Key authentication (Bearer token)
+
+  schemas:
+    VerificationRequest:
+      type: object
+      required:
+        - tag_id
+      properties:
+        tag_id:
+          type: string
+          format: uuid
+          description: Unique identifier of output tag
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        verify_merkle:
+          type: boolean
+          default: true
+          description: Verify cryptographic merkle proofs
+        include_audit_trail:
+          type: boolean
+          default: true
+          description: Include agent action history
+
+    VerificationResponse:
+      type: object
+      required:
+        - verified
+        - tag_id
+        - organization_id
+        - inference_type
+        - policies_applied
+        - risk_level
+        - task_batch_verified
+        - org_batch_verified
+        - merkle_proof_valid
+        - agent_audit_trail
+        - issues
+        - warnings
+      properties:
+        verified:
+          type: boolean
+          description: Whether output is authentic and verified
+        tag_id:
+          type: string
+          format: uuid
+          description: Output tag ID
+        organization_id:
+          type: string
+          description: Organization that generated output
+        inference_type:
+          type: string
+          enum: [agent_orchestrated, direct_model]
+          description: Type of inference (multi-agent or single model)
+        model_name:
+          type: string
+          nullable: true
+          description: Model name (for direct_model inference only)
+        agent_ids:
+          type: array
+          items:
+            type: string
+          description: Agent IDs involved (for agent_orchestrated)
+        policies_applied:
+          type: array
+          items:
+            type: string
+          description: Policies enforced during generation
+          example: ["HIPAA_COMPLIANT", "FDA_SaMD", "ISO_14971"]
+        risk_level:
+          type: string
+          enum: [low, medium, high, critical]
+          description: Risk classification of output
+        task_batch_verified:
+          type: boolean
+          description: Task-level merkle proof is valid
+        org_batch_verified:
+          type: boolean
+          description: Org-level merkle proof is valid
+        merkle_proof_valid:
+          type: boolean
+          description: Overall cryptographic proof is valid
+        agent_audit_trail:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditAction'
+          description: Sequence of agent actions (if requested)
+        issues:
+          type: array
+          items:
+            type: string
+          description: Verification failures detected
+        warnings:
+          type: array
+          items:
+            type: string
+          description: Non-blocking issues found
+
+    AuditAction:
+      type: object
+      required:
+        - agent_id
+        - action_type
+        - timestamp
+        - risk_level
+        - status
+      properties:
+        agent_id:
+          type: string
+          description: Which agent performed the action
+          example: "healthcare_reader_001"
+        action_type:
+          type: string
+          enum: [inference, analysis, decision, escalation]
+          description: Type of action performed
+        timestamp:
+          type: string
+          format: date-time
+          description: ISO 8601 timestamp
+        risk_level:
+          type: string
+          enum: [low, medium, high, critical]
+          description: Risk level of this action
+        status:
+          type: string
+          enum: [success, failure, partial]
+          description: Outcome of the action
+
+    ComplianceReport:
+      type: object
+      required:
+        - organization_id
+        - policy
+        - total_outputs
+        - policy_covered
+        - compliance_rate
+        - verified_outputs
+      properties:
+        organization_id:
+          type: string
+          description: Organization ID
+        policy:
+          type: string
+          description: Policy name
+          example: "HIPAA_COMPLIANT"
+        total_outputs:
+          type: integer
+          description: Total outputs from organization
+        policy_covered:
+          type: integer
+          description: Outputs where policy was applied
+        compliance_rate:
+          type: number
+          format: double
+          minimum: 0
+          maximum: 1
+          description: Compliance percentage (0.0-1.0)
+        verified_outputs:
+          type: integer
+          description: Outputs successfully verified
+
+    OrganizationStats:
+      type: object
+      required:
+        - organization_id
+        - total_tags
+        - verified_tags
+        - high_risk_tags
+        - critical_tags
+        - total_batch_windows
+      properties:
+        organization_id:
+          type: string
+          description: Organization ID
+        total_tags:
+          type: integer
+          description: Total output tags created
+        verified_tags:
+          type: integer
+          description: Successfully verified tags
+        high_risk_tags:
+          type: integer
+          description: Count of high-risk outputs
+        critical_tags:
+          type: integer
+          description: Count of critical-risk outputs
+        total_batch_windows:
+          type: integer
+          description: Number of org batch windows (6-hour intervals)
+
+    AuditTrail:
+      type: object
+      properties:
+        tag_id:
+          type: string
+          format: uuid
+        agent_ids:
+          type: array
+          items:
+            type: string
+        inference_type:
+          type: string
+          enum: [agent_orchestrated, direct_model]
+        model_name:
+          type: string
+          nullable: true
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditAction'
+
+    HealthCheck:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [healthy, degraded, unhealthy]
+        service:
+          type: string
+        proof_store_stats:
+          type: object
+          properties:
+            output_tags_count:
+              type: integer
+            task_batches_count:
+              type: integer
+            org_batch_windows_count:
+              type: integer
+            agent_actions_count:
+              type: integer
+            verification_cache_hits:
+              type: integer
+            last_sync:
+              type: string
+              format: date-time
+
+    ErrorResponse:
+      type: object
+      required:
+        - detail
+      properties:
+        detail:
+          type: string
+          description: Error message
+        code:
+          type: string
+          description: Error code for programmatic handling
+        timestamp:
+          type: string
+          format: date-time
+
+paths:
+  /health:
+    get:
+      summary: Health Check
+      description: Check service availability and proof store statistics
+      operationId: healthCheck
+      tags:
+        - System
+      security: []
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthCheck'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /verify:
+    post:
+      summary: Verify Output (POST)
+      description: |
+        Verify AI-generated output with complete audit trail and merkle proofs.
+        Validates cryptographic proof chain: tag → task batch → org batch.
+      operationId: verifyOutput
+      tags:
+        - Verification
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerificationRequest'
+            examples:
+              default:
+                summary: Verify with full audit
+                value:
+                  tag_id: "550e8400-e29b-41d4-a716-446655440000"
+                  verify_merkle: true
+                  include_audit_trail: true
+              minimal:
+                summary: Verify merkle proof only
+                value:
+                  tag_id: "550e8400-e29b-41d4-a716-446655440000"
+                  verify_merkle: true
+                  include_audit_trail: false
+      responses:
+        '200':
+          description: Verification complete (check verified field)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerificationResponse'
+        '400':
+          description: Invalid request or verification failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Missing or invalid API key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error (database issue)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /verify/{tag_id}:
+    get:
+      summary: Verify Output (GET)
+      description: |
+        Verify output by tag ID using GET method (browser-friendly).
+        Supports query parameters for selective verification.
+      operationId: verifyByTagId
+      tags:
+        - Verification
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: tag_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Output tag ID
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        - name: verify_merkle
+          in: query
+          schema:
+            type: boolean
+            default: true
+          description: Verify merkle proofs
+        - name: include_audit_trail
+          in: query
+          schema:
+            type: boolean
+            default: true
+          description: Include agent audit trail
+      responses:
+        '200':
+          description: Output verified successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerificationResponse'
+        '404':
+          description: Tag not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /audit/{tag_id}:
+    get:
+      summary: Get Audit Trail
+      description: |
+        Get agent audit trail for an output.
+        Shows which agents processed it, in what order, with timing details.
+      operationId: getAuditTrail
+      tags:
+        - Audit
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: tag_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Output tag ID
+      responses:
+        '200':
+          description: Audit trail retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditTrail'
+        '404':
+          description: Tag not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /compliance/{organization_id}:
+    get:
+      summary: Get Compliance Report
+      description: |
+        Get policy compliance report for organization.
+        Shows percentage of outputs compliant with policies.
+      operationId: getComplianceReport
+      tags:
+        - Compliance
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: organization_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Organization ID
+          example: "healthcare_org_001"
+        - name: policy
+          in: query
+          schema:
+            type: string
+          description: Filter by specific policy
+          example: "HIPAA_COMPLIANT"
+      responses:
+        '200':
+          description: Compliance report generated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComplianceReport'
+        '404':
+          description: Organization not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /stats/{organization_id}:
+    get:
+      summary: Get Organization Statistics
+      description: |
+        Get verification statistics for organization.
+        Shows total outputs, verification rate, risk distribution.
+      operationId: getOrganizationStats
+      tags:
+        - Statistics
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: organization_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Organization ID
+          example: "healthcare_org_001"
+      responses:
+        '200':
+          description: Statistics retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationStats'
+        '404':
+          description: Organization not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /admin/refresh-cache:
+    post:
+      summary: Refresh Cache (Admin)
+      description: |
+        Refresh merkle proof cache from database (admin only).
+        Should be called after org batch window creation or during maintenance.
+      operationId: refreshCache
+      tags:
+        - Admin
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Cache refreshed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  stats:
+                    type: object
+                  message:
+                    type: string
+        '403':
+          description: Insufficient permissions (not admin)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+tags:
+  - name: Verification
+    description: Verify AI-generated outputs
+  - name: Audit
+    description: Query audit trails
+  - name: Compliance
+    description: Compliance reporting
+  - name: Statistics
+    description: Organization statistics
+  - name: Admin
+    description: Administrative operations
+  - name: System
+    description: System health and status
