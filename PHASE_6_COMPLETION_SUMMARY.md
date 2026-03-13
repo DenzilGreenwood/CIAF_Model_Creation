@@ -406,7 +406,7 @@ Return Complete Attestation
 
 ### 1. Quick Local Setup (10 minutes)
 ```bash
-git clone https://github.com/anthropics/CIAF-Models.git
+git clone https://github.com/DenzilGreenwood/CIAF_Model_Creation.git
 cd CIAF_Model_Creation
 
 docker-compose up -d
@@ -486,7 +486,7 @@ Interactive testing: http://localhost:8001/docs (Swagger UI)
 
 ## Support & Resources
 
-- **GitHub:** https://github.com/anthropics/CIAF-Models
+- **GitHub:** https://github.com/DenzilGreenwood/CIAF_Model_Creation
 - **Issues:** Report bugs or feature requests
 - **Documentation:** See `/docs` endpoint (Swagger UI)
 - **Examples:** `ciaf/workflows/` directory

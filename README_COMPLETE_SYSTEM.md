@@ -340,7 +340,7 @@ docker run -d -p 8001:8001 -p 3000:3000 ciaf-verification:1.0.0
 - 💬 **Discuss** on GitHub Discussions
 
 ### Useful Links
-- [GitHub Repository](https://github.com/anthropics/CIAF-Models)
+- [GitHub Repository](https://github.com/DenzilGreenwood/CIAF_Model_Creation)
 - [CIAF Website](https://ciaf.io)
 - [API Swagger UI](http://localhost:8001/docs) (after startup)
 - [Interactive ReDoc](http://localhost:8001/redoc) (after startup)

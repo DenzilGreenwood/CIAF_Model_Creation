@@ -1095,7 +1095,7 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
 
 ## Support & Documentation
 
-- **Repository:** https://github.com/anthropics/CIAF-Models
+- **Repository:** https://github.com/DenzilGreenwood/CIAF_Model_Creation
 - **Issues:** Report bugs and feature requests on GitHub
 - **Documentation:** Full developer guide at `/docs`
 - **Swagger UI:** Interactive API explorer at `/docs` (automatic)

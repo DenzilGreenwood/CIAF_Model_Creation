@@ -40,7 +40,7 @@ A complete, production-ready web application for the CIAF Verification Microserv
 
 ```bash
 # Clone repository
-git clone https://github.com/anthropics/CIAF-Models.git
+git clone https://github.com/DenzilGreenwood/CIAF_Model_Creation.git
 cd CIAF_Model_Creation
 
 # Start all services (backend + frontend + database)

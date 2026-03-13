@@ -10,10 +10,10 @@ info:
   version: 0.1.0
   contact:
     name: CIAF Development Team
-    url: https://github.com/anthropics/CIAF-Models
+    url: https://github.com/DenzilGreenwood/CIAF_Model_Creation
   license:
     name: BUSL-1.1 (converts to Apache 2.0 on Jan 1, 2029)
-    url: https://github.com/anthropics/CIAF-Models/blob/main/LICENSE
+    url: https://github.com/DenzilGreenwood/CIAF_Model_Creation/blob/main/LICENSE
 
 servers:
   - url: http://localhost:8001

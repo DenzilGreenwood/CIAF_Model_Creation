@@ -24,7 +24,7 @@ Get up and running with the CIAF Verification Microservice in 10 minutes.
 ### Step 1: Clone Repository
 
 ```bash
-git clone https://github.com/anthropics/CIAF-Models.git
+git clone https://github.com/DenzilGreenwood/CIAF_Model_Creation.git
 cd CIAF_Model_Creation
 ```
 
@@ -576,7 +576,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 ## Support & Resources
 
-- **GitHub Issues:** https://github.com/anthropics/CIAF-Models/issues
+- **GitHub Issues:** https://github.com/DenzilGreenwood/CIAF_Model_Creation/issues
 - **Documentation:** `/docs` (Swagger UI)
 - **Examples:** `ciaf/verification/examples/`
 - **API Spec:** `ciaf/verification/openapi.yaml`
