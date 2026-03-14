@@ -11,6 +11,7 @@ import json
 import sqlite3
 from typing import Optional, Dict, Any
 from fastapi import FastAPI, HTTPException, Query
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 from .proof_store import PostgresProofStore
@@ -118,6 +119,23 @@ def create_verification_app(
         title="CIAF Verification Microservice",
         description="Cryptographic verification of AI-generated outputs",
         version="0.1.0",
+    )
+
+    # ========================================================================
+    # CORS Configuration - Allow frontend to access verification service
+    # ========================================================================
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=[
+            "http://localhost:3000",      # Local development
+            "http://localhost:5173",      # Vite dev server
+            "http://127.0.0.1:3000",
+            "http://127.0.0.1:5173",
+            "http://ciaf-frontend:3000",  # Docker service name
+        ],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
     )
 
     # Initialize dependencies
