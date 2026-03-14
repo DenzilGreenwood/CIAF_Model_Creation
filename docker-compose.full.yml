@@ -85,6 +85,29 @@ services:
       timeout: 3s
       retries: 3
 
+  # CIAF Vault - Enterprise Cryptographic Proof Custodian
+  vault:
+    build:
+      context: .
+      dockerfile: ciaf/vault/Dockerfile
+    container_name: ciaf-vault
+    environment:
+      SERVICE_HOST: 0.0.0.0
+      SERVICE_PORT: 8002
+      ENVIRONMENT: production
+      LOG_LEVEL: INFO
+    ports:
+      - "8002:8002"
+    volumes:
+      - "C:\\Users\\Denzi\\.ciaf\\vault:/root/.ciaf/vault"
+    networks:
+      - ciaf-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8002/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
   # pgAdmin for Database Management (Optional)
   pgadmin:
     image: dpage/pgadmin4:latest
@@ -104,6 +127,7 @@ services:
 volumes:
   postgres_data:
   redis_data:
+  vault_data:
 
 networks:
   ciaf-network:
