@@ -7,6 +7,8 @@ Created: 2025-03-13
 Author: Denzil James Greenwood
 """
 
+import json
+import sqlite3
 from typing import Optional, Dict, Any
 from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel, Field
@@ -231,8 +233,34 @@ def create_verification_app(
             "is_verified": False,
         }
 
-        # Store in proof store (in-memory cache for now)
+        # Store in proof store cache
         proof_store.output_tags_cache[request.tag_id] = tag_dict
+
+        # Store in database for persistence
+        try:
+            conn = sqlite3.connect(proof_store.db_path)
+            cursor = conn.cursor()
+            cursor.execute('''
+                INSERT OR REPLACE INTO output_tags
+                (tag_id, content, agent_ids, organization_id, policies_applied,
+                 metadata, timestamp, inference_type, model_name, is_verified)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ''', (
+                request.tag_id,
+                request.content,
+                json.dumps(request.agents),
+                request.organization_id,
+                json.dumps(request.policies),
+                json.dumps(request.metadata),
+                request.timestamp,
+                "agent_orchestrated" if request.agents else "direct_model",
+                request.metadata.get("model_name"),
+                0
+            ))
+            conn.commit()
+            conn.close()
+        except Exception as e:
+            print(f"[ERROR] Failed to store tag in database: {e}")
 
         return {
             "status": "success",
