@@ -20,6 +20,18 @@ from .verification_service import VerificationService, VerificationResult
 # ============================================================================
 
 
+class SubmitTagRequest(BaseModel):
+    """Request to submit/store a new output tag."""
+
+    tag_id: str = Field(..., description="Output tag ID")
+    content: str = Field(..., description="AI-generated output content")
+    agents: list = Field(default_factory=list, description="Agent IDs that generated this")
+    organization_id: str = Field(..., description="Organization ID")
+    policies: list = Field(default_factory=list, description="Policies applied")
+    metadata: Dict[str, Any] = Field(default_factory=dict, description="Additional metadata")
+    timestamp: str = Field(..., description="ISO format timestamp")
+
+
 class VerificationRequest(BaseModel):
     """Request to verify an output."""
 
@@ -180,6 +192,55 @@ def create_verification_app(
 
         return VerificationResponse(**result.to_dict())
 
+    @app.post("/tags")
+    async def submit_tag(request: SubmitTagRequest) -> Dict[str, Any]:
+        """
+        Submit/store a new output tag for verification.
+
+        This endpoint accepts a newly generated output tag from an agent/LLM
+        and stores it in the proof store for later verification.
+
+        Args:
+            request: SubmitTagRequest with output content and metadata
+
+        Returns:
+            Confirmation with tag_id and storage status
+
+        Example:
+            ```json
+            {
+                "tag_id": "550e8400-e29b-41d4-a716-446655440000",
+                "content": "Based on...",
+                "agents": ["credit_analyst_001"],
+                "organization_id": "banking_org_001",
+                "policies": ["fair_lending"],
+                "timestamp": "2026-03-14T10:30:00Z"
+            }
+            ```
+        """
+        tag_dict = {
+            "tag_id": request.tag_id,
+            "content": request.content,
+            "agent_ids": request.agents,
+            "organization_id": request.organization_id,
+            "policies_applied": request.policies,
+            "metadata": request.metadata,
+            "timestamp": request.timestamp,
+            "inference_type": "agent_orchestrated" if request.agents else "direct_model",
+            "model_name": request.metadata.get("model_name"),
+            "is_verified": False,
+        }
+
+        # Store in proof store (in-memory cache for now)
+        proof_store.output_tags_cache[request.tag_id] = tag_dict
+
+        return {
+            "status": "success",
+            "tag_id": request.tag_id,
+            "organization_id": request.organization_id,
+            "message": "Tag submitted and stored for verification",
+        }
+
     @app.get("/verify/{tag_id}", response_model=VerificationResponse)
     async def verify_by_tag_id(
         tag_id: str,
@@ -208,8 +269,10 @@ def create_verification_app(
             include_audit_trail=include_audit_trail,
         )
 
-        if not result.verified:
-            raise HTTPException(status_code=404, detail="Tag not found or invalid")
+        # Return result even if not fully verified (e.g., newly submitted tags)
+        # Only return 404 if tag doesn't exist at all
+        if len(result.issues) > 0 and "not found" in result.issues[0].lower():
+            raise HTTPException(status_code=404, detail="Tag not found")
 
         return VerificationResponse(**result.to_dict())
 

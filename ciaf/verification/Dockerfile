@@ -11,8 +11,8 @@ RUN apt-get update && apt-get install -y \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Python dependencies (essential packages for verification service)
-RUN pip install --no-cache-dir fastapi uvicorn python-dotenv pydantic sqlalchemy psycopg2-binary redis requests click
+# Install Python dependencies
+RUN pip install --no-cache-dir fastapi uvicorn python-dotenv pydantic sqlalchemy psycopg2-binary redis requests click cryptography numpy pandas jsonschema ecdsa python-jose passlib typing-extensions tqdm prometheus-client structlog aiohttp websockets
 
 
 # Copy application code
