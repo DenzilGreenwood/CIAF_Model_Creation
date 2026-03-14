@@ -1,4 +1,4 @@
-# Verification Service - Optimized Dependencies
+# Verification Service - Minimal Docker Dependencies
 
 # Web & API
 fastapi>=0.75.0

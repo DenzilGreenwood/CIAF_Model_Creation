@@ -1,7 +1,7 @@
 import React from 'react';
 import { useOrganizationStats } from '@/api/hooks';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { LoadingSpinner, RiskBadge } from '@/components/common/Badges';
+import { Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { LoadingSpinner } from '@/components/common/Badges';
 
 export const OrganizationStats: React.FC = () => {
   const { data: stats, isLoading } = useOrganizationStats('healthcare_org_001');

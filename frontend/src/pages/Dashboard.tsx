@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { useHealthCheck, useOrganizationStats } from '@/api/hooks';
 import { RiskBadge, LoadingSpinner } from '@/components/common/Badges';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { BarChart, Bar, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { Activity, CheckCircle2, AlertCircle, Zap } from 'lucide-react';
 import { Link } from 'react-router-dom';
 

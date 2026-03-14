@@ -11,23 +11,18 @@ RUN apt-get update && apt-get install -y \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements
-COPY requirements.txt .
+# Install Python dependencies (essential packages for verification service)
+RUN pip install --no-cache-dir fastapi uvicorn python-dotenv pydantic sqlalchemy psycopg2-binary redis requests click
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
-COPY ciaf/verification /app/verification-service
-COPY ciaf/__init__.py /app/ciaf/
-COPY ciaf/agents /app/ciaf/agents
-COPY ciaf/tagging /app/ciaf/tagging
-COPY ciaf/sessions /app/ciaf/sessions
-COPY ciaf/org_batching /app/ciaf/org_batching
+COPY ciaf /app/ciaf
+COPY ciaf/verification /app/verification_service
 
 # Set environment
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONPATH=/app
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
