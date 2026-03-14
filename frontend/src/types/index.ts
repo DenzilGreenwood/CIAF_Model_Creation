@@ -73,12 +73,15 @@ export interface HealthCheck {
   status: 'healthy' | 'degraded' | 'unhealthy';
   service: string;
   proof_store_stats?: {
-    output_tags_count: number;
-    task_batches_count: number;
-    org_batch_windows_count: number;
-    agent_actions_count: number;
-    verification_cache_hits: number;
-    last_sync: string;
+    output_tags?: number;
+    task_batches?: number;
+    org_batch_windows?: number;
+    output_tags_count?: number;
+    task_batches_count?: number;
+    org_batch_windows_count?: number;
+    agent_actions_count?: number;
+    verification_cache_hits?: number;
+    last_sync?: string;
   };
 }
 
