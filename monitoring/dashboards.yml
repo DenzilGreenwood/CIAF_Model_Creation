@@ -1,0 +1,12 @@
+apiVersion: 1
+
+providers:
+  - name: 'CIAF Dashboards'
+    orgId: 1
+    folder: 'CIAF'
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 10
+    allowUiUpdates: true
+    options:
+      path: /etc/grafana/provisioning/dashboards/ciaf
