@@ -17,6 +17,7 @@ from .authentication import APIKeyManager, Tenant
 from .manifest import EvidenceManifestGenerator, EventType
 from .certificate_generator import CertificatePDFGenerator
 from .audit_package import AuditPackageGenerator
+from ciaf.verification.rate_limiting import RateLimitMiddleware
 
 
 # ============================================================================
@@ -75,6 +76,33 @@ class VaultStatsResponse(BaseModel):
     total_reads: int
 
 
+class PublicKeyResponse(BaseModel):
+    """Public key for signature verification."""
+    key_id: str
+    algorithm: str
+    public_key_pem: str
+    valid_from: str
+    valid_until: str
+
+
+class KeyRotationResponse(BaseModel):
+    """Key rotation result."""
+    new_version: str
+    old_version: str
+    rotated_at: str
+    reason: str
+    public_key_pem: str
+
+
+class KeyVersionResponse(BaseModel):
+    """Key version info."""
+    key_version: str
+    created_at: str
+    rotated_at: Optional[str]
+    is_active: int
+    reason: Optional[str]
+
+
 # ============================================================================
 # VAULT API APPLICATION
 # ============================================================================
@@ -93,6 +121,15 @@ def create_vault_api() -> FastAPI:
         allow_origins=["*"],
         allow_methods=["*"],
         allow_headers=["*"],
+    )
+
+    # Rate Limiting (DoS protection)
+    app.add_middleware(
+        RateLimitMiddleware,
+        global_limit=1000,      # 1000 requests/minute globally
+        org_limit=100,          # 100 requests/minute per organization
+        user_limit=30,          # 30 requests/minute per user
+        window_seconds=60
     )
 
     # Initialize vault components
@@ -684,8 +721,7 @@ def create_vault_api() -> FastAPI:
                 proof_dicts.append(proof.to_dict())
 
             # Get vault public key for signature verification
-            # (In production, this would be from vault's signing key)
-            public_key_pem = None  # Would be loaded from vault
+            public_key_pem = vault.get_public_key_pem()
 
             # Generate audit package ZIP
             zip_bytes = AuditPackageGenerator.create_audit_package(
@@ -738,6 +774,145 @@ def create_vault_api() -> FastAPI:
                 result="failure",
                 details={"error": str(e)},
                 ip_address=client_request.client.host if client_request else None
+            )
+            raise HTTPException(status_code=500, detail=str(e))
+
+    # ========================================================================
+    # KEY MANAGEMENT ENDPOINTS
+    # ========================================================================
+
+    @app.get("/public-key", response_model=PublicKeyResponse)
+    async def get_public_key() -> PublicKeyResponse:
+        """
+        Get vault's public key for independent signature verification.
+
+        This endpoint allows auditors and external systems to verify all
+        signatures issued by this vault without relying on CIAF systems.
+
+        Returns:
+            PublicKeyResponse with vault's public key and metadata
+        """
+        entry_id = str(uuid.uuid4())
+        try:
+            public_pem = vault.get_public_key_pem()
+            key_version = vault.get_key_version()
+
+            audit.log_action(
+                entry_id=entry_id,
+                action="export_public_key",
+                organization_id="system",
+                actor="public",
+                result="success",
+                details={"key_version": key_version}
+            )
+
+            return PublicKeyResponse(
+                key_id=f"vault-key-{key_version}",
+                algorithm="Ed25519",
+                public_key_pem=public_pem,
+                valid_from=datetime.now().isoformat(),
+                valid_until="2099-12-31T23:59:59Z"  # Long validity for public key
+            )
+        except Exception as e:
+            audit.log_action(
+                entry_id=entry_id,
+                action="export_public_key",
+                organization_id="system",
+                actor="public",
+                result="failure",
+                details={"error": str(e)}
+            )
+            raise HTTPException(status_code=500, detail=str(e))
+
+    @app.post("/admin/rotate-key", response_model=KeyRotationResponse)
+    async def rotate_signing_key(
+        api_key: str = Header(...),
+        reason: str = Query(default="Scheduled rotation")
+    ) -> KeyRotationResponse:
+        """
+        Rotate vault's signing key to a new version (admin-only).
+
+        This endpoint requires admin API key and should only be called
+        by authorized administrators during maintenance windows.
+
+        Args:
+            api_key: Admin API key for authentication
+            reason: Reason for key rotation
+
+        Returns:
+            KeyRotationResponse with new key version and public key
+        """
+        entry_id = str(uuid.uuid4())
+        try:
+            # Validate admin key (in production, check against admin key store)
+            if not api_key.startswith("admin-"):
+                raise HTTPException(status_code=403, detail="Admin key required")
+
+            result = vault.rotate_key(reason=reason)
+
+            audit.log_action(
+                entry_id=entry_id,
+                action="rotate_key",
+                organization_id="system",
+                actor="admin",
+                result="success",
+                details={
+                    "new_version": result["new_version"],
+                    "reason": reason
+                }
+            )
+
+            return KeyRotationResponse(**result)
+
+        except HTTPException:
+            raise
+        except Exception as e:
+            audit.log_action(
+                entry_id=entry_id,
+                action="rotate_key",
+                organization_id="system",
+                actor="admin",
+                result="failure",
+                details={"error": str(e)}
+            )
+            raise HTTPException(status_code=500, detail=str(e))
+
+    @app.get("/admin/key-versions", response_model=List[KeyVersionResponse])
+    async def list_key_versions(api_key: str = Header(...)) -> List[KeyVersionResponse]:
+        """
+        Get all key versions and their status (admin-only).
+
+        Returns:
+            List of key versions with metadata
+        """
+        entry_id = str(uuid.uuid4())
+        try:
+            if not api_key.startswith("admin-"):
+                raise HTTPException(status_code=403, detail="Admin key required")
+
+            versions = vault.get_key_versions()
+
+            audit.log_action(
+                entry_id=entry_id,
+                action="list_key_versions",
+                organization_id="system",
+                actor="admin",
+                result="success",
+                details={"version_count": len(versions)}
+            )
+
+            return [KeyVersionResponse(**v) for v in versions]
+
+        except HTTPException:
+            raise
+        except Exception as e:
+            audit.log_action(
+                entry_id=entry_id,
+                action="list_key_versions",
+                organization_id="system",
+                actor="admin",
+                result="failure",
+                details={"error": str(e)}
             )
             raise HTTPException(status_code=500, detail=str(e))
 

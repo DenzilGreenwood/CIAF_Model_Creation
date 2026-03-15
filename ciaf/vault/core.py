@@ -137,7 +137,7 @@ class VaultManager:
                 merkle_root TEXT,
                 read_count INTEGER DEFAULT 0,
                 last_read TIMESTAMP,
-                -- WORM enforcement: no UPDATE allowed, only INSERT and SELECT
+                key_version TEXT DEFAULT '1.0',
                 _write_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         ''')
@@ -151,6 +151,7 @@ class VaultManager:
                 timestamp TEXT NOT NULL,
                 signature TEXT NOT NULL,
                 verification_url TEXT,
+                key_version TEXT DEFAULT '1.0',
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (proof_id) REFERENCES vault_proofs(proof_id)
             )
@@ -165,6 +166,7 @@ class VaultManager:
                 valid_until TIMESTAMP NOT NULL,
                 issuer TEXT,
                 signature TEXT NOT NULL,
+                key_version TEXT DEFAULT '1.0',
                 FOREIGN KEY (proof_id) REFERENCES vault_proofs(proof_id)
             )
         ''')
@@ -180,11 +182,43 @@ class VaultManager:
             )
         ''')
 
+        # Key rotation table for managing signing key versions
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS vault_key_versions (
+                key_version TEXT PRIMARY KEY,
+                private_key_path TEXT NOT NULL,
+                public_key_pem TEXT NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                rotated_at TIMESTAMP,
+                is_active INTEGER DEFAULT 1,
+                reason TEXT
+            )
+        ''')
+
         # Create indices for fast queries
         cursor.execute('CREATE INDEX IF NOT EXISTS idx_vault_org ON vault_proofs(organization_id)')
         cursor.execute('CREATE INDEX IF NOT EXISTS idx_vault_timestamp ON vault_proofs(timestamp)')
         cursor.execute('CREATE INDEX IF NOT EXISTS idx_vault_hash ON vault_proofs(content_hash)')
         cursor.execute('CREATE INDEX IF NOT EXISTS idx_receipt_proof ON vault_receipts(proof_id)')
+        cursor.execute('CREATE INDEX IF NOT EXISTS idx_vault_org_timestamp ON vault_proofs(organization_id, timestamp DESC)')
+
+        # Add DB-level WORM enforcement triggers
+        cursor.execute('''
+            CREATE TRIGGER IF NOT EXISTS vault_proofs_no_proof_update
+            BEFORE UPDATE ON vault_proofs
+            FOR EACH ROW
+            WHEN NEW.proof_id != OLD.proof_id
+              OR NEW.organization_id != OLD.organization_id
+              OR NEW.content_hash != OLD.content_hash
+              OR NEW.raw_content != OLD.raw_content
+              OR NEW.agent_ids != OLD.agent_ids
+              OR NEW.policies_applied != OLD.policies_applied
+              OR NEW.timestamp != OLD.timestamp
+              OR NEW.merkle_root != COALESCE(OLD.merkle_root, 'null')
+            BEGIN
+              SELECT RAISE(ABORT, 'WORM_VIOLATION: Cannot modify immutable proof fields');
+            END
+        ''')
 
         conn.commit()
         conn.close()
@@ -213,6 +247,12 @@ class VaultManager:
         proof_id = str(uuid.uuid4())
         content_hash = hashlib.sha256(content.encode()).hexdigest()
 
+        # Generate merkle root for this proof
+        merkle_root = hashlib.sha256(f"{proof_id}:{content_hash}".encode()).hexdigest()
+
+        # Get current key version
+        current_key_version = self.get_key_version()
+
         # Check for duplicate content (content addressed)
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
@@ -228,8 +268,8 @@ class VaultManager:
             cursor.execute('''
                 INSERT INTO vault_proofs (
                     proof_id, organization_id, content_hash, raw_content,
-                    agent_ids, policies_applied, timestamp
-                ) VALUES (?, ?, ?, ?, ?, ?, ?)
+                    agent_ids, policies_applied, timestamp, merkle_root, key_version
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             ''', (
                 proof_id,
                 organization_id,
@@ -237,7 +277,9 @@ class VaultManager:
                 content,
                 json.dumps(agent_ids),
                 json.dumps(policies_applied),
-                timestamp
+                timestamp,
+                merkle_root,
+                current_key_version
             ))
 
             conn.commit()
@@ -248,15 +290,16 @@ class VaultManager:
 
             cursor.execute('''
                 INSERT INTO vault_receipts (
-                    receipt_id, proof_id, organization_id, timestamp, signature, verification_url
-                ) VALUES (?, ?, ?, ?, ?, ?)
+                    receipt_id, proof_id, organization_id, timestamp, signature, verification_url, key_version
+                ) VALUES (?, ?, ?, ?, ?, ?, ?)
             ''', (
                 receipt_id,
                 proof_id,
                 organization_id,
                 timestamp,
                 signature,
-                f"https://vault.ciaf.io/verify/{proof_id}"
+                f"https://vault.ciaf.io/verify/{proof_id}",
+                current_key_version
             ))
 
             conn.commit()
@@ -307,19 +350,26 @@ class VaultManager:
         )
         conn.commit()
 
+        # Fetch updated row to get new read_count
+        cursor.execute(
+            'SELECT * FROM vault_proofs WHERE proof_id = ?',
+            (proof_id,)
+        )
+        updated_row = cursor.fetchone()
+
         proof = ImmutableProof(
-            proof_id=row["proof_id"],
-            organization_id=row["organization_id"],
-            content_hash=row["content_hash"],
-            raw_content=row["raw_content"],
-            agent_ids=json.loads(row["agent_ids"]) if row["agent_ids"] else [],
-            policies_applied=json.loads(row["policies_applied"]) if row["policies_applied"] else [],
-            timestamp=row["timestamp"],
-            created_at=row["created_at"],
-            verified=bool(row["verified"]),
-            merkle_root=row["merkle_root"],
-            read_count=row["read_count"],
-            last_read=row["last_read"]
+            proof_id=updated_row["proof_id"],
+            organization_id=updated_row["organization_id"],
+            content_hash=updated_row["content_hash"],
+            raw_content=updated_row["raw_content"],
+            agent_ids=json.loads(updated_row["agent_ids"]) if updated_row["agent_ids"] else [],
+            policies_applied=json.loads(updated_row["policies_applied"]) if updated_row["policies_applied"] else [],
+            timestamp=updated_row["timestamp"],
+            created_at=updated_row["created_at"],
+            verified=bool(updated_row["verified"]),
+            merkle_root=updated_row["merkle_root"],
+            read_count=updated_row["read_count"],
+            last_read=updated_row["last_read"]
         )
 
         conn.close()
@@ -448,3 +498,95 @@ class VaultManager:
             "total_reads": total_reads,
             "avg_reads_per_proof": total_reads / max(total_proofs, 1),
         }
+
+    def get_public_key_pem(self) -> str:
+        """Get vault's public key for independent signature verification."""
+        public_key = self.private_key.public_key()
+        return public_key.public_bytes(
+            encoding=serialization.Encoding.PEM,
+            format=serialization.PublicFormat.SubjectPublicKeyInfo
+        ).decode('utf-8')
+
+    def get_key_version(self) -> str:
+        """Get current key version."""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute('SELECT key_version FROM vault_key_versions WHERE is_active = 1 ORDER BY created_at DESC LIMIT 1')
+        result = cursor.fetchone()
+        conn.close()
+        return result[0] if result else "1.0"
+
+    def rotate_key(self, reason: str = "Scheduled rotation") -> Dict[str, Any]:
+        """
+        Rotate the vault's signing key to a new version.
+
+        Args:
+            reason: Reason for key rotation (e.g., "Compromised", "Scheduled rotation")
+
+        Returns:
+            New key version metadata
+        """
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+
+        # Deactivate old key
+        old_version = self.get_key_version()
+        cursor.execute(
+            'UPDATE vault_key_versions SET is_active = 0, rotated_at = CURRENT_TIMESTAMP WHERE is_active = 1'
+        )
+
+        # Generate new key
+        new_private_key = ed25519.Ed25519PrivateKey.generate()
+        new_version = f"{int(old_version.split('.')[0]) + 1}.0"
+
+        # Store new key
+        new_key_path = str(self.vault_path / f"vault_key_v{new_version}.pem")
+        pem = new_private_key.private_bytes(
+            encoding=serialization.Encoding.PEM,
+            format=serialization.PrivateFormat.PKCS8,
+            encryption_algorithm=serialization.NoEncryption()
+        )
+        with open(new_key_path, "wb") as f:
+            f.write(pem)
+
+        # Record in database
+        public_pem = new_private_key.public_key().public_bytes(
+            encoding=serialization.Encoding.PEM,
+            format=serialization.PublicFormat.SubjectPublicKeyInfo
+        ).decode('utf-8')
+
+        cursor.execute('''
+            INSERT INTO vault_key_versions (key_version, private_key_path, public_key_pem, is_active, reason)
+            VALUES (?, ?, ?, 1, ?)
+        ''', (new_version, new_key_path, public_pem, reason))
+
+        conn.commit()
+        conn.close()
+
+        # Update active key in memory
+        self.private_key = new_private_key
+        self.signing_key_path = Path(new_key_path)
+
+        return {
+            "new_version": new_version,
+            "old_version": old_version,
+            "rotated_at": datetime.now().isoformat(),
+            "reason": reason,
+            "public_key_pem": public_pem
+        }
+
+    def get_key_versions(self) -> List[Dict[str, Any]]:
+        """Get all key versions and their status."""
+        conn = sqlite3.connect(self.db_path)
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+
+        cursor.execute('''
+            SELECT key_version, created_at, rotated_at, is_active, reason
+            FROM vault_key_versions
+            ORDER BY created_at DESC
+        ''')
+        rows = cursor.fetchall()
+        conn.close()
+
+        return [dict(row) for row in rows]

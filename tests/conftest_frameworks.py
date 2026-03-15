@@ -59,14 +59,35 @@ class BaseFrameworkTest(ABC):
         """Return framework-specific test data (override in subclass)"""
         raise NotImplementedError
 
+    def create_framework_instance(self):
+        """
+        Create framework instance with framework-specific parameters.
+
+        Override this method in subclasses for frameworks with custom __init__ signatures.
+        """
+        FrameworkClass = self.get_framework_class()
+        # Default constructor - subclasses override for custom parameters
+        try:
+            # Try with just organization_id first (for simple frameworks)
+            return FrameworkClass(organization_id="test_org_123")
+        except TypeError:
+            # If that fails, try with regulatory_requirements
+            try:
+                return FrameworkClass(
+                    organization_id="test_org_123",
+                    regulatory_requirements=self.get_regulatory_requirements()
+                )
+            except TypeError as e:
+                # Framework has custom parameters - subclass must override
+                raise NotImplementedError(
+                    f"Framework {self.get_framework_name()} requires custom initialization. "
+                    f"Override create_framework_instance() method in test class. Error: {e}"
+                )
+
     @pytest.fixture
     def framework_instance(self):
         """Create framework instance for testing"""
-        FrameworkClass = self.get_framework_class()
-        return FrameworkClass(
-            organization_id="test_org_123",
-            regulatory_requirements=self.get_regulatory_requirements()
-        )
+        return self.create_framework_instance()
 
     @pytest.fixture
     def metadata(self):
@@ -82,12 +103,9 @@ class BaseFrameworkTest(ABC):
 
     def test_framework_initialization(self):
         """Test framework initializes without errors"""
-        framework = self.get_framework_class()(
-            organization_id="test_org",
-            regulatory_requirements=self.get_regulatory_requirements()
-        )
+        framework = self.create_framework_instance()
         assert framework is not None
-        assert framework.organization_id == "test_org"
+        assert framework.organization_id == "test_org_123"
 
     def test_framework_has_required_methods(self, framework_instance):
         """Test framework has all required methods"""

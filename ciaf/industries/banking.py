@@ -450,17 +450,18 @@ class BankingAIGovernanceFramework(AIGovernanceFramework):
     def generate_audit_report(self, **kwargs) -> Dict[str, Any]:
         """
         Generate comprehensive banking AI governance audit report
-        
+
         Creates detailed audit documentation with cryptographic verification,
         compliance status, risk assessments, and regulatory reporting.
-        
+
         Returns:
             Dict containing comprehensive audit report with verification metadata
         """
         report_type = kwargs.get('report_type', 'comprehensive')
         include_historical_data = kwargs.get('include_historical_data', True)
-        
+
         audit_report = {
+            'organization_id': self.organization_id,  # Add at top level
             'report_metadata': {
                 'organization_id': self.organization_id,
                 'report_type': report_type,
