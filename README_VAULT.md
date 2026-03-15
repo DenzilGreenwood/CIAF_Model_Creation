@@ -1,14 +1,14 @@
-# CIAF Vault 1.0 - Enterprise Cryptographic Proof Custodian
+# Artificial Intelligence Evidence Vault (AI-EV) 1.0 - Enterprise Cryptographic Proof Custodian
 
 **The industry standard for third-party AI governance proof verification.**
 
-CIAF Vault is a production-grade, enterprise-ready platform for storing and verifying cryptographic proofs of AI system outputs. It serves as an independent, trusted custodian that regulators, enterprises, and auditors can query directly—eliminating the need to trust individual organizations' claims about their AI systems.
+The Artificial Intelligence Evidence Vault is a production-grade, enterprise-ready platform for storing and verifying cryptographic proofs of AI system outputs. It serves as an independent, trusted custodian that regulators, enterprises, and auditors can query directly—eliminating the need to trust individual organizations' claims about their AI systems.
 
-> **Think of it as a notary public for AI outputs.** When an organization generates an AI output, they submit it to CIAF Vault. The vault digitally certifies it, stores it immutably, and makes it independently verifiable by anyone with an API key.
+> **Think of it as a notary public for AI outputs.** When an organization generates an AI output, they submit it to AI-EV. The vault digitally certifies it, stores it immutably, and makes it independently verifiable by anyone with an API key.
 
 ---
 
-## 🎯 Why CIAF Vault Matters
+## 🎯 Why AI-EV Matters
 
 ### The Problem
 ```
@@ -21,14 +21,14 @@ Organization: "Trust us."
 
 ### The Solution
 ```
-With CIAF Vault:
+With AI-EV:
 Organization: "Our AI system made this decision fairly."
-↓ [Submit to CIAF Vault]
-CIAF Vault: "Proof accepted, certified, and stored immutably"
+↓ [Submit to AI-EV]
+AI-EV: "Proof accepted, certified, and stored immutably"
 ↓
 Regulator: "Verify this proof"
-↓ [Query CIAF Vault directly]
-CIAF Vault: "✓ Verified. This output came from Agent_X at timestamp_Y with policies_Z"
+↓ [Query AI-EV directly]
+AI-EV: "✓ Verified. This output came from Agent_X at timestamp_Y with policies_Z"
 ✅ Independent, cryptographic verification
 ```
 
@@ -201,7 +201,7 @@ POST /certificate/{proof_id}
   "proof_id": "uuid",
   "generated_at": "2026-03-14T10:31:00Z",
   "valid_until": "2027-03-14T10:31:00Z",
-  "issuer": "CIAF Vault",
+  "issuer": "Artificial Intelligence Evidence Vault",
   "signature": "cryptographic_signature"
 }
 ```
@@ -308,7 +308,7 @@ python ciaf_vault_cli.py key revoke {key_id}
 # Show vault statistics
 python ciaf_vault_cli.py vault info
 # Output:
-# CIAF Vault Statistics
+# Artificial Intelligence Evidence Vault Statistics
 # ==================================================
 # Total Proofs: 1,234
 # Total Organizations: 5
@@ -414,7 +414,7 @@ LOG_LEVEL=INFO
 ### Health Check (Every 10s)
 ```
 GET /health
-Response: {"status": "healthy", "service": "CIAF Vault", "version": "1.0.0"}
+Response: {"status": "healthy", "service": "Artificial Intelligence Evidence Vault", "version": "1.0.0"}
 ```
 
 ### Vault Statistics
@@ -495,4 +495,4 @@ Licensed under the Business Source License (BUSL 1.1), converting to Apache 2.0 
 
 **Built with ❤️ by Denzil James Greenwood**
 
-CIAF Vault v1.0.0 | Production Ready | Enterprise Grade
+Artificial Intelligence Evidence Vault v1.0.0 | Production Ready | Enterprise Grade

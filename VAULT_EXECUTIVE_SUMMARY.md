@@ -1,8 +1,8 @@
-# CIAF Vault - Executive Summary
+# Artificial Intelligence Evidence Vault - Executive Summary
 
 ## Mission Accomplished ✅
 
-The CIAF Vault is now **fully operational as a third-party evidence custodian for cryptographic proofs** in regulated industries.
+The Artificial Intelligence Evidence Vault is now **fully operational as a third-party evidence custodian for cryptographic proofs** in regulated industries.
 
 ## What Was Built
 
@@ -68,7 +68,7 @@ Result: ✅ Non-repudiable evidence of multi-step decision process
 
 ```bash
 # Health Check
-GET /health → {status: healthy, service: "CIAF Vault", version: "1.0.0"}
+GET /health → {status: healthy, service: "Artificial Intelligence Evidence Vault", version: "1.0.0"}
 
 # Submit Proof (WORM - Write-Once)
 POST /submit
@@ -188,7 +188,7 @@ Docker Status: ✅ HEALTHY
 
 ## Bottom Line
 
-**The CIAF Vault is now a complete, production-ready evidence custodian that provides cryptographic proof of AI system behavior for regulatory compliance.**
+**The Artificial Intelligence Evidence Vault is now a complete, production-ready evidence custodian that provides cryptographic proof of AI system behavior for regulatory compliance.**
 
 It delivers the core value proposition:
 - ✅ Non-repudiation: Undeniable proof of what happened and when

@@ -1,4 +1,4 @@
-# CIAF Vault - Critical Issue Fixed & Full Operation Verified
+# Artificial Intelligence Evidence Vault - Critical Issue Fixed & Full Operation Verified
 
 ## Issue Identified & Resolved
 **Root Cause:** Docker volume mount configuration mismatch
@@ -62,7 +62,7 @@ Volume Mount: C:\Users\Denzi\.ciaf\vault → /root/.ciaf/vault
 6. Deploy to production
 
 ## Production Readiness
-The CIAF Vault is **production-ready** with:
+The Artificial Intelligence Evidence Vault is **production-ready** with:
 - WORM enforcement (no data modification after creation)
 - Complete audit trails (non-repudiation)
 - Multi-tenant isolation (strict organization_id filtering)
