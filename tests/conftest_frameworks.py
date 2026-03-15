@@ -65,24 +65,76 @@ class BaseFrameworkTest(ABC):
 
         Override this method in subclasses for frameworks with custom __init__ signatures.
         """
+        import inspect
         FrameworkClass = self.get_framework_class()
-        # Default constructor - subclasses override for custom parameters
+
+        # Try simple initialization first
         try:
-            # Try with just organization_id first (for simple frameworks)
             return FrameworkClass(organization_id="test_org_123")
         except TypeError:
-            # If that fails, try with regulatory_requirements
-            try:
-                return FrameworkClass(
-                    organization_id="test_org_123",
-                    regulatory_requirements=self.get_regulatory_requirements()
-                )
-            except TypeError as e:
-                # Framework has custom parameters - subclass must override
-                raise NotImplementedError(
-                    f"Framework {self.get_framework_name()} requires custom initialization. "
-                    f"Override create_framework_instance() method in test class. Error: {e}"
-                )
+            pass
+
+        # Try with regulatory_requirements
+        try:
+            return FrameworkClass(
+                organization_id="test_org_123",
+                regulatory_requirements=self.get_regulatory_requirements()
+            )
+        except TypeError:
+            pass
+
+        # Introspect __init__ signature to find required parameters
+        sig = inspect.signature(FrameworkClass.__init__)
+        kwargs = {'organization_id': 'test_org_123'}
+
+        # Add default values for common custom parameters
+        parameter_defaults = {
+            'carrier_id': 'test_carrier_001',
+            'service_regions': ['US-EAST', 'US-WEST'],
+            'biotech_organization_id': 'test_biotech_001',
+            'research_focus': 'drug_discovery',
+            'sustainability_office_id': 'test_sustainability_001',
+            'primary_jurisdiction': 'US',
+            'government_agency_id': 'test_agency_001',
+            'jurisdiction': 'US',
+            'utility_id': 'test_utility_001',
+            'grid_region': 'NORTH_AMERICA',
+            'model_registry_id': 'test_registry_001',
+            'security_organization_id': 'test_security_001',
+            'security_clearance_level': 'confidential',
+            'defense_organization_id': 'test_defense_001',
+            'classification_level': 'secret',
+            'educational_institution_id': 'test_institution_001',
+            'institution_type': 'university',
+            'law_firm_id': 'test_law_firm_001',
+            'media_organization_id': 'test_media_001',
+            'platform_id': 'test_platform_001',
+            'retail_organization_id': 'test_retail_001',
+            'facility_id': 'test_facility_001',
+            'supply_chain_tier': 'TIER_1',
+            'fleet_id': 'test_fleet_001',
+            'vehicle_types': ['autonomous', 'commercial'],
+        }
+
+        # Add any missing required parameters
+        for param_name, param in sig.parameters.items():
+            if param_name in ('self', 'kwargs'):
+                continue
+            if param.default is inspect.Parameter.empty and param_name not in kwargs:
+                # Required parameter without default
+                if param_name in parameter_defaults:
+                    kwargs[param_name] = parameter_defaults[param_name]
+                else:
+                    # Unknown required parameter - try None
+                    kwargs[param_name] = None
+
+        try:
+            return FrameworkClass(**kwargs)
+        except TypeError as e:
+            raise NotImplementedError(
+                f"Framework {self.get_framework_name()} requires custom initialization. "
+                f"Override create_framework_instance() method in test class. Error: {e}"
+            )
 
     @pytest.fixture
     def framework_instance(self):
