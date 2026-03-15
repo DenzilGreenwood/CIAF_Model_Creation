@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useVerifyOutputMutation } from '@/api/hooks';
-import { VerificationStatusBadge, RiskBadge, PoliciesBadge, LoadingSpinner } from '@/components/common/Badges';
+import { VerificationStatusBadge, RiskBadge, PoliciesBadge } from '@/components/common/Badges';
+import { Spinner } from '@/components/common/Spinner';
 import { useNotifications } from '@/store/notifications.store';
 import { Search, Download, Copy, AlertCircle, CheckCircle } from 'lucide-react';
 
@@ -80,7 +81,7 @@ export const VerificationEngine: React.FC = () => {
                 type="text"
                 value={tagId}
                 onChange={(e) => setTagId(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleVerify()}
+                onKeyDown={(e) => e.key === 'Enter' && handleVerify()}
                 placeholder="550e8400-e29b-41d4-a716-446655440000"
                 className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
@@ -159,7 +160,7 @@ export const VerificationEngine: React.FC = () => {
       </div>
 
       {/* Loading State */}
-      {isPending && <LoadingSpinner message="Verifying output..." />}
+      {isPending && <Spinner message="Verifying output..." />}
 
       {/* Error State */}
       {isError && (

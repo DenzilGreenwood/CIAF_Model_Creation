@@ -35,6 +35,21 @@ export const useAuditTrail = (tagId: string) => {
   });
 };
 
+export const useAuditTrailEntries = (organizationId: string, options?: {
+  action?: string;
+  start_time?: string;
+  end_time?: string;
+  limit?: number;
+}) => {
+  return useQuery({
+    queryKey: ['audit-trail', organizationId, options],
+    queryFn: () => apiClient.getAuditTrailEntries(organizationId, options),
+    enabled: !!organizationId,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    refetchInterval: 30 * 1000, // 30 seconds (real-time updates)
+  });
+};
+
 // Compliance Hooks
 export const useComplianceReport = (organizationId: string, policy?: string) => {
   return useQuery({

@@ -158,7 +158,7 @@ make demo-government   # OMB M-24-10 transparency
 ciaf-verify examples/receipts/ --full-audit
 ```
 
-**Output:** Machine-verifiable compliance reports at `localhost:3000` with downloadable evidence packs
+**Output:** Machine-verifiable compliance reports at `localhost:3002` with downloadable evidence packs
 
 ---
 

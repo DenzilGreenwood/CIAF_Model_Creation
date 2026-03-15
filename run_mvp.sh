@@ -32,7 +32,7 @@ python demo_workflows.py
 echo ""
 echo "✅ MVP Demo Complete!"
 echo ""
-echo "📊 Access the Web Dashboard: http://localhost:3000"
+echo "📊 Access the Web Dashboard: http://localhost:3002"
 echo "📚 API Documentation: http://localhost:8001/docs"
 echo ""
 echo "💡 Next Steps:"

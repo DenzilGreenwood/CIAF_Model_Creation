@@ -1,0 +1,134 @@
+groups:
+  - name: security_alerts
+    interval: 30s
+    rules:
+      # Failed authentication attempts spike
+      - alert: FailedAuthenticationSpike
+        expr: rate(auth_failed_total[5m]) > 10
+        for: 2m
+        labels:
+          severity: critical
+          component: security
+        annotations:
+          summary: "Spike in failed authentication attempts"
+          description: "Failed auth rate is {{ $value }}/sec (threshold: 10/sec)"
+          runbook_url: "https://docs.ciaf.io/runbooks/auth-spike"
+
+      # Brute force attack detection
+      - alert: BruteForceAttackDetected
+        expr: count(increase(auth_failed_total{user=~".+"}[2m])) by (user) > 5
+        labels:
+          severity: critical
+          component: security
+        annotations:
+          summary: "Potential brute force attack on user {{ $labels.user }}"
+          description: "{{ $value }} failed login attempts in 2 minutes"
+
+      # Rate limit violations
+      - alert: RateLimitViolations
+        expr: rate(rate_limit_exceeded_total[5m]) > 100
+        for: 2m
+        labels:
+          severity: warning
+          component: security
+        annotations:
+          summary: "High rate of rate limit violations"
+          description: "{{ $value }} violations/sec from {{ $labels.source }}"
+
+      # Unauthorized API access attempts
+      - alert: UnauthorizedAPIAccess
+        expr: rate(http_requests_total{status="401"}[5m]) > 0.5
+        for: 5m
+        labels:
+          severity: warning
+          component: security
+        annotations:
+          summary: "High rate of 401 Unauthorized responses"
+          description: "{{ $value }} unauthorized attempts/sec"
+
+      # Suspicious IP addresses
+      - alert: SuspiciousIPActivity
+        expr: count(increase(http_requests_total[5m])) by (client_ip) > 1000
+        for: 5m
+        labels:
+          severity: warning
+          component: security
+        annotations:
+          summary: "Suspicious activity from IP {{ $labels.client_ip }}"
+          description: "{{ $value }} requests from single IP in 5 minutes"
+
+      # Proof tampering detected
+      - alert: ProofTamperingDetected
+        expr: increase(proof_tampering_attempts_total[5m]) > 0
+        for: 1m
+        labels:
+          severity: critical
+          component: security
+        annotations:
+          summary: "Proof tampering attempt detected!"
+          description: "Please investigate immediately"
+          runbook_url: "https://docs.ciaf.io/runbooks/proof-tampering"
+
+      # Signature verification failures
+      - alert: SignatureVerificationFailures
+        expr: rate(signature_verification_failures_total[5m]) > 0.001
+        for: 5m
+        labels:
+          severity: critical
+          component: security
+        annotations:
+          summary: "Signature verification failures detected"
+          description: "Failure rate: {{ $value | humanaperc }}"
+
+      # Unusual data access patterns
+      - alert: UnusualDataAccessPattern
+        expr: stddev(rate(data_access_total[5m])) > 2 * avg(rate(data_access_total[5m]))
+        for: 10m
+        labels:
+          severity: warning
+          component: security
+        annotations:
+          summary: "Unusual data access pattern detected"
+          description: "Access patterns deviate significantly from baseline"
+
+      # Certificate expiration warning
+      - alert: SSLCertificateExpiring
+        expr: (ssl_certificate_expiry_timestamp - time()) / 86400 < 30
+        labels:
+          severity: warning
+          component: security
+        annotations:
+          summary: "SSL certificate expires in {{ $value }} days"
+          description: "Certificate for {{ $labels.domain }} needs renewal"
+
+      # Encryption key compromise check
+      - alert: KeyCompromiseIndicators
+        expr: rate(key_compromise_indicators_total[5m]) > 0
+        labels:
+          severity: critical
+          component: security
+        annotations:
+          summary: "Possible encryption key compromise detected"
+          description: "Manual investigation required immediately"
+          runbook_url: "https://docs.ciaf.io/runbooks/key-compromise"
+
+      # Audit log tampering
+      - alert: AuditLogTampering
+        expr: increase(audit_log_tampering_detected_total[5m]) > 0
+        labels:
+          severity: critical
+          component: security
+        annotations:
+          summary: "Audit log tampering detected!"
+          description: "Integrity check failed on audit logs"
+
+      # Compliance violation
+      - alert: ComplianceViolation
+        expr: rate(compliance_violations_total[5m]) > 0
+        for: 1m
+        labels:
+          severity: critical
+          component: compliance
+        annotations:
+          summary: "Compliance violation detected"
+          description: "{{ $labels.regulation }}: {{ $labels.violation }}"

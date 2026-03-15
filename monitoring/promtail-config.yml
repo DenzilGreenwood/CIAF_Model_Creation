@@ -1,0 +1,76 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+
+scrape_configs:
+  # Docker logs
+  - job_name: docker
+    docker:
+      host: unix:///var/run/docker.sock
+      use_inode: true
+    relabel_configs:
+      - source_labels: ['__meta_docker_container_name']
+        target_label: container_name
+      - source_labels: ['__meta_docker_container_label_com_docker_compose_service']
+        target_label: service_name
+      - source_labels: ['__meta_docker_container_log_stream']
+        target_label: stream
+      - source_labels: ['__meta_docker_container_id']
+        target_label: container_id
+
+  # Application logs from /var/log
+  - job_name: syslog
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: syslog
+          __path__: /var/log/*.log
+
+  # CIAF application logs
+  - job_name: ciaf-app
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: ciaf-app
+          app: ciaf
+          __path__: /var/log/ciaf/*.log
+    pipeline_stages:
+      - json:
+          expressions:
+            timestamp: timestamp
+            level: level
+            message: message
+            trace_id: trace_id
+      - labels:
+          level: level
+          trace_id: trace_id
+      - timestamp:
+          source: timestamp
+
+  # Verification service logs
+  - job_name: verification-service
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: verification-service
+          service: verification
+          __path__: /var/log/verification/*.log
+
+  # Vault service logs
+  - job_name: vault-service
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: vault-service
+          service: vault
+          __path__: /var/log/vault/*.log

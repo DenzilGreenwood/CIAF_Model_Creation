@@ -1,0 +1,143 @@
+name: CodeQL Security Scanning
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # Run security scans daily at 2 AM UTC
+    - cron: '0 2 * * *'
+
+jobs:
+  analyze:
+    name: CodeQL Analysis
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'python', 'javascript-typescript' ]
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v2
+      with:
+        languages: ${{ matrix.language }}
+        queries: security-and-quality
+
+    - name: Setup Python (for Python analysis)
+      if: matrix.language == 'python'
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+
+    - name: Install Python dependencies (for Python analysis)
+      if: matrix.language == 'python'
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+      continue-on-error: true
+
+    - name: Setup Node.js (for JavaScript/TypeScript analysis)
+      if: matrix.language == 'javascript-typescript'
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v2
+      with:
+        category: "/language:${{ matrix.language }}"
+
+  python-security:
+    name: Python Security Scanning
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install bandit[toml] pylint safety
+
+    - name: Run Bandit security scan
+      run: |
+        bandit -r ciaf/ -f sarif -o bandit-results.sarif || true
+        bandit -r ciaf/ -f txt || true
+      continue-on-error: true
+
+    - name: Upload Bandit results to GitHub Security
+      uses: github/codeql-action/upload-sarif@v2
+      if: always()
+      with:
+        sarif_file: bandit-results.sarif
+        category: 'bandit'
+      continue-on-error: true
+
+    - name: Run Pylint
+      run: |
+        pylint ciaf/ --exit-zero --output-format=parseable > pylint-report.txt || true
+      continue-on-error: true
+
+    - name: Check for known vulnerabilities
+      run: |
+        safety check --json > safety-report.json || true
+      continue-on-error: true
+
+    - name: Upload security reports
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: python-security-reports
+        path: |
+          bandit-results.sarif
+          pylint-report.txt
+          safety-report.json
+
+  dependency-check:
+    name: Dependency Security Check
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Check for outdated dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip list --outdated || true
+      continue-on-error: true
+
+    - name: Run OWASP Dependency Check
+      uses: dependency-check/Dependency-Check_Action@main
+      if: always()
+      with:
+        project: 'CIAF-Backend'
+        path: '.'
+        format: 'SARIF'
+        args: >
+          --enableExperimental
+      continue-on-error: true
+
+    - name: Upload Dependency Check results
+      uses: github/codeql-action/upload-sarif@v2
+      if: always()
+      with:
+        sarif_file: 'reports/dependency-check-report.sarif'
+        category: 'dependency-check'
+      continue-on-error: true

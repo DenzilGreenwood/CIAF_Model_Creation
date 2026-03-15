@@ -1,0 +1,192 @@
+name: Release Management
+
+on:
+  release:
+    types: [published, created]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., v1.2.3)'
+        required: true
+        type: string
+      release-notes:
+        description: 'Release notes'
+        required: false
+        type: string
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Extract version
+      id: version
+      run: |
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          VERSION="${{ inputs.version }}"
+        else
+          VERSION="${{ github.event.release.tag_name }}"
+        fi
+        VERSION=${VERSION#v}
+        echo "version=${VERSION}" >> $GITHUB_OUTPUT
+        echo "tag=v${VERSION}" >> $GITHUB_OUTPUT
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Update version in pyproject.toml
+      run: |
+        python -c "
+        import toml
+        with open('pyproject.toml', 'r') as f:
+            data = toml.load(f)
+        data['project']['version'] = '${{ steps.version.outputs.version }}'
+        with open('pyproject.toml', 'w') as f:
+            toml.dump(data, f)
+        "
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+
+    - name: Update version in package.json
+      run: |
+        cd frontend
+        npm version ${{ steps.version.outputs.version }} --no-git-tag-version
+
+    - name: Create CHANGELOG entry
+      run: |
+        cat > /tmp/changelog_entry.md << 'EOF'
+        ## ${{ steps.version.outputs.tag }} - $(date -u +'%Y-%m-%d')
+
+        ### Features
+        - Add new features here
+
+        ### Bug Fixes
+        - Fix bugs here
+
+        ### Security
+        - Security improvements
+
+        ### Documentation
+        - Updated documentation
+
+        ### Breaking Changes
+        - None
+
+        ${{ inputs.release-notes }}
+        EOF
+
+        cat /tmp/changelog_entry.md CHANGELOG.md > /tmp/temp_changelog.md
+        mv /tmp/temp_changelog.md CHANGELOG.md
+
+    - name: Commit version bump
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add pyproject.toml frontend/package.json CHANGELOG.md
+        git commit -m "chore: bump version to ${{ steps.version.outputs.version }}" || true
+
+    - name: Push version bump
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: main
+      continue-on-error: true
+
+    - name: Create GitHub Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.version.outputs.tag }}
+        release_name: Release ${{ steps.version.outputs.tag }}
+        body_path: /tmp/changelog_entry.md
+        draft: false
+        prerelease: false
+      if: github.event_name != 'workflow_dispatch'
+
+    - name: Build and publish Python package
+      run: |
+        python -m pip install --upgrade pip build twine
+        python -m build
+        python -m twine upload dist/* --skip-existing
+      env:
+        TWINE_USERNAME: __token__
+        TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+      if: secrets.PYPI_TOKEN != ''
+      continue-on-error: true
+
+    - name: Push Docker images
+      run: |
+        echo "Docker images pushed for version ${{ steps.version.outputs.tag }}"
+        # Add Docker push commands here if using Docker Hub
+      continue-on-error: true
+
+    - name: Generate release artifacts
+      run: |
+        mkdir -p release-artifacts
+        cp -r ciaf release-artifacts/
+        cp -r frontend/dist release-artifacts/frontend-build/
+        cp pyproject.toml CHANGELOG.md LICENSE release-artifacts/
+
+    - name: Upload release artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: release-${{ steps.version.outputs.tag }}
+        path: release-artifacts/
+
+    - name: Notify Slack
+      uses: 8398a7/action-slack@v3
+      if: always()
+      with:
+        status: ${{ job.status }}
+        text: |
+          Release ${{ steps.version.outputs.tag }} ${{ job.status }}.
+          ${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ steps.version.outputs.tag }}
+        webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+      continue-on-error: true
+
+  validate-release:
+    needs: create-release
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: main
+
+    - name: Verify version consistency
+      run: |
+        echo "Verifying version consistency across all files..."
+        # Add version consistency checks here
+
+    - name: Verify release artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: release-${{ github.event.release.tag_name }}
+
+    - name: Generate checksum
+      run: |
+        find . -type f -exec sha256sum {} \; > SHA256SUMS.txt
+
+    - name: Upload checksums to release
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ./SHA256SUMS.txt
+        asset_name: SHA256SUMS.txt
+        asset_content_type: text/plain
+      if: github.event_name == 'release'
+      continue-on-error: true

@@ -1,13 +1,13 @@
 import React from 'react';
 import { useOrganizationStats } from '@/api/hooks';
 import { Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { LoadingSpinner } from '@/components/common/Badges';
+import { Spinner } from '@/components/common/Spinner';
 
 export const OrganizationStats: React.FC = () => {
   const { data: stats, isLoading } = useOrganizationStats('healthcare_org_001');
 
   if (isLoading) {
-    return <LoadingSpinner message="Loading statistics..." />;
+    return <Spinner message="Loading statistics..." />;
   }
 
   if (!stats) {

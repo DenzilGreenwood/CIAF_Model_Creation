@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useComplianceReport } from '@/api/hooks';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { LoadingSpinner } from '@/components/common/Badges';
+import { Spinner } from '@/components/common/Spinner';
 
 export const ComplianceDashboard: React.FC = () => {
   const [selectedOrg, setSelectedOrg] = useState('healthcare_org_001');
@@ -70,7 +70,7 @@ export const ComplianceDashboard: React.FC = () => {
       </div>
 
       {isLoading ? (
-        <LoadingSpinner message="Loading compliance data..." />
+        <Spinner message="Loading compliance data..." />
       ) : compliance ? (
         <div className="space-y-6">
           {/* Compliance Metrics */}

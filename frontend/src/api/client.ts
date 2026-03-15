@@ -77,6 +77,22 @@ export class APIClient {
     return response.data;
   }
 
+  async getAuditTrailEntries(organizationId: string, options?: {
+    action?: string;
+    start_time?: string;
+    end_time?: string;
+    limit?: number;
+  }): Promise<{
+    entries: any[];
+    total: number;
+    organization_id: string;
+  }> {
+    const response = await this.client.get('/audit-trail', {
+      params: options,
+    });
+    return response.data;
+  }
+
   // Compliance endpoints
   async getComplianceReport(
     organizationId: string,
@@ -106,6 +122,66 @@ export class APIClient {
   // Admin endpoints
   async refreshCache(): Promise<{ status: string; message: string }> {
     const response = await this.client.post('/admin/refresh-cache', {});
+    return response.data;
+  }
+
+  // ============================================================
+  // Authentication endpoints
+  // ============================================================
+
+  async login(email: string, password: string): Promise<{
+    access_token: string;
+    refresh_token: string;
+    token_type: string;
+    user: {
+      id: string;
+      email: string;
+      name: string;
+      role: string;
+      organization_id: string;
+    };
+  }> {
+    const response = await this.client.post('/auth/login', { email, password });
+    return response.data;
+  }
+
+  async logout(): Promise<{ status: string; message: string }> {
+    const response = await this.client.post('/auth/logout', {});
+    return response.data;
+  }
+
+  async refreshToken(refreshToken: string): Promise<{
+    access_token: string;
+    token_type: string;
+  }> {
+    const response = await this.client.post('/auth/refresh', { refresh_token: refreshToken });
+    return response.data;
+  }
+
+  async requestPasswordReset(email: string): Promise<{
+    message: string;
+    status: string;
+  }> {
+    const response = await this.client.post('/auth/password-reset', { email });
+    return response.data;
+  }
+
+  async confirmPasswordReset(token: string, newPassword: string): Promise<{
+    message: string;
+    status: string;
+  }> {
+    const response = await this.client.post('/auth/password-reset-confirm', {
+      token,
+      new_password: newPassword,
+    });
+    return response.data;
+  }
+
+  async verifyEmail(token: string): Promise<{
+    message: string;
+    status: string;
+  }> {
+    const response = await this.client.post('/auth/verify-email', { token });
     return response.data;
   }
 }

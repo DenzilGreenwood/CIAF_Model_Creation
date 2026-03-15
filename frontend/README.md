@@ -46,7 +46,7 @@ cp .env.example .env.development.local
 npm run dev
 ```
 
-The application will be available at `http://localhost:3000`
+The application will be available at `http://localhost:3002`
 
 ### Environment Configuration
 
@@ -302,7 +302,7 @@ docker run -p 3000:3000 \
 # Start all services (backend + frontend + database)
 docker-compose -f docker-compose.full.yml up
 
-# Access frontend at http://localhost:3000
+# Access frontend at http://localhost:3002
 ```
 
 ### Production Build

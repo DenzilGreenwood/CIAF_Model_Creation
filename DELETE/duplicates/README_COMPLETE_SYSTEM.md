@@ -72,7 +72,7 @@ docker-compose -f docker-compose.full.yml up -d
 sleep 30
 
 # Open browser
-# Frontend (Dashboard): http://localhost:3000
+# Frontend (Dashboard): http://localhost:3002
 # Backend (API):        http://localhost:8001
 # API Docs:            http://localhost:8001/docs
 ```
@@ -114,7 +114,7 @@ sleep 30
 ```
 ┌─────────────────────────────────────────┐
 │   FRONTEND (React 18 + TypeScript)      │
-│   http://localhost:3000                 │
+│   http://localhost:3002                 │
 │                                         │
 │   Dashboard • Verify • Compliance       │
 │   Stats • Audit • Agents • Admin        │
@@ -192,7 +192,7 @@ sleep 30
 
 ### 👀 "I want to see it working"
 → `docker-compose -f docker-compose.full.yml up`
-→ Open http://localhost:3000
+→ Open http://localhost:3002
 
 ### 💻 "I want to develop locally"
 → Read `FRONTEND_GETTING_STARTED.md`
@@ -238,7 +238,7 @@ python -m uvicorn api:app --port 8001 --reload
 cd frontend
 npm install
 npm run dev
-# Opens at http://localhost:3000
+# Opens at http://localhost:3002
 ```
 
 ### VS Code Setup (Recommended)
@@ -412,6 +412,6 @@ curl http://localhost:8001/docs (then open in browser)
 
 ---
 
-**TL;DR**: Run `docker-compose -f docker-compose.full.yml up`, visit `http://localhost:3000`, try verifying an output. You now have a complete AI governance platform with cryptographic verification and beautiful dashboards.
+**TL;DR**: Run `docker-compose -f docker-compose.full.yml up`, visit `http://localhost:3002`, try verifying an output. You now have a complete AI governance platform with cryptographic verification and beautiful dashboards.
 
 **Questions?** See COMPLETE_SYSTEM_SUMMARY.md ← Start here!

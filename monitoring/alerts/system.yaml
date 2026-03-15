@@ -1,0 +1,115 @@
+groups:
+  - name: system_alerts
+    interval: 30s
+    rules:
+      # High error rate
+      - alert: HighErrorRate
+        expr: rate(http_requests_total{status=~"5.."}[5m]) > 0.05
+        for: 5m
+        labels:
+          severity: critical
+          component: api
+        annotations:
+          summary: "High error rate detected"
+          description: "Error rate is {{ $value | humanaperc }} for {{ $labels.job }}"
+          runbook_url: "https://docs.ciaf.io/runbooks/high-error-rate"
+
+      # High latency
+      - alert: HighLatency
+        expr: histogram_quantile(0.95, http_request_duration_seconds_bucket) > 1
+        for: 5m
+        labels:
+          severity: warning
+          component: api
+        annotations:
+          summary: "High API latency detected"
+          description: "95th percentile latency is {{ $value }}s for {{ $labels.job }}"
+
+      # Request rate spike
+      - alert: RequestRateSpike
+        expr: rate(http_requests_total[5m]) > 1000
+        for: 2m
+        labels:
+          severity: warning
+          component: api
+        annotations:
+          summary: "Sudden increase in request rate"
+          description: "Request rate is {{ $value }}/sec for {{ $labels.job }}"
+
+      # Service down
+      - alert: ServiceDown
+        expr: up{job=~"ciaf-.*"} == 0
+        for: 2m
+        labels:
+          severity: critical
+          component: infrastructure
+        annotations:
+          summary: "{{ $labels.job }} service is down"
+          description: "{{ $labels.instance }} has been down for 2 minutes"
+          runbook_url: "https://docs.ciaf.io/runbooks/service-down"
+
+      # Database connection pool exhausted
+      - alert: DatabaseConnectionPoolExhausted
+        expr: database_connections_active / database_max_connections > 0.9
+        for: 5m
+        labels:
+          severity: critical
+          component: database
+        annotations:
+          summary: "Database connection pool near exhaustion"
+          description: "{{ $value | humanaperc }} of database connections are in use"
+
+      # Memory usage high
+      - alert: HighMemoryUsage
+        expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) > 0.9
+        for: 5m
+        labels:
+          severity: warning
+          component: infrastructure
+        annotations:
+          summary: "High memory usage on {{ $labels.instance }}"
+          description: "Memory usage is {{ $value | humanaperc }}"
+
+      # Disk space running low
+      - alert: DiskSpaceLow
+        expr: (node_filesystem_avail_bytes / node_filesystem_size_bytes) < 0.1
+        for: 5m
+        labels:
+          severity: warning
+          component: infrastructure
+        annotations:
+          summary: "Low disk space on {{ $labels.instance }}"
+          description: "{{ $value | humanaperc }} free on {{ $labels.mountpoint }}"
+
+      # CPU usage high
+      - alert: HighCPUUsage
+        expr: (1 - avg(rate(node_cpu_seconds_total{mode="idle"}[5m]))) > 0.8
+        for: 5m
+        labels:
+          severity: warning
+          component: infrastructure
+        annotations:
+          summary: "High CPU usage on {{ $labels.instance }}"
+          description: "CPU usage is {{ $value | humanaperc }}"
+
+      # Proof verification failures
+      - alert: ProofVerificationFailures
+        expr: rate(proof_verification_failures_total[5m]) > 0.01
+        for: 5m
+        labels:
+          severity: critical
+          component: verification
+        annotations:
+          summary: "Proof verification failures detected"
+          description: "Failure rate is {{ $value | humanaperc }}"
+
+      # LCM materialization delay
+      - alert: LCMMaterializationDelay
+        expr: histogram_quantile(0.95, lcm_materialization_duration_seconds_bucket) > 1
+        for: 5m
+        labels:
+          severity: warning
+          component: lcm
+        annotations:
+          summary: "LCM materialization experiencing delays"
+          description: "95th percentile delay is {{ $value }}s"

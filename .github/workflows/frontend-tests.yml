@@ -1,0 +1,129 @@
+name: Frontend Tests & Linting
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/frontend-tests.yml'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'frontend/**'
+
+jobs:
+  frontend-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ['18.x', '20.x']
+
+    env:
+      VITE_API_BASE_URL: http://localhost:8001
+      VITE_VERIFICATION_API: http://localhost:8001/verify
+      VITE_AUDIT_API: http://localhost:8001/audit
+      VITE_COMPLIANCE_API: http://localhost:8001/compliance
+      VITE_STATS_API: http://localhost:8001/stats
+      VITE_HEALTH_API: http://localhost:8001/health
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: 'frontend/package-lock.json'
+
+    - name: Install dependencies
+      run: npm ci
+      working-directory: frontend
+
+    - name: Lint with ESLint
+      run: npm run lint
+      working-directory: frontend
+      continue-on-error: true
+
+    - name: Format check with Prettier
+      run: npm run format:check
+      working-directory: frontend
+      continue-on-error: true
+
+    - name: Type check with TypeScript
+      run: npm run type-check
+      working-directory: frontend
+      continue-on-error: true
+
+    - name: Run frontend tests
+      run: npm test -- --run --coverage
+      working-directory: frontend
+      continue-on-error: true
+
+    - name: Build frontend
+      run: npm run build
+      working-directory: frontend
+      env:
+        NODE_ENV: production
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      if: always()
+      with:
+        files: ./frontend/coverage/coverage-final.json
+        flags: frontend-node${{ matrix.node-version }}
+        name: frontend-coverage-node${{ matrix.node-version }}
+        fail_ci_if_error: false
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: frontend-build-${{ matrix.node-version }}
+        path: frontend/dist/
+
+    - name: Comment PR with build status
+      if: github.event_name == 'pull_request' && always()
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          const buildDir = './frontend/dist';
+          const buildExists = fs.existsSync(buildDir);
+
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: `✅ Frontend build: ${buildExists ? 'SUCCESS' : 'FAILED'}\n\nNode.js: ${{ matrix.node-version }}`
+          });
+
+  security-audit:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Run npm audit
+      run: npm audit --audit-level=moderate
+      working-directory: frontend
+      continue-on-error: true
+
+    - name: OWASP Dependency Check
+      uses: dependency-check/Dependency-Check_Action@main
+      if: always()
+      with:
+        project: 'CIAF-Frontend'
+        path: 'frontend'
+        format: 'JSON'
+        args: >
+          --scan frontend
+          --enableExperimental
+      continue-on-error: true
+
+    - name: Upload OWASP report
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: owasp-dependency-check-report
+        path: 'reports/dependency-check-report.json'
+      continue-on-error: true

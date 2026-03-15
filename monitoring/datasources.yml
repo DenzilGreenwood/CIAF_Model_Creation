@@ -1,0 +1,49 @@
+apiVersion: 1
+
+datasources:
+  # Prometheus datasource
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    url: http://prometheus:9090
+    isDefault: true
+    jsonData:
+      queryTimeout: 60s
+      timeInterval: 30s
+    version: 1
+
+  # Loki datasource (for logs)
+  - name: Loki
+    type: loki
+    access: proxy
+    url: http://loki:3100
+    jsonData:
+      derivedFields:
+        - name: TraceID
+          matcherRegex: '"trace_id":"(\w+)"'
+          url: 'jaeger:16686/trace/$${__value.raw}'
+          datasourceUid: prometheus-uid
+    version: 1
+
+  # Jaeger datasource (for traces)
+  - name: Jaeger
+    type: jaeger
+    access: proxy
+    url: http://jaeger:16686
+    jsonData:
+      nodeGraph:
+        enabled: true
+    version: 1
+
+  # Elasticsearch datasource (alternative to Loki)
+  - name: Elasticsearch
+    type: elasticsearch
+    access: proxy
+    url: http://elasticsearch:9200
+    database: '[logs-]YYYY.MM.DD'
+    jsonData:
+      esVersion: '8.0.0'
+      logMessageField: message
+      logLevelField: level
+      timeField: '@timestamp'
+    version: 1

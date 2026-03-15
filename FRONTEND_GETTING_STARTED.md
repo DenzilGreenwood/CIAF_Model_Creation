@@ -50,7 +50,7 @@ docker-compose -f docker-compose.full.yml up -d
 sleep 30
 
 # Access the application
-# Frontend: http://localhost:3000
+# Frontend: http://localhost:3002
 # Backend API: http://localhost:8001
 # Database Admin: http://localhost:5050 (if --profile debug enabled)
 ```
@@ -74,7 +74,7 @@ docker-compose logs -f frontend
 ```
 ┌─────────────────────────────────────────────────────┐
 │ CIAF VERIFICATION DASHBOARD (Frontend)              │
-│ http://localhost:3000                               │
+│ http://localhost:3002                               │
 │                                                     │
 │ • Dashboard      • Verify Output                    │
 │ • Audit Trail    • Compliance Report                │
@@ -106,7 +106,7 @@ docker-compose logs -f frontend
 
 ### 1. Dashboard
 
-Access: `http://localhost:3000/dashboard`
+Access: `http://localhost:3002/dashboard`
 
 **Features:**
 - Real-time metrics (total outputs, verification rate, risks)
@@ -121,7 +121,7 @@ Access: `http://localhost:3000/dashboard`
 
 ### 2. Verify Output
 
-Access: `http://localhost:3000/verify`
+Access: `http://localhost:3002/verify`
 
 **How to Use:**
 1. Enter a tag ID (example: `550e8400-e29b-41d4-a716-446655440000`)
@@ -141,7 +141,7 @@ Access: `http://localhost:3000/verify`
 
 ### 3. Compliance Dashboard
 
-Access: `http://localhost:3000/compliance`
+Access: `http://localhost:3002/compliance`
 
 **Features:**
 - Policy selection (HIPAA, FDA SaMD, ISO 14971, etc.)
@@ -159,7 +159,7 @@ Access: `http://localhost:3000/compliance`
 
 ### 4. Organization Statistics
 
-Access: `http://localhost:3000/stats`
+Access: `http://localhost:3002/stats`
 
 **Displays:**
 - Total outputs verified
@@ -170,7 +170,7 @@ Access: `http://localhost:3000/stats`
 
 ### 5. Audit Trail Viewer
 
-Access: `http://localhost:3000/audit`
+Access: `http://localhost:3002/audit`
 
 Search and filter agent execution sequences with:
 - Tag ID search
@@ -181,7 +181,7 @@ Search and filter agent execution sequences with:
 
 ### 6. Agent Registry
 
-Access: `http://localhost:3000/agents`
+Access: `http://localhost:3002/agents`
 
 Browse registered agents with:
 - Agent name and ID
@@ -191,7 +191,7 @@ Browse registered agents with:
 
 ### 7. Admin Panel
 
-Access: `http://localhost:3000/admin`
+Access: `http://localhost:3002/admin`
 
 Manage system with:
 - Cache refresh
@@ -279,7 +279,7 @@ VITE_API_BASE_URL=http://localhost:8001
 # Start dev server
 npm run dev
 
-# Opens at http://localhost:3000 with hot reload
+# Opens at http://localhost:3002 with hot reload
 ```
 
 ### Run Backend Only
@@ -497,7 +497,7 @@ npm run build
 1. **Try the Dashboard**
    ```bash
    docker-compose -f docker-compose.full.yml up
-   # Visit http://localhost:3000
+   # Visit http://localhost:3002
    ```
 
 2. **Verify an Output**

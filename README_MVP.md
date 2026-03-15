@@ -265,7 +265,7 @@ Proof that:
 While demos are running, access the web dashboard in real-time:
 
 ```
-URL: http://localhost:3000
+URL: http://localhost:3002
 
 Available Pages:
 ├── Dashboard - Real-time overview
@@ -353,7 +353,7 @@ This MVP demonstrates:
 ## 📞 Support
 
 For issues or questions:
-1. Check the dashboard at http://localhost:3000
+1. Check the dashboard at http://localhost:3002
 2. Review API docs at http://localhost:8001/docs
 3. Check agent execution history in demo output
 4. Verify service health: `curl http://localhost:8001/health`

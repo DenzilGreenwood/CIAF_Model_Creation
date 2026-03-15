@@ -46,7 +46,7 @@ docker-compose -f docker-compose.full.yml up -d
 sleep 30
 
 # Open browser
-# Frontend: http://localhost:3000
+# Frontend: http://localhost:3002
 # Backend API: http://localhost:8001
 # Docs: http://localhost:8001/docs
 ```
@@ -65,7 +65,7 @@ sleep 30
 cd frontend
 npm install
 npm run dev
-# Opens at http://localhost:3000 with hot reload
+# Opens at http://localhost:3002 with hot reload
 
 # Backend (in separate terminal)
 cd ciaf/verification
@@ -92,7 +92,7 @@ See `ciaf/verification/PRODUCTION_DEPLOYMENT.md` for:
 ```
 ┌─────────────────────────────────────────────────┐
 │         FRONTEND (React 18 + TypeScript)        │
-│  http://localhost:3000                          │
+│  http://localhost:3002                          │
 ├─────────────────────────────────────────────────┤
 │ Dashboard │ Verify │ Compliance │ Stats         │
 │ Audit Trail │ Agents │ Admin                    │
@@ -219,7 +219,7 @@ Docker & Cloud Ready:
 
 ### **1. Verify an Output**
 ```bash
-# In browser: http://localhost:3000/verify
+# In browser: http://localhost:3002/verify
 # Or via API:
 curl -X GET http://localhost:8001/verify/{tag_id} \
   -H "Authorization: Bearer sk_dev_abc123"
@@ -227,21 +227,21 @@ curl -X GET http://localhost:8001/verify/{tag_id} \
 
 ### **2. Check Compliance**
 ```bash
-# In browser: http://localhost:3000/compliance
+# In browser: http://localhost:3002/compliance
 # Or via API:
 curl -X GET "http://localhost:8001/compliance/healthcare_org_001?policy=HIPAA_COMPLIANT"
 ```
 
 ### **3. View Audit Trail**
 ```bash
-# In browser: http://localhost:3000/audit
+# In browser: http://localhost:3002/audit
 # Or via API:
 curl -X GET http://localhost:8001/audit/{tag_id}
 ```
 
 ### **4. Monitor Statistics**
 ```bash
-# In browser: http://localhost:3000/stats
+# In browser: http://localhost:3002/stats
 # Or via API:
 curl -X GET http://localhost:8001/stats/healthcare_org_001
 ```
@@ -316,7 +316,7 @@ docker run -d -p 8001:8001 ciaf-verification:latest
 ### **Health Checks**
 ```bash
 # Frontend
-curl http://localhost:3000/
+curl http://localhost:3002/
 
 # Backend
 curl http://localhost:8001/health
@@ -409,7 +409,7 @@ kubectl logs deployment/ciaf-frontend
    ```bash
    docker-compose -f docker-compose.full.yml up
    ```
-   Visit `http://localhost:3000`
+   Visit `http://localhost:3002`
 
 2. **Explore Features**
    - Dashboard: View metrics
@@ -487,7 +487,7 @@ You now have a **complete, production-ready system** that:
 **Try it now:**
 ```bash
 docker-compose -f docker-compose.full.yml up
-open http://localhost:3000
+open http://localhost:3002
 ```
 
 ---

@@ -1,0 +1,140 @@
+name: Backend Tests & Security Scanning
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'ciaf/**'
+      - 'tests/**'
+      - 'pyproject.toml'
+      - 'requirements.txt'
+      - '.github/workflows/backend-tests.yml'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'ciaf/**'
+      - 'tests/**'
+      - 'pyproject.toml'
+      - 'requirements.txt'
+
+jobs:
+  backend-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.9', '3.10', '3.11']
+
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: ciaf_verification
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_DB: ciaf_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    env:
+      DB_USER: ciaf_verification
+      DB_PASSWORD: test_password
+      DB_NAME: ciaf_test
+      REDIS_URL: redis://localhost:6379/0
+      ENVIRONMENT: testing
+      JWT_SECRET_KEY: test_secret_key_for_ci_testing_only
+      API_KEY_SECRET: test_api_key_secret_for_ci_testing_only
+      CIAF_API_KEY: test_ciaf_api_key_for_ci_testing_only
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+        cache: 'pip'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest pytest-cov pytest-asyncio bandit[toml] safety
+
+    - name: Lint with Bandit (Security)
+      run: |
+        bandit -r ciaf/ -f json -o bandit-report.json || true
+        bandit -r ciaf/ || true
+      continue-on-error: true
+
+    - name: Check dependencies for vulnerabilities
+      run: |
+        safety check --json || true
+      continue-on-error: true
+
+    - name: Run backend tests with coverage
+      run: |
+        pytest tests/ \
+          --cov=ciaf \
+          --cov-report=xml \
+          --cov-report=html \
+          --cov-report=term-missing \
+          --junitxml=junit/test-results-${{ matrix.python-version }}.xml \
+          -v
+      env:
+        DATABASE_URL: postgresql://ciaf_verification:test_password@localhost:5432/ciaf_test
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        files: ./coverage.xml
+        flags: backend-py${{ matrix.python-version }}
+        name: backend-coverage-py${{ matrix.python-version }}
+        fail_ci_if_error: false
+
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-results-${{ matrix.python-version }}
+        path: junit/test-results-${{ matrix.python-version }}.xml
+
+    - name: Upload coverage report
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: coverage-report-${{ matrix.python-version }}
+        path: htmlcov/
+
+    - name: Upload Bandit report
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: bandit-report
+        path: bandit-report.json
+
+  test-results:
+    runs-on: ubuntu-latest
+    needs: backend-tests
+    if: always()
+    steps:
+    - name: Publish test results
+      uses: EnricoMi/publish-unit-test-result-action@v2
+      if: always()
+      with:
+        files: junit/**/*.xml
+        check_name: Backend Test Results
+        comment_mode: always

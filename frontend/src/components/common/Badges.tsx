@@ -1,6 +1,6 @@
 import React from 'react';
 import { RiskLevel, VerificationStatus } from '@/types';
-import { CheckCircle2, XCircle, AlertCircle, Clock } from 'lucide-react';
+import { CheckCircle2, XCircle, AlertCircle } from 'lucide-react';
 
 interface RiskBadgeProps {
   level: RiskLevel;
@@ -94,24 +94,6 @@ export const PoliciesBadge: React.FC<PoliciesBadgeProps> = ({ policies, maxDispl
   );
 };
 
-interface LoadingSpinnerProps {
-  size?: 'sm' | 'md' | 'lg';
-  message?: string;
-}
-
-export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ size = 'md', message }) => {
-  const sizeMap = {
-    sm: 'w-4 h-4',
-    md: 'w-8 h-8',
-    lg: 'w-12 h-12',
-  };
-
-  return (
-    <div className="flex flex-col items-center justify-center p-8">
-      <div className={`${sizeMap[size]} animate-spin`}>
-        <Clock className="text-blue-600" />
-      </div>
-      {message && <p className="mt-4 text-gray-600">{message}</p>}
-    </div>
-  );
-};
+// LoadingSpinner moved to Spinner.tsx
+// Re-export for backward compatibility
+export { LoadingSpinner } from './Spinner';

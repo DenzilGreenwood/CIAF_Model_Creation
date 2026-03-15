@@ -1,0 +1,180 @@
+name: Dependency Updates
+
+on:
+  schedule:
+    # Run every Monday at 9 AM UTC
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-python-dependencies:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Check for outdated packages
+      id: check
+      run: |
+        pip install --upgrade pip pip-audit
+        pip list --outdated > /tmp/outdated.txt
+        cat /tmp/outdated.txt
+        echo "outdated_count=$(wc -l < /tmp/outdated.txt)" >> $GITHUB_OUTPUT
+
+    - name: Update requirements
+      run: |
+        pip install pip-tools
+        if [ -f requirements.txt ]; then
+          pip-compile requirements.txt --upgrade
+        fi
+      continue-on-error: true
+
+    - name: Create PR for Python dependencies
+      uses: peter-evans/create-pull-request@v5
+      if: steps.check.outputs.outdated_count > '1'
+      with:
+        commit-message: 'chore: update Python dependencies'
+        title: 'chore: update Python dependencies'
+        body: |
+          ## Automated Dependency Update
+
+          This PR updates Python dependencies to their latest versions.
+
+          ### Security Considerations
+          - Run security audit before merging
+          - Review breaking changes in CHANGELOG files
+          - Test thoroughly in staging environment
+
+          ### Next Steps
+          - [ ] Review changes
+          - [ ] Run tests
+          - [ ] Check security audit results
+          - [ ] Merge if approved
+        branch: chore/update-python-deps
+        delete-branch: true
+        labels: |
+          dependencies
+          python
+        reviewers: ${{ secrets.DEPENDENCY_REVIEWERS }}
+      continue-on-error: true
+
+  update-node-dependencies:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+        cache-dependency-path: 'frontend/package-lock.json'
+
+    - name: Check for outdated packages
+      id: check
+      run: |
+        cd frontend
+        npm outdated > /tmp/outdated.txt || true
+        OUTDATED_COUNT=$(grep -c "." /tmp/outdated.txt || echo 0)
+        echo "outdated_count=${OUTDATED_COUNT}" >> $GITHUB_OUTPUT
+        cat /tmp/outdated.txt
+
+    - name: Update npm dependencies
+      run: |
+        cd frontend
+        npm update
+        npm audit fix --audit-level=moderate || true
+      continue-on-error: true
+
+    - name: Create PR for Node dependencies
+      uses: peter-evans/create-pull-request@v5
+      if: steps.check.outputs.outdated_count > '0'
+      with:
+        commit-message: 'chore: update Node dependencies'
+        title: 'chore: update Node dependencies'
+        body: |
+          ## Automated Dependency Update
+
+          This PR updates Node.js dependencies to their latest versions.
+
+          ### Security Considerations
+          - Security audit has been run
+          - Breaking changes should be reviewed
+          - Frontend tests should pass
+
+          ### Next Steps
+          - [ ] Review changes
+          - [ ] Run frontend tests
+          - [ ] Check for visual regressions
+          - [ ] Merge if approved
+        branch: chore/update-node-deps
+        delete-branch: true
+        labels: |
+          dependencies
+          javascript
+          frontend
+        reviewers: ${{ secrets.DEPENDENCY_REVIEWERS }}
+      continue-on-error: true
+
+  security-audit:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Run pip audit
+      run: |
+        pip install pip-audit
+        pip-audit --desc > /tmp/pip-audit.txt || true
+        cat /tmp/pip-audit.txt
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+
+    - name: Run npm audit
+      run: |
+        cd frontend
+        npm audit --json > /tmp/npm-audit.json || true
+        cat /tmp/npm-audit.json | jq '.'
+
+    - name: Upload audit reports
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: dependency-audits
+        path: /tmp/*audit*
+
+    - name: Comment on latest PR if vulnerabilities found
+      uses: actions/github-script@v7
+      if: always()
+      with:
+        script: |
+          const fs = require('fs');
+          let vulnCount = 0;
+
+          try {
+            const npmAudit = JSON.parse(fs.readFileSync('/tmp/npm-audit.json', 'utf8'));
+            vulnCount += npmAudit.metadata?.vulnerabilities?.critical || 0;
+            vulnCount += npmAudit.metadata?.vulnerabilities?.high || 0;
+          } catch (e) {}
+
+          if (vulnCount > 0) {
+            console.log(`Found ${vulnCount} vulnerabilities`);
+          } else {
+            console.log('No high/critical vulnerabilities found');
+          }
+      continue-on-error: true
