@@ -10,6 +10,7 @@ import {
   LogOut,
   Menu,
   X,
+  BookOpen,
 } from 'lucide-react';
 import { useAuthStore } from '@/store/auth.store';
 import { useState } from 'react';
@@ -39,6 +40,7 @@ export const MainLayout: React.FC = () => {
     { name: 'Compliance', href: '/compliance', icon: BarChart3 },
     { name: 'Organization Stats', href: '/stats', icon: BarChart3 },
     { name: 'Agent Registry', href: '/agents', icon: Users },
+    { name: 'Documentation', href: '/docs', icon: BookOpen },
     { name: 'Admin', href: '/admin', icon: Settings },
   ];
 
@@ -130,7 +132,7 @@ export const MainLayout: React.FC = () => {
         <header className="bg-slate-900 border-b border-slate-800 px-8 py-4 flex justify-between items-center">
           <div>
             <h1 className="text-2xl font-bold text-slate-50">
-              CIAF Verification Dashboard
+              AI-EI Vault Verification Dashboard
             </h1>
             <p className="text-sm text-slate-400 mt-1">
               Cryptographic verification of AI-generated outputs

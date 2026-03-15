@@ -5,17 +5,18 @@ import { MainLayout } from '@/components/layout/MainLayout';
 import { ProtectedRoute, PublicRoute, AdminRoute } from '@/components/common/ProtectedRoute';
 
 import {
-   Home, 
-   Dashboard, 
-   VerificationEngine, 
-   AuditTrailViewer, 
-   ComplianceDashboard, 
-   OrganizationStats, 
-   AgentRegistry, 
-   AdminPanel, 
-   NotFound, 
-   Login, 
-   ForgotPassword, 
+   Home,
+   Dashboard,
+   VerificationEngine,
+   AuditTrailViewer,
+   ComplianceDashboard,
+   OrganizationStats,
+   AgentRegistry,
+   AdminPanel,
+   Documentation,
+   NotFound,
+   Login,
+   ForgotPassword,
    ResetPassword } from '@/pages';
 
 import { useAuthStore } from '@/store/auth.store';
@@ -86,6 +87,7 @@ export const App: React.FC = () => {
             <Route path="/compliance" element={<ComplianceDashboard />} />
             <Route path="/stats" element={<OrganizationStats />} />
             <Route path="/agents" element={<AgentRegistry />} />
+            <Route path="/docs" element={<Documentation />} />
 
             {/* Admin Only Routes */}
             <Route

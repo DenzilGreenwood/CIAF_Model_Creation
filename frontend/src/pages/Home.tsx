@@ -122,7 +122,7 @@ export const Home: React.FC = () => {
       <nav className="sticky top-0 z-50 bg-slate-950/80 backdrop-blur-md border-b border-slate-800 p-4">
         <div className="container mx-auto flex justify-between items-center">
           <div className="text-2xl font-black tracking-tighter text-white">
-            CIAF <span className="text-cyan-400">VAULT</span>
+            AI-EI <span className="text-cyan-400">VAULT</span>
           </div>
           <div className="hidden md:flex space-x-6 text-sm font-medium text-slate-300">
             <a href="#problem" className="hover:text-cyan-400 transition">

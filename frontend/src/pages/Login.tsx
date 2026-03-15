@@ -87,7 +87,7 @@ export const Login: React.FC = () => {
               <Lock className="text-cyan-400" size={32} />
             </div>
             <h1 className="text-3xl font-bold text-white mb-2">Welcome Back</h1>
-            <p className="text-slate-400">Sign in to your CIAF account</p>
+            <p className="text-slate-400">Sign in to your AI-EI account</p>
           </div>
 
           {/* Server Error Alert */}

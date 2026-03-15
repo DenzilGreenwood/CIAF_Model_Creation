@@ -28,6 +28,9 @@ export { AgentRegistry } from './AgentRegistry';
 // Export Admin Panel page
 export { AdminPanel } from './AdminPanel';
 
+// Export Documentation page
+export { default as Documentation } from './Documentation';
+
 // Export Not Found page
 export { NotFound } from './NotFound';
 
