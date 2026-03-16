@@ -299,7 +299,6 @@ class TestComplianceVerification:
         """Test compliance status is one of valid values"""
         if framework_class == GovernmentAIGovernanceFramework:
             framework = framework_class(
-                organization_id=org_id,
                 government_agency_id="A006",
                 jurisdiction="US"
             )
@@ -364,11 +363,13 @@ class TestFrameworkConsistency:
     ])
     def test_method_existence(self, framework_class):
         """Test all required methods exist"""
-        f = framework_class(
-            organization_id="cons_002",
-            **({} if framework_class not in [GovernmentAIGovernanceFramework]
-               else {'government_agency_id': 'A007', 'jurisdiction': 'US'})
-        )
+        if framework_class == GovernmentAIGovernanceFramework:
+            f = framework_class(
+                government_agency_id='A007',
+                jurisdiction='US'
+            )
+        else:
+            f = framework_class(organization_id="cons_002")
         methods = ['assess_compliance', 'validate_governance_requirements',
                    'generate_audit_report', 'record_governance_event']
         for method in methods:
@@ -413,7 +414,6 @@ class TestFrameworkComparison:
         """Test governance coverage comparison"""
         health = HealthcareAIGovernanceFramework(organization_id="cmp_002")
         govt = GovernmentAIGovernanceFramework(
-            organization_id="cmp_002",
             government_agency_id="A008",
             jurisdiction="US"
         )
