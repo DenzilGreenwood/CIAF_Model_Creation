@@ -21,7 +21,7 @@ import uuid
 from queue import Queue, Empty
 from typing import Dict, List, Optional, Any, Callable
 from dataclasses import dataclass, asdict
-from datetime import datetime
+from datetime import datetime, timezone
 import pickle
 import os
 from pathlib import Path

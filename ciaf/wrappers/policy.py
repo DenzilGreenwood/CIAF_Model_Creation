@@ -15,7 +15,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Any, TYPE_CHECKING
 from enum import Enum
-from datetime import datetime
+from datetime import datetime, timezone
 
 # Import core utilities for policy integrity
 from ..lcm import canonical_json, canonical_hash

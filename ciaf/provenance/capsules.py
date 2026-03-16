@@ -13,7 +13,7 @@ Version: 1.0.0
 
 import os
 from base64 import urlsafe_b64decode, urlsafe_b64encode
-from datetime import datetime
+from datetime import datetime, timezone
 
 from cryptography.exceptions import InvalidTag
 
@@ -21,6 +21,7 @@ from cryptography.exceptions import InvalidTag
 from ..core import (
     SALT_LENGTH,
     decrypt_aes_gcm,
+    derive_key,
     encrypt_aes_gcm,
     secure_random_bytes,
     sha256_hash,

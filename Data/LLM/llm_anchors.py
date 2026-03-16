@@ -7,7 +7,7 @@ following the CIAF Data Structures Technical Specification.
 
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Any
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 @dataclass
@@ -48,7 +48,7 @@ class LLMDatasetAnchor:
     
     # Policy and governance
     policy: Optional[Any] = None           # LCM Policy reference
-    timestamp: str = field(default_factory=lambda: datetime.utcnow().isoformat() + 'Z')
+    timestamp: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat() + 'Z')
 
 
 @dataclass
@@ -96,7 +96,7 @@ class LLMModelAnchor:
     
     # Policy and governance
     policy: Optional[Any] = None           # LCM Policy reference
-    timestamp: str = field(default_factory=lambda: datetime.utcnow().isoformat() + 'Z')
+    timestamp: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat() + 'Z')
 
 
 @dataclass
@@ -155,10 +155,10 @@ class LLMDeploymentAnchor:
     validation_results: Dict[str, Any] = field(default_factory=dict)
     
     # Cryptographic verification
-    deployment_timestamp: str = field(default_factory=lambda: datetime.utcnow().isoformat() + 'Z')
+    deployment_timestamp: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat() + 'Z')
     merkle_root: Optional[str] = None      # Verification Merkle root
     signature: Optional[str] = None        # Deployment signature
     
     # Policy and governance
     policy: Optional[Any] = None           # LCM Policy reference
-    timestamp: str = field(default_factory=lambda: datetime.utcnow().isoformat() + 'Z')
+    timestamp: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat() + 'Z')

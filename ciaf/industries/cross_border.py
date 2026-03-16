@@ -605,7 +605,7 @@ class CrossBorderAIGovernanceFramework(AIGovernanceFramework):
 
         compliance_results = {
             "system_id": system_id,
-            "assessment_timestamp": datetime.now(timezone.utc),
+            "assessment_timestamp": datetime.now(timezone.utc).isoformat(),
             "overall_compliance_score": 0.0,
             "domain_scores": {},
             "regulatory_compliance": {},

@@ -5,7 +5,7 @@ Defines governance policies for pretraining data with CIAF/LCM integration
 
 from dataclasses import dataclass, field
 from typing import List, Dict, Any
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 import json
 import hashlib
@@ -56,7 +56,7 @@ class LCMPolicy:
     
     # Additional metadata
     version: str = "1.0.0"
-    created_at: str = field(default_factory=lambda: datetime.utcnow().isoformat() + 'Z')
+    created_at: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat() + 'Z')
     description: str = ""
     
     # Compression and batching settings

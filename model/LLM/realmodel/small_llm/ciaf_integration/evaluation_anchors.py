@@ -7,7 +7,7 @@ import json
 import hashlib
 from dataclasses import dataclass, field, asdict
 from typing import Dict, Any, List, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 
@@ -81,7 +81,7 @@ class EvaluationManager:
             EvaluationAnchor
         """
         # Generate evaluation ID
-        timestamp = datetime.utcnow().timestamp()
+        timestamp = datetime.now(timezone.utc).timestamp()
         evaluation_id = f"eval_{model_version_anchor_id[:16]}_{timestamp}"
         
         # Create anchor
@@ -89,7 +89,7 @@ class EvaluationManager:
             evaluation_id=evaluation_id,
             model_version_anchor_id=model_version_anchor_id,
             test_dataset_anchors=test_dataset_anchors,
-            evaluation_timestamp=datetime.utcnow().isoformat() + 'Z',
+            evaluation_timestamp=datetime.now(timezone.utc).isoformat() + 'Z',
             eval_config=eval_config or {}
         )
         

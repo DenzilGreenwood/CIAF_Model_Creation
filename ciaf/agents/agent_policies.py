@@ -11,7 +11,7 @@ Author: Denzil James Greenwood
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Tuple, Any
 from enum import Enum
-from datetime import time
+from datetime import time, timezone
 
 
 class AccessLevel(str, Enum):

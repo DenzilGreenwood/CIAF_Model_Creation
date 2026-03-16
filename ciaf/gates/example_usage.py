@@ -6,7 +6,7 @@ for ML lifecycle governance with policy-driven configuration.
 """
 
 import numpy as np
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, Any
 
 # Import CIAF gates components

@@ -1,0 +1,43 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ciaf-config
+  namespace: ciaf
+  labels:
+    app: ciaf
+    component: config
+data:
+  # Logging Configuration
+  log_level: "INFO"
+  log_format: "json"
+  
+  # Service Configuration
+  environment: "production"
+  service_host: "0.0.0.0"
+  
+  # Database Configuration (non-sensitive)
+  db_echo: "false"
+  pool_size: "10"
+  max_overflow: "5"
+  pool_recycle: "3600"
+  
+  # Cache Configuration
+  cache_ttl: "300"
+  
+  # Timeouts
+  query_timeout: "30"
+  verification_timeout: "5"
+  
+  # CIAF Core URLs
+  ciaf_core_url: "http://ciaf-vault:8000"
+  ciaf_verification_url: "http://ciaf-verification:8001"
+  
+  # Feature Flags
+  enable_audit_logging: "true"
+  enable_merkle_tree: "true"
+  enable_worm_enforcement: "true"
+  
+  # Performance
+  max_workers: "4"
+  worker_timeout: "30"

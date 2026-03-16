@@ -7,7 +7,7 @@ CIAF Inference and Training Structures specification.
 
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Any
-from datetime import datetime
+from datetime import datetime, timezone
 import uuid
 
 
@@ -68,7 +68,7 @@ class LLMInferenceReceipt:
     evidence_strength: str = "real"        # Evidence reliability classification
     
     # Verification and compliance
-    committed_at: str = field(default_factory=lambda: datetime.utcnow().isoformat() + 'Z')
+    committed_at: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat() + 'Z')
     signature: Optional[str] = None        # Digital signature
     policy: Optional[Any] = None           # LCM Policy reference
 
@@ -171,7 +171,7 @@ class LLMTrainingSession:
     
     # Policy and governance
     policy: Optional[Any] = None           # LCM Policy reference
-    timestamp: str = field(default_factory=lambda: datetime.utcnow().isoformat() + 'Z')
+    timestamp: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat() + 'Z')
 
 
 @dataclass
@@ -216,6 +216,6 @@ class LLMBatchInferenceReceipt:
     individual_receipts: List[str] = field(default_factory=list)
     
     # Verification and compliance
-    committed_at: str = field(default_factory=lambda: datetime.utcnow().isoformat() + 'Z')
+    committed_at: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat() + 'Z')
     signature: Optional[str] = None
     policy: Optional[Any] = None

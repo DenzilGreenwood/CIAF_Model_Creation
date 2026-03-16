@@ -6,7 +6,7 @@ import json
 import torch
 from pathlib import Path
 from typing import Dict, Optional, Any
-from datetime import datetime
+from datetime import datetime, timezone
 
 from model import LanguageModel
 from config import ModelConfig

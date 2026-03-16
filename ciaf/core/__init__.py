@@ -36,6 +36,7 @@ from .crypto import (
     compute_hash,
     derive_anchor_from_master,
     derive_master_anchor,
+    derive_key,
     derive_dataset_anchor,
     derive_model_anchor,
     derive_capsule_anchor,

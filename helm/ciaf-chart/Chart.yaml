@@ -1,0 +1,19 @@
+apiVersion: v2
+name: ciaf
+description: Cloud-native AI Governance Framework - Production deployment
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+keywords:
+  - ai-governance
+  - compliance
+  - audit
+  - ciaf
+  - verification
+home: https://github.com/DenzilGreenwood/CIAF_Model_Creation
+sources:
+  - https://github.com/DenzilGreenwood/CIAF_Model_Creation
+maintainers:
+  - name: CIAF Team
+    email: support@ciaf.example.com
+dependencies: []

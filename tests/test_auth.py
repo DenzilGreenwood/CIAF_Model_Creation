@@ -3,21 +3,21 @@ Backend Unit Tests - Authentication System
 Tests for token generation, validation, password hashing, etc.
 """
 import pytest
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from unittest.mock import Mock, patch
 import jwt
 
 
 # Mock authentication functions (these would be from your actual auth module)
 class AuthService:
-    SECRET_KEY = "test_secret_key"
+    SECRET_KEY = "test_secret_key_that_is_at_least_32_bytes_long_for_hs256_security"
 
     @staticmethod
     def generate_token(user_id: str, expires_in_minutes: int = 15) -> str:
         payload = {
             "user_id": user_id,
-            "exp": datetime.utcnow() + timedelta(minutes=expires_in_minutes),
-            "iat": datetime.utcnow(),
+            "exp": datetime.now(timezone.utc) + timedelta(minutes=expires_in_minutes),
+            "iat": datetime.now(timezone.utc),
         }
         return jwt.encode(payload, AuthService.SECRET_KEY, algorithm="HS256")
 
@@ -87,8 +87,8 @@ class TestTokenVerification:
         # Create an already-expired token
         payload = {
             "user_id": "user123",
-            "exp": datetime.utcnow() - timedelta(hours=1),  # Already expired
-            "iat": datetime.utcnow() - timedelta(hours=2),
+            "exp": datetime.now(timezone.utc) - timedelta(hours=1),  # Already expired
+            "iat": datetime.now(timezone.utc) - timedelta(hours=2),
         }
         expired_token = jwt.encode(payload, AuthService.SECRET_KEY, algorithm="HS256")
 

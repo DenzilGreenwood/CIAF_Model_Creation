@@ -8,7 +8,7 @@ import torch
 from pathlib import Path
 from typing import Optional
 from pydantic import BaseModel
-from datetime import datetime
+from datetime import datetime, timezone
 import time
 
 # Add parent directory to path

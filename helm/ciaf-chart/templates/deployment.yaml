@@ -1,0 +1,54 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ciaf-vault
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app: ciaf-core
+    component: backend
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    release: {{ .Release.Name }}
+spec:
+  replicas: {{ .Values.replicaCount.vault }}
+  selector:
+    matchLabels:
+      app: ciaf-core
+  template:
+    metadata:
+      labels:
+        app: ciaf-core
+        component: backend
+    spec:
+      serviceAccountName: {{ .Values.rbac.serviceAccount.name }}
+      securityContext:
+        runAsNonRoot: {{ .Values.security.runAsNonRoot }}
+        runAsUser: {{ .Values.security.runAsUser }}
+        fsGroup: {{ .Values.security.fsGroup }}
+      containers:
+      - name: ciaf-core
+        image: "{{ .Values.images.vault.repository }}:{{ .Values.images.vault.tag }}"
+        imagePullPolicy: {{ .Values.images.vault.pullPolicy }}
+        ports:
+        - name: http
+          containerPort: 8000
+          protocol: TCP
+        envFrom:
+        - configMapRef:
+            name: ciaf-config
+        - secretRef:
+            name: ciaf-secrets
+        resources:
+          {{- toYaml .Values.resources.vault | nindent 10 }}
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 5

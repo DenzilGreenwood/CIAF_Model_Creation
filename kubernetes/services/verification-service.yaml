@@ -1,0 +1,19 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ciaf-verification
+  namespace: ciaf
+  labels:
+    app: ciaf-verification
+    component: backend
+    tier: verification
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8001
+    targetPort: 8001
+    protocol: TCP
+    name: http
+  selector:
+    app: ciaf-verification

@@ -184,7 +184,11 @@ class CIAFExplainabilityManager:
 
 
 # Legacy global instance for backward compatibility
-explainability_manager = CIAFExplainabilityManager()
+# Suppress deprecation warning since this is intentionally kept for backward compatibility
+import warnings
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", DeprecationWarning)
+    explainability_manager = CIAFExplainabilityManager()
 
 # Legacy factory functions for backward compatibility
 def create_shap_explainer(model: Any, feature_names: Optional[List[str]] = None) -> CIAFExplainer:

@@ -6,7 +6,7 @@ Filters and curates SlimPajama-6B data with full provenance tracking
 import hashlib
 import json
 from typing import Dict, Any, List, Optional, Tuple
-from datetime import datetime
+from datetime import datetime, timezone
 from dataclasses import dataclass, asdict
 import logging
 
@@ -182,7 +182,7 @@ class DataCurator:
             'reasons': reasons,
             'text_length': len(text),
             'source': source,
-            'timestamp': datetime.utcnow().isoformat() + 'Z'
+            'timestamp': datetime.now(timezone.utc).isoformat() + 'Z'
         }
         
         # Create commitment hash

@@ -5,7 +5,7 @@ Tests performance of critical operations
 import pytest
 import time
 import statistics
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import jwt
 import hashlib
 
@@ -21,7 +21,7 @@ class PerformanceMetrics:
         self.measurements.append({
             "operation": operation_name,
             "duration_ms": duration * 1000,
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now(timezone.utc).isoformat()
         })
 
     def get_stats(self, operation_name: str) -> dict:
@@ -76,8 +76,8 @@ class TestAuthenticationPerformance:
             start = time.time()
             payload = {
                 "user_id": f"user_{i}",
-                "exp": datetime.utcnow() + timedelta(minutes=15),
-                "iat": datetime.utcnow(),
+                "exp": datetime.now(timezone.utc) + timedelta(minutes=15),
+                "iat": datetime.now(timezone.utc),
             }
             token = jwt.encode(payload, self.SECRET_KEY, algorithm="HS256")
             duration = time.time() - start
@@ -92,8 +92,8 @@ class TestAuthenticationPerformance:
         # Generate a token first
         payload = {
             "user_id": "user123",
-            "exp": datetime.utcnow() + timedelta(minutes=15),
-            "iat": datetime.utcnow(),
+            "exp": datetime.now(timezone.utc) + timedelta(minutes=15),
+            "iat": datetime.now(timezone.utc),
         }
         token = jwt.encode(payload, self.SECRET_KEY, algorithm="HS256")
 
@@ -118,7 +118,7 @@ class TestAuthenticationPerformance:
             provided = "UserPassword123!"
             verified = hashlib.sha256(provided.encode()).hexdigest() == hashed
             # Generate token
-            payload = {"user_id": f"user_{i}", "exp": datetime.utcnow() + timedelta(minutes=15)}
+            payload = {"user_id": f"user_{i}", "exp": datetime.now(timezone.utc) + timedelta(minutes=15)}
             token = jwt.encode(payload, self.SECRET_KEY, algorithm="HS256")
             duration = time.time() - start
             metrics.measure("login_flow", duration)
@@ -161,7 +161,7 @@ class TestVerificationPerformance:
                 # Compute hash
                 content_hash = hashlib.sha256(content.encode()).hexdigest()
                 # Generate timestamp
-                timestamp = datetime.utcnow().isoformat()
+                timestamp = datetime.now(timezone.utc).isoformat()
                 # Create signature
                 signature = hashlib.sha256(
                     f"{content_hash}{timestamp}".encode()
@@ -180,7 +180,7 @@ class TestVerificationPerformance:
         for i in range(5):
             content = f"Output content {i}"
             content_hash = hashlib.sha256(content.encode()).hexdigest()
-            timestamp = datetime.utcnow().isoformat()
+            timestamp = datetime.now(timezone.utc).isoformat()
             signature = hashlib.sha256(f"{content_hash}{timestamp}".encode()).hexdigest()
             proofs.append((content, content_hash, timestamp, signature))
 
@@ -208,7 +208,7 @@ class TestVerificationPerformance:
             content = f"Output {i}"
             proof = {
                 "content_hash": hashlib.sha256(content.encode()).hexdigest(),
-                "timestamp": datetime.utcnow().isoformat(),
+                "timestamp": datetime.now(timezone.utc).isoformat(),
                 "signature": hashlib.sha256(f"sig_{i}".encode()).hexdigest(),
                 "verified": True
             }
@@ -220,7 +220,7 @@ class TestVerificationPerformance:
                 # Materialize
                 materialized = {
                     "proof": proof,
-                    "materialized_at": datetime.utcnow().isoformat(),
+                    "materialized_at": datetime.now(timezone.utc).isoformat(),
                     "status": "verified" if proof["verified"] else "unverified"
                 }
                 duration = time.time() - start
@@ -244,7 +244,7 @@ class TestAPIPerformance:
             # Simulate database write, signature generation
             content_hash = hashlib.sha256(f"output_{i}".encode()).hexdigest()
             proof_id = f"proof_{i}"
-            timestamp = datetime.utcnow().isoformat()
+            timestamp = datetime.now(timezone.utc).isoformat()
             # Simulate network latency (minimal in tests)
             duration = time.time() - start
             metrics.measure("api_verify_submit", duration)
@@ -261,7 +261,7 @@ class TestAPIPerformance:
             proof = {
                 "id": f"proof_{i}",
                 "content_hash": hashlib.sha256(f"data_{i}".encode()).hexdigest(),
-                "timestamp": datetime.utcnow().isoformat(),
+                "timestamp": datetime.now(timezone.utc).isoformat(),
                 "status": "verified"
             }
             duration = time.time() - start

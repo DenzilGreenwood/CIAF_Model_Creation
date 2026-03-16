@@ -10,7 +10,7 @@ Author: Denzil James Greenwood
 
 from dataclasses import dataclass
 from typing import Dict, List, Optional, Tuple, Any
-from datetime import datetime
+from datetime import datetime, timezone
 
 from ciaf.tagging import OutputTag
 from ciaf.core.merkle import MerkleTree

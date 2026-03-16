@@ -1,7 +1,7 @@
 """Base agent class and agent orchestration."""
 
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional, Dict, List, Any
 from abc import ABC, abstractmethod
 from llm_providers import LLMProvider, LLMProviderFactory, LLMProviderType
@@ -103,7 +103,7 @@ class Agent(ABC):
 
         # Record execution
         execution_record = {
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "tag_id": tag_id,
             "output": output,
             "verification": verification

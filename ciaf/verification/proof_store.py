@@ -12,7 +12,7 @@ import json
 import sqlite3
 from dataclasses import asdict
 from typing import Dict, List, Optional, Any
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 from ciaf.tagging import OutputTag

@@ -973,7 +973,9 @@ class ClimateESGAIGovernanceFramework(AIGovernanceFramework):
         }
     
     def assess_compliance(self, system_id: str = None, assessment_type: str = "comprehensive", **kwargs) -> Dict[str, Any]:
-
+        """
+        Assess Climate ESG AI compliance
+        
         Args:
             system_id: Climate ESG AI system identifier (defaults to organization_id)
             assessment_type: Type of compliance assessment
@@ -988,7 +990,7 @@ class ClimateESGAIGovernanceFramework(AIGovernanceFramework):
 
         compliance_results = {
             "system_id": system_id,
-            "assessment_timestamp": datetime.now(timezone.utc),
+            "assessment_timestamp": datetime.now(timezone.utc).isoformat(),
             "overall_compliance_score": 0.0,
             "domain_scores": {},
             "regulatory_compliance": {},

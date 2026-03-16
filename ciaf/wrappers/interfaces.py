@@ -13,7 +13,7 @@ Version: 1.0.0
 
 from __future__ import annotations
 from typing import Protocol, runtime_checkable, Any, Dict, List, Optional, Tuple, Union
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 @runtime_checkable

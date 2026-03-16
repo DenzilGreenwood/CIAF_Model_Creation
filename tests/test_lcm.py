@@ -3,7 +3,7 @@ Backend Unit Tests - LCM (Lazy Capsule Materialization) System
 Tests for proof generation, materialization, verification
 """
 import pytest
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, Any
 import hashlib
 import json
@@ -39,7 +39,7 @@ class LCMSystem:
     def create_proof(content: str) -> LCMProof:
         """Create a proof for content"""
         content_hash = LCMSystem.compute_hash(content)
-        timestamp = datetime.utcnow().isoformat()
+        timestamp = datetime.now(timezone.utc).isoformat()
         # Simplified signature (in production, use Ed25519)
         signature = hashlib.sha256(
             f"{content_hash}{timestamp}".encode()
@@ -67,7 +67,7 @@ class LCMSystem:
         """Materialize a proof (lazy evaluation)"""
         return {
             "proof": proof.to_dict(),
-            "materialized_at": datetime.utcnow().isoformat(),
+            "materialized_at": datetime.now(timezone.utc).isoformat(),
             "status": "verified" if proof.verified else "unverified"
         }
 

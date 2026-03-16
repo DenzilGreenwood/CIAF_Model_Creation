@@ -16,7 +16,7 @@ Enhanced with:
 
 import warnings
 import pickle
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
@@ -27,7 +27,7 @@ from ..provenance import ModelAggregationAnchor, ProvenanceCapsule, TrainingSnap
 
 # Import new modules
 try:
-    from ..preprocessing import CIAFModelAdapter, create_auto_adapter
+    from ..preprocessing import CIAFModelAdapter, create_auto_model_adapter
 
     PREPROCESSING_AVAILABLE = True
 except ImportError:
@@ -175,14 +175,15 @@ class CIAFModelWrapper:
         try:
             # Setup preprocessing adapter
             if self.enable_preprocessing:
-                self.model_adapter = create_auto_adapter(self.model)
+                self.model_adapter = create_auto_model_adapter(self.model)
 
             # Setup explainer
             if self.enable_explainability:
                 self.explainer = create_auto_explainer(self.model)
-                explainability_manager.register_explainer(
-                    self.model_name, self.model, feature_names=self.feature_names
-                )
+                # Use the new protocol-based provider instead of legacy manager
+                from ..explainability import get_global_explanation_provider
+                provider = get_global_explanation_provider()
+                provider.register_explainer(self.model_name, self.explainer, self.feature_names)
 
             # Setup uncertainty quantifier
             if self.enable_uncertainty:
@@ -605,17 +606,25 @@ class CIAFModelWrapper:
 
             # Use our new preprocessing modules for enhanced compatibility
             try:
-                from ..preprocessing import auto_preprocess_data
+                from ..preprocessing import create_auto_preprocessor
 
                 print(
                     f"   🔧 Using enhanced preprocessing for {type(self.model).__name__}"
                 )
 
-                # Pass the training data directly to auto_preprocess_data
-                # Also pass self to store the fitted preprocessor
-                X_processed, y_processed = auto_preprocess_data(
-                    training_data, store_preprocessor=self
-                )
+                # Create preprocessor and fit_transform
+                preprocessor = create_auto_preprocessor(training_data)
+                X_processed = preprocessor.fit_transform(training_data)
+                
+                # Extract targets if available
+                y_processed = []
+                for item in training_data:
+                    if isinstance(item, dict) and "metadata" in item and "target" in item["metadata"]:
+                        y_processed.append(item["metadata"]["target"])
+                
+                # Store preprocessor info
+                self.fitted_preprocessor = preprocessor
+                self.preprocessing_type = "protocol_based"
 
                 if X_processed is not None:
                     print(
@@ -830,12 +839,17 @@ class CIAFModelWrapper:
         
         state = self.__dict__.copy()
         
+        # Remove unpicklable objects (framework contains cryptographic objects)
+        # These will be recreated in __setstate__
+        state.pop('framework', None)
+        state.pop('anchor_signer', None)
+        
         # Add LCM metadata to state
         state['_lcm_metadata_trail'] = lcm_metadata
         state['_lcm_serialization_timestamp'] = datetime.now().isoformat()
         
         # Store detailed framework LCM state
-        if hasattr(self.framework, 'lcm_inference_manager'):
+        if hasattr(self, 'framework') and hasattr(self.framework, 'lcm_inference_manager'):
             state['_lcm_inference_connections'] = {}
             receipt_count = 0
             
@@ -866,9 +880,15 @@ class CIAFModelWrapper:
         # Restore basic state
         self.__dict__.update(state)
         
+        # Recreate framework if it was removed during pickling
+        if not hasattr(self, 'framework'):
+            from ..api import CIAFFramework
+            self.framework = CIAFFramework()
+            print(f"🔄 Recreated CIAFFramework for {state.get('model_name', 'Unknown')}")
+        
         # Restore LCM connections if available
         total_restored_receipts = 0
-        if '_lcm_inference_connections' in state and hasattr(self.framework, 'lcm_inference_manager'):
+        if '_lcm_inference_connections' in state and hasattr(self, 'framework') and hasattr(self.framework, 'lcm_inference_manager'):
             for conn_id, conn_data in state['_lcm_inference_connections'].items():
                 # Recreate connections from serialized data
                 if conn_data and 'receipts' in conn_data:

@@ -11,7 +11,7 @@ Version: 1.0.0
 """
 
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict
 
 from ..core import MerkleTree, sha256_hash

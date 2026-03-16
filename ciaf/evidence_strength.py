@@ -8,7 +8,7 @@ audit trails clearly distinguish between real and simulated evidence.
 from enum import Enum
 from typing import Dict, Any, Optional
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timezone
 
 class EvidenceStrength(Enum):
     """Evidence strength levels for audit trails."""
@@ -45,7 +45,7 @@ class EvidenceTracker:
             component=component,
             reason=reason,
             missing_sources=missing_sources,
-            timestamp=datetime.utcnow().isoformat()
+            timestamp=datetime.now(timezone.utc).isoformat()
         )
         self.fallback_log.append(fallback)
         return fallback

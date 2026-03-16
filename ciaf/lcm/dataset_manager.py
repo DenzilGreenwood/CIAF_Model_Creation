@@ -10,7 +10,7 @@ Version: 1.0.0
 """
 
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 from typing import Dict, List, Any, Optional, Union, TYPE_CHECKING
 from dataclasses import dataclass

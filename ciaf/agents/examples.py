@@ -10,7 +10,7 @@ Author: Denzil James Greenwood
 
 from .agent_policies import IAMPolicy, PAMPolicy
 from .agent_registry import AgentRegistry, Agent
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 def create_healthcare_policies() -> tuple[dict, dict]:

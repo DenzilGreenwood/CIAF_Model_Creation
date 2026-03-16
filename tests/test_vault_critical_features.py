@@ -14,7 +14,7 @@ import pytest
 import sqlite3
 import json
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from ciaf.vault.core import VaultManager, ImmutableProof
 from ciaf.vault.authentication import APIKeyManager

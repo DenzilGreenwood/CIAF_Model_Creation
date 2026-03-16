@@ -15,7 +15,7 @@ from ciaf.agents import (
     create_banking_policies,
     create_example_agent_registry,
 )
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 class TestIAMPolicy:

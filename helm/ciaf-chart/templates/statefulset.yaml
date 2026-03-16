@@ -1,0 +1,61 @@
+{{- if .Values.postgresql.enabled -}}
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ciaf-postgresql
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app: ciaf-postgresql
+    component: database
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    release: {{ .Release.Name }}
+spec:
+  serviceName: ciaf-postgresql
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ciaf-postgresql
+  template:
+    metadata:
+      labels:
+        app: ciaf-postgresql
+        component: database
+    spec:
+      containers:
+      - name: postgresql
+        image: "{{ .Values.postgresql.image.repository }}:{{ .Values.postgresql.image.tag }}"
+        ports:
+        - name: postgresql
+          containerPort: 5432
+        env:
+        - name: POSTGRES_DB
+          value: {{ .Values.postgresql.database | quote }}
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: ciaf-secrets
+              key: postgres_user
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: ciaf-secrets
+              key: postgres_password
+        volumeMounts:
+        - name: postgresql-data
+          mountPath: /var/lib/postgresql/data
+        resources:
+          {{- toYaml .Values.resources.postgresql | nindent 10 }}
+  {{- if .Values.persistence.enabled }}
+  volumeClaimTemplates:
+  - metadata:
+      name: postgresql-data
+    spec:
+      accessModes:
+      - {{ .Values.persistence.postgresql.accessMode }}
+      storageClassName: {{ .Values.persistence.storageClass }}
+      resources:
+        requests:
+          storage: {{ .Values.persistence.postgresql.size }}
+  {{- end }}
+{{- end }}

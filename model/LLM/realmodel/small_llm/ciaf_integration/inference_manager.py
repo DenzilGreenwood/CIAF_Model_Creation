@@ -7,7 +7,7 @@ import hashlib
 import json
 from dataclasses import dataclass, field, asdict
 from typing import Dict, Any, Optional, List
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 
@@ -132,13 +132,13 @@ class InferenceManager:
         
         # Create receipt ID
         self.receipt_count += 1
-        receipt_id = f"{self.deployment_anchor_id}_inference_{self.receipt_count}_{datetime.utcnow().timestamp()}"
+        receipt_id = f"{self.deployment_anchor_id}_inference_{self.receipt_count}_{datetime.now(timezone.utc).timestamp()}"
         
         # Create receipt
         receipt = InferenceReceipt(
             receipt_id=receipt_id,
             deployment_anchor_id=self.deployment_anchor_id,
-            timestamp=datetime.utcnow().isoformat() + 'Z',
+            timestamp=datetime.now(timezone.utc).isoformat() + 'Z',
             input_hash=input_hash,
             output_hash=output_hash,
             prompt_length=len(input_text),
@@ -210,13 +210,13 @@ def create_deployment_anchor(
     Returns:
         DeploymentAnchor
     """
-    timestamp = datetime.utcnow().timestamp()
+    timestamp = datetime.now(timezone.utc).timestamp()
     deployment_id = f"deployment_{model_version_anchor_id[:16]}_{timestamp}"
     
     anchor = DeploymentAnchor(
         deployment_id=deployment_id,
         model_version_anchor_id=model_version_anchor_id,
-        deployment_timestamp=datetime.utcnow().isoformat() + 'Z',
+        deployment_timestamp=datetime.now(timezone.utc).isoformat() + 'Z',
         deployment_config=deployment_config or {},
         compliance_policy=compliance_policy or [
             "EU AI Act Compliance",

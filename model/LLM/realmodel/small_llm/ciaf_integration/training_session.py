@@ -7,7 +7,7 @@ import json
 import hashlib
 from dataclasses import dataclass, field, asdict
 from typing import Dict, Any, List, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 
@@ -120,7 +120,7 @@ class TrainingSessionManager:
             TrainingSessionAnchor
         """
         # Generate session ID
-        timestamp = datetime.utcnow().timestamp()
+        timestamp = datetime.now(timezone.utc).timestamp()
         if session_name:
             session_id = f"{session_name}_{timestamp}"
         else:
@@ -133,7 +133,7 @@ class TrainingSessionManager:
             dataset_anchors=dataset_anchors,
             policy_id=policy_id,
             hyperparameters=hyperparameters,
-            training_start=datetime.utcnow().isoformat() + 'Z',
+            training_start=datetime.now(timezone.utc).isoformat() + 'Z',
             status="initialized"
         )
         
@@ -152,7 +152,7 @@ class TrainingSessionManager:
         """Mark session as running."""
         if self.active_session:
             self.active_session.status = "running"
-            self.active_session.training_start = datetime.utcnow().isoformat() + 'Z'
+            self.active_session.training_start = datetime.now(timezone.utc).isoformat() + 'Z'
             self._save_session(self.active_session)
             print(f"Started training session: {self.active_session.session_id}")
     
@@ -195,7 +195,7 @@ class TrainingSessionManager:
             epoch=epoch,
             global_step=global_step,
             tokens_seen=tokens_seen,
-            timestamp=datetime.utcnow().isoformat() + 'Z',
+            timestamp=datetime.now(timezone.utc).isoformat() + 'Z',
             training_loss=training_loss,
             validation_loss=validation_loss,
             learning_rate=learning_rate,
@@ -229,7 +229,7 @@ class TrainingSessionManager:
         """Mark session as completed."""
         if self.active_session:
             self.active_session.status = "completed"
-            self.active_session.training_end = datetime.utcnow().isoformat() + 'Z'
+            self.active_session.training_end = datetime.now(timezone.utc).isoformat() + 'Z'
             self._save_session(self.active_session)
             print(f"Completed training session: {self.active_session.session_id}")
     
@@ -237,7 +237,7 @@ class TrainingSessionManager:
         """Mark session as failed."""
         if self.active_session:
             self.active_session.status = "failed"
-            self.active_session.training_end = datetime.utcnow().isoformat() + 'Z'
+            self.active_session.training_end = datetime.now(timezone.utc).isoformat() + 'Z'
             if error_message:
                 self.active_session.hyperparameters['error'] = error_message
             self._save_session(self.active_session)

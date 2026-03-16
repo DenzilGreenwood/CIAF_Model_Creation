@@ -10,7 +10,7 @@ Author: Denzil James Greenwood
 
 from dataclasses import dataclass, field
 from typing import List, Dict, Any, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 import uuid
 
 

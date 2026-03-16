@@ -6,7 +6,7 @@ Tests all endpoints with realistic request/response scenarios.
 import pytest
 import json
 from typing import Dict, Any
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 # Test fixtures and helpers

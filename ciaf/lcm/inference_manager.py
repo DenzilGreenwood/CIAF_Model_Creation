@@ -11,7 +11,7 @@ Version: 1.0.0
 
 import json
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, List, Any, Optional, TYPE_CHECKING
 from dataclasses import dataclass
 

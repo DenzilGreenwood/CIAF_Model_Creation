@@ -4,7 +4,7 @@ import requests
 import json
 import time
 from typing import Dict, List, Optional, Any
-from datetime import datetime
+from datetime import datetime, timezone
 from .types import VerificationResult, AuditAction, ComplianceReport, VerificationStatus, RiskLevel
 
 
@@ -82,7 +82,7 @@ class CIAFClient:
             "organization_id": organization_id,
             "policies": policies or [],
             "metadata": metadata or {},
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now(timezone.utc).isoformat()
         }
 
         response = self.session.post(
@@ -193,7 +193,7 @@ class CIAFClient:
             tag_id=data.get("tag_id", ""),
             status=VerificationStatus(data.get("status", "unverified")),
             risk_level=RiskLevel(data.get("risk_level", "low")),
-            verified_at=datetime.fromisoformat(data.get("verified_at", datetime.utcnow().isoformat())),
+            verified_at=datetime.fromisoformat(data.get("verified_at", datetime.now(timezone.utc).isoformat())),
             agents=data.get("agents", []),
             policies=data.get("policies", []),
             merkle_proof_valid=data.get("merkle_proof_valid", False),
@@ -210,7 +210,7 @@ class CIAFClient:
             agent_id=data.get("agent_id", ""),
             action_type=data.get("action_type", ""),
             resource=data.get("resource", ""),
-            timestamp=datetime.fromisoformat(data.get("timestamp", datetime.utcnow().isoformat())),
+            timestamp=datetime.fromisoformat(data.get("timestamp", datetime.now(timezone.utc).isoformat())),
             status=data.get("status", ""),
             details=data.get("details", {})
         )
@@ -220,8 +220,8 @@ class CIAFClient:
         """Parse compliance report from API response."""
         return ComplianceReport(
             organization_id=data.get("organization_id", ""),
-            period_start=datetime.fromisoformat(data.get("period_start", datetime.utcnow().isoformat())),
-            period_end=datetime.fromisoformat(data.get("period_end", datetime.utcnow().isoformat())),
+            period_start=datetime.fromisoformat(data.get("period_start", datetime.now(timezone.utc).isoformat())),
+            period_end=datetime.fromisoformat(data.get("period_end", datetime.now(timezone.utc).isoformat())),
             total_outputs=data.get("total_outputs", 0),
             verified_outputs=data.get("verified_outputs", 0),
             compliance_rate=data.get("compliance_rate", 0.0),

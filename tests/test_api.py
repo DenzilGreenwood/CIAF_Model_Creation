@@ -12,6 +12,8 @@ from typing import Optional
 # ========== MOCK API MODELS ==========
 
 class VerificationRequest(BaseModel):
+    model_config = {"protected_namespaces": ()}
+    
     content: str
     model_version: str
     output_type: str
@@ -42,7 +44,7 @@ proofs_store = {}
 async def submit_verification(request: VerificationRequest):
     """Submit output for verification"""
     import hashlib
-    from datetime import datetime
+    from datetime import datetime, timezone
 
     content_hash = hashlib.sha256(request.content.encode()).hexdigest()
     proof_id = f"proof_{len(proofs_store) + 1}"
@@ -51,7 +53,7 @@ async def submit_verification(request: VerificationRequest):
         "id": proof_id,
         "content_hash": content_hash,
         "status": "verified",
-        "timestamp": datetime.utcnow().isoformat(),
+        "timestamp": datetime.now(timezone.utc).isoformat(),
         "content": request.content
     }
     proofs_store[proof_id] = proof
@@ -60,7 +62,7 @@ async def submit_verification(request: VerificationRequest):
         proof_id=proof_id,
         status="verified",
         content_hash=content_hash,
-        verification_timestamp=datetime.utcnow().isoformat()
+        verification_timestamp=datetime.now(timezone.utc).isoformat()
     )
 
 
@@ -71,7 +73,7 @@ async def get_verification(proof_id: str):
         raise HTTPException(status_code=404, detail="Proof not found")
 
     proof = proofs_store[proof_id]
-    from datetime import datetime
+    from datetime import datetime, timezone
     return VerificationResponse(
         proof_id=proof_id,
         status=proof["status"],

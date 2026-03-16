@@ -11,7 +11,7 @@ Author: Denzil James Greenwood
 Version: 1.0.0
 """
 
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List, Optional
 
 from ..core import CryptoUtils

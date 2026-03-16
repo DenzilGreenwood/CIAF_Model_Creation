@@ -1,0 +1,239 @@
+# Default values for CIAF Helm chart
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# Global settings
+global:
+  namespace: ciaf
+  domain: ciaf.example.com
+
+# Image settings
+images:
+  vault:
+    repository: ciaf-core
+    tag: "latest"
+    pullPolicy: IfNotPresent
+  verification:
+    repository: ciaf-verification
+    tag: "latest"
+    pullPolicy: IfNotPresent
+  frontend:
+    repository: ciaf-frontend
+    tag: "latest"
+    pullPolicy: IfNotPresent
+  nginx:
+    repository: nginx
+    tag: "1.25-alpine"
+    pullPolicy: IfNotPresent
+
+# Replica counts
+replicaCount:
+  vault: 3
+  verification: 2
+  frontend: 2
+  nginx: 2
+
+# Resource limits and requests
+resources:
+  vault:
+    requests:
+      memory: "512Mi"
+      cpu: "250m"
+    limits:
+      memory: "2Gi"
+      cpu: "1000m"
+  verification:
+    requests:
+      memory: "256Mi"
+      cpu: "200m"
+    limits:
+      memory: "1Gi"
+      cpu: "500m"
+  frontend:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+    limits:
+      memory: "512Mi"
+      cpu: "300m"
+  nginx:
+    requests:
+      memory: "64Mi"
+      cpu: "50m"
+    limits:
+      memory: "256Mi"
+      cpu: "200m"
+  postgresql:
+    requests:
+      memory: "512Mi"
+      cpu: "250m"
+    limits:
+      memory: "2Gi"
+      cpu: "1000m"
+  redis:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+    limits:
+      memory: "512Mi"
+      cpu: "300m"
+
+# Service configuration
+service:
+  vault:
+    type: ClusterIP
+    port: 8000
+  verification:
+    type: ClusterIP
+    port: 8001
+  frontend:
+    type: ClusterIP
+    port: 3000
+  nginx:
+    type: LoadBalancer
+    port: 80
+    httpsPort: 443
+  postgresql:
+    type: ClusterIP
+    port: 5432
+  redis:
+    type: ClusterIP
+    port: 6379
+
+# Ingress configuration
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/limit-rps: "100"
+  tls:
+    enabled: true
+    secretName: ciaf-tls-cert
+  hosts:
+    - host: ciaf.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+    - host: api.ciaf.example.com
+      paths:
+        - path: /vault
+          pathType: Prefix
+        - path: /verify
+          pathType: Prefix
+
+# Persistent storage
+persistence:
+  enabled: true
+  storageClass: "fast-ssd"
+  postgresql:
+    size: 50Gi
+    accessMode: ReadWriteOnce
+  redis:
+    size: 10Gi
+    accessMode: ReadWriteOnce
+
+# PostgreSQL configuration
+postgresql:
+  enabled: true
+  image:
+    repository: postgres
+    tag: "14-alpine"
+  database: ciaf_proofs
+  username: ciaf_verification
+  # Password should be set via --set or secrets
+
+# Redis configuration
+redis:
+  enabled: true
+  image:
+    repository: redis
+    tag: "7-alpine"
+  maxmemory: "512mb"
+  maxmemoryPolicy: "allkeys-lru"
+
+# Application configuration
+config:
+  logLevel: "INFO"
+  logFormat: "json"
+  environment: "production"
+  dbEcho: false
+  poolSize: 10
+  maxOverflow: 5
+  poolRecycle: 3600
+  cacheTtl: 300
+  queryTimeout: 30
+  verificationTimeout: 5
+  enableAuditLogging: true
+  enableMerkleTree: true
+  enableWormEnforcement: true
+
+# Security settings
+security:
+  runAsNonRoot: true
+  runAsUser: 1000
+  fsGroup: 1000
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: false
+
+# RBAC
+rbac:
+  create: true
+  serviceAccount:
+    create: true
+    name: ciaf-service-account
+
+# Monitoring
+monitoring:
+  enabled: true
+  prometheus:
+    enabled: true
+    retention: 30d
+    resources:
+      requests:
+        memory: "512Mi"
+        cpu: "200m"
+      limits:
+        memory: "2Gi"
+        cpu: "1000m"
+  grafana:
+    enabled: true
+    adminPassword: ""  # Set via --set or secrets
+    resources:
+      requests:
+        memory: "256Mi"
+        cpu: "100m"
+      limits:
+        memory: "512Mi"
+        cpu: "500m"
+
+# Autoscaling
+autoscaling:
+  enabled: false
+  vault:
+    minReplicas: 2
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 70
+    targetMemoryUtilizationPercentage: 80
+  verification:
+    minReplicas: 2
+    maxReplicas: 8
+    targetCPUUtilizationPercentage: 70
+
+# Pod disruption budgets
+podDisruptionBudget:
+  enabled: true
+  vault:
+    minAvailable: 1
+  verification:
+    minAvailable: 1
+
+# Network policies
+networkPolicy:
+  enabled: false
+
+# Pod security policy
+podSecurityPolicy:
+  enabled: false

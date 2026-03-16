@@ -98,7 +98,7 @@ class InMemoryAnchorStore(AnchorStore):
         # Create a copy to prevent external modification
         anchor_copy = dict(anchor)
         if 'timestamp' not in anchor_copy:
-            from datetime import datetime
+            from datetime import datetime, timezone
             anchor_copy['timestamp'] = datetime.now().isoformat()
         self._anchors.append(anchor_copy)
     

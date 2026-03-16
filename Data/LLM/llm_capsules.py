@@ -7,7 +7,7 @@ following the CIAF Capsule Header Integration specification.
 
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Any
-from datetime import datetime
+from datetime import datetime, timezone
 import json
 
 
@@ -22,7 +22,7 @@ class LLMCapsuleHeader:
     capsule_id: str = ""                   # Unique capsule identifier
     capsule_version: str = "1.0"           # Capsule format version
     capsule_type: str = "llm_audit_proof"  # LLM-specific capsule type
-    generated_at: str = field(default_factory=lambda: datetime.utcnow().isoformat() + 'Z')
+    generated_at: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat() + 'Z')
     
     # Policy configuration (serialized)
     policy: Dict[str, Any] = field(default_factory=dict)
@@ -159,7 +159,7 @@ class LLMAuditPackage:
     # Package metadata
     package_id: str = ""
     package_version: str = "1.0"
-    created_at: str = field(default_factory=lambda: datetime.utcnow().isoformat() + 'Z')
+    created_at: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat() + 'Z')
     created_by: str = ""
     
     # Source capsule reference

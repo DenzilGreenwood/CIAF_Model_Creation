@@ -14,7 +14,7 @@ Version: 1.0.0
 from __future__ import annotations
 from typing import Any, Dict, List, Optional, Protocol, runtime_checkable
 from abc import abstractmethod
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 @runtime_checkable

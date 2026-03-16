@@ -16,7 +16,7 @@ import time
 import hashlib
 import uuid
 from typing import Any, Dict, List, Optional, Union
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 
 from .deferred_lcm import (

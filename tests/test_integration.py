@@ -3,7 +3,7 @@ Integration Tests - Authentication and Verification Flows
 Tests for complete end-to-end workflows
 """
 import pytest
-from datetime import datetime
+from datetime import datetime, timezone
 import hashlib
 
 
@@ -46,7 +46,7 @@ class IntegrationTestEnvironment:
             return {"success": False, "error": "Invalid credentials"}
 
         # Generate token
-        token = hashlib.sha256(f"{user.id}{datetime.utcnow()}".encode()).hexdigest()
+        token = hashlib.sha256(f"{user.id}{datetime.now(timezone.utc)}".encode()).hexdigest()
         user.token = token
         self.sessions[token] = user
 
@@ -71,7 +71,7 @@ class IntegrationTestEnvironment:
             "user_id": user.id,
             "content_hash": content_hash,
             "content": content,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "status": "verified"
         }
 

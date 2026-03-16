@@ -15,7 +15,7 @@ import warnings
 import inspect
 import numpy as np
 from typing import Any, Dict, List, Optional, Tuple, Union, Callable, TYPE_CHECKING
-from datetime import datetime
+from datetime import datetime, timezone
 from abc import ABC, abstractmethod
 
 from .interfaces import ModelAdapter, ModelMetadataProvider

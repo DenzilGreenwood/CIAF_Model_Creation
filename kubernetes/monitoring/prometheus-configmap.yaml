@@ -1,0 +1,136 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: ciaf
+  labels:
+    app: prometheus
+    component: monitoring
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 15s
+      evaluation_interval: 15s
+      external_labels:
+        cluster: 'ciaf-production'
+        environment: 'production'
+
+    # Alertmanager configuration (optional)
+    # alerting:
+    #   alertmanagers:
+    #   - static_configs:
+    #     - targets: ['alertmanager:9093']
+
+    # Scrape configurations
+    scrape_configs:
+    # Prometheus self-monitoring
+    - job_name: 'prometheus'
+      static_configs:
+      - targets: ['localhost:9090']
+
+    # CIAF Vault API metrics
+    - job_name: 'ciaf-vault'
+      kubernetes_sd_configs:
+      - role: endpoints
+        namespaces:
+          names:
+          - ciaf
+      relabel_configs:
+      - source_labels: [__meta_kubernetes_service_name]
+        regex: ciaf-vault
+        action: keep
+      - source_labels: [__meta_kubernetes_endpoint_port_name]
+        regex: metrics
+        action: keep
+
+    # CIAF Verification Service metrics
+    - job_name: 'ciaf-verification'
+      kubernetes_sd_configs:
+      - role: endpoints
+        namespaces:
+          names:
+          - ciaf
+      relabel_configs:
+      - source_labels: [__meta_kubernetes_service_name]
+        regex: ciaf-verification
+        action: keep
+      - source_labels: [__meta_kubernetes_endpoint_port_name]
+        regex: metrics
+        action: keep
+
+    # PostgreSQL metrics (if postgres_exporter is deployed)
+    - job_name: 'postgresql'
+      kubernetes_sd_configs:
+      - role: endpoints
+        namespaces:
+          names:
+          - ciaf
+      relabel_configs:
+      - source_labels: [__meta_kubernetes_service_name]
+        regex: ciaf-postgresql-metrics
+        action: keep
+
+    # Redis metrics (if redis_exporter is deployed)
+    - job_name: 'redis'
+      kubernetes_sd_configs:
+      - role: endpoints
+        namespaces:
+          names:
+          - ciaf
+      relabel_configs:
+      - source_labels: [__meta_kubernetes_service_name]
+        regex: ciaf-redis-metrics
+        action: keep
+
+    # Kubernetes API server metrics
+    - job_name: 'kubernetes-apiservers'
+      kubernetes_sd_configs:
+      - role: endpoints
+      scheme: https
+      tls_config:
+        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+      bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+      relabel_configs:
+      - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+        regex: default;kubernetes;https
+        action: keep
+
+    # Kubernetes nodes (kubelet)
+    - job_name: 'kubernetes-nodes'
+      kubernetes_sd_configs:
+      - role: node
+      scheme: https
+      tls_config:
+        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+      bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+      relabel_configs:
+      - action: labelmap
+        regex: __meta_kubernetes_node_label_(.+)
+
+    # Kubernetes pods
+    - job_name: 'kubernetes-pods'
+      kubernetes_sd_configs:
+      - role: pod
+        namespaces:
+          names:
+          - ciaf
+      relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+        regex: "true"
+        action: keep
+      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+        regex: (.+)
+        target_label: __metrics_path__
+        action: replace
+      - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+        regex: ([^:]+)(?::\d+)?;(\d+)
+        replacement: $1:$2
+        target_label: __address__
+        action: replace
+      - action: labelmap
+        regex: __meta_kubernetes_pod_label_(.+)
+      - source_labels: [__meta_kubernetes_namespace]
+        target_label: kubernetes_namespace
+      - source_labels: [__meta_kubernetes_pod_name]
+        target_label: kubernetes_pod_name

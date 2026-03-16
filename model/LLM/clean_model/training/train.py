@@ -12,7 +12,7 @@ from torch.utils.data import DataLoader
 from tqdm import tqdm
 from typing import Dict, Any, Optional
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 
 # Add parent directory for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -253,7 +253,7 @@ class Trainer:
                 'global_step': self.global_step,
                 'train_loss': epoch_loss,
                 **val_metrics,
-                'timestamp': datetime.utcnow().isoformat() + 'Z'
+                'timestamp': datetime.now(timezone.utc).isoformat() + 'Z'
             }
             self.training_history.append(history_entry)
             

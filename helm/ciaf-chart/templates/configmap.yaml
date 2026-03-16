@@ -1,0 +1,26 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ciaf-config
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app: ciaf
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    release: {{ .Release.Name }}
+data:
+  log_level: {{ .Values.config.logLevel | quote }}
+  log_format: {{ .Values.config.logFormat | quote }}
+  environment: {{ .Values.config.environment | quote }}
+  db_echo: {{ .Values.config.dbEcho | quote }}
+  pool_size: {{ .Values.config.poolSize | quote }}
+  max_overflow: {{ .Values.config.maxOverflow | quote }}
+  pool_recycle: {{ .Values.config.poolRecycle | quote }}
+  cache_ttl: {{ .Values.config.cacheTtl | quote }}
+  query_timeout: {{ .Values.config.queryTimeout | quote }}
+  verification_timeout: {{ .Values.config.verificationTimeout | quote }}
+  enable_audit_logging: {{ .Values.config.enableAuditLogging | quote }}
+  enable_merkle_tree: {{ .Values.config.enableMerkleTree | quote }}
+  enable_worm_enforcement: {{ .Values.config.enableWormEnforcement | quote }}
+  ciaf_core_url: "http://ciaf-vault:{{ .Values.service.vault.port }}"
+  ciaf_verification_url: "http://ciaf-verification:{{ .Values.service.verification.port }}"

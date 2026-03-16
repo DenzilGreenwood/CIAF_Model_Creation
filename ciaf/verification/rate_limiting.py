@@ -3,7 +3,7 @@ Rate Limiting Middleware for FastAPI
 Implements per-organization and per-user rate limiting
 """
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Dict, Tuple
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request

@@ -7,7 +7,7 @@ following CIAF policy framework and regulatory requirements.
 
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Any, Union
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 
 
@@ -41,7 +41,7 @@ class ComplianceViolation:
     requirement: str
     severity: str  # 'low', 'medium', 'high', 'critical'
     description: str
-    detected_at: str = field(default_factory=lambda: datetime.utcnow().isoformat() + 'Z')
+    detected_at: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat() + 'Z')
     evidence: Dict[str, Any] = field(default_factory=dict)
     remediation_steps: List[str] = field(default_factory=list)
     status: str = "open"  # 'open', 'investigating', 'resolved', 'accepted_risk'
@@ -55,7 +55,7 @@ class ComplianceResult:
     violations: List[ComplianceViolation] = field(default_factory=list)
     warnings: List[str] = field(default_factory=list)
     recommendations: List[str] = field(default_factory=list)
-    assessment_timestamp: str = field(default_factory=lambda: datetime.utcnow().isoformat() + 'Z')
+    assessment_timestamp: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat() + 'Z')
     assessment_version: str = "1.0"
 
 
@@ -297,7 +297,7 @@ class LLMComplianceMonitor:
                 framework_breakdown[framework]["open"] += 1
         
         return {
-            "report_generated": datetime.utcnow().isoformat() + 'Z',
+            "report_generated": datetime.now(timezone.utc).isoformat() + 'Z',
             "summary": {
                 "total_violations": total_violations,
                 "critical_violations": critical_violations,
@@ -353,6 +353,6 @@ class LLMComplianceMonitor:
             "total_violations": report["summary"]["total_violations"],
             "critical_violations": report["summary"]["critical_violations"],
             "frameworks_assessed": list(self.compliance_rules.keys()),
-            "last_assessment": datetime.utcnow().isoformat() + 'Z',
+            "last_assessment": datetime.now(timezone.utc).isoformat() + 'Z',
             "status": "compliant" if report["summary"]["critical_violations"] == 0 else "non_compliant"
         }

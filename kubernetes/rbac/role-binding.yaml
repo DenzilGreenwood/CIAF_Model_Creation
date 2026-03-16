@@ -1,0 +1,35 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: ciaf-role-binding
+  namespace: ciaf
+  labels:
+    app: ciaf
+    component: rbac
+subjects:
+- kind: ServiceAccount
+  name: ciaf-service-account
+  namespace: ciaf
+roleRef:
+  kind: Role
+  name: ciaf-role
+  apiGroup: rbac.authorization.k8s.io
+---
+# Monitoring role binding
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: ciaf-monitoring-role-binding
+  namespace: ciaf
+  labels:
+    app: ciaf
+    component: monitoring
+subjects:
+- kind: ServiceAccount
+  name: ciaf-monitoring
+  namespace: ciaf
+roleRef:
+  kind: Role
+  name: ciaf-monitoring-role
+  apiGroup: rbac.authorization.k8s.io

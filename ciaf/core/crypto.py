@@ -110,6 +110,21 @@ def derive_master_anchor(password: str, salt: bytes) -> bytes:
     return hashlib.pbkdf2_hmac("sha256", password_bytes, salt, PBKDF2_ITERATIONS, dklen=KDF_DKLEN)
 
 
+def derive_key(salt: bytes, password: bytes, key_length: int = 32) -> bytes:
+    """
+    Derive a cryptographic key from a password and salt using PBKDF2.
+    
+    Args:
+        salt: Salt bytes for key derivation
+        password: Password bytes
+        key_length: Desired key length in bytes (default: 32)
+        
+    Returns:
+        Derived key bytes
+    """
+    return hashlib.pbkdf2_hmac("sha256", password, salt, PBKDF2_ITERATIONS, dklen=key_length)
+
+
 def _derive_hmac_bytes(key: bytes, data: bytes) -> bytes:
     return bytes.fromhex(hmac_sha256(key, data))
 

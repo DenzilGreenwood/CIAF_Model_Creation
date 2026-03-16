@@ -5,7 +5,7 @@ Enables JSON-structured logs for Loki and ELK stack
 import logging
 import json
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 from pythonjsonlogger import jsonlogger
 import uuid
 import os
@@ -34,7 +34,7 @@ class ContextFilter(logging.Filter):
         record.trace_id = self.trace_id
         record.span_id = self.span_id
         record.request_id = self.request_id
-        record.timestamp = datetime.utcnow().isoformat()
+        record.timestamp = datetime.now(timezone.utc).isoformat()
         record.hostname = os.environ.get('HOSTNAME', 'unknown')
         record.service = os.environ.get('SERVICE_NAME', 'ciaf')
 

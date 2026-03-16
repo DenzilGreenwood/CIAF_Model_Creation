@@ -1,0 +1,60 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ciaf-vault
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app: ciaf-core
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    release: {{ .Release.Name }}
+spec:
+  type: {{ .Values.service.vault.type }}
+  ports:
+  - port: {{ .Values.service.vault.port }}
+    targetPort: 8000
+    protocol: TCP
+    name: http
+  selector:
+    app: ciaf-core
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ciaf-verification
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app: ciaf-verification
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    release: {{ .Release.Name }}
+spec:
+  type: {{ .Values.service.verification.type }}
+  ports:
+  - port: {{ .Values.service.verification.port }}
+    targetPort: 8001
+    protocol: TCP
+    name: http
+  selector:
+    app: ciaf-verification
+---
+{{- if .Values.postgresql.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: ciaf-postgresql
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app: ciaf-postgresql
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    release: {{ .Release.Name }}
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+  - port: {{ .Values.service.postgresql.port }}
+    targetPort: 5432
+    protocol: TCP
+    name: postgresql
+  selector:
+    app: ciaf-postgresql
+{{- end }}

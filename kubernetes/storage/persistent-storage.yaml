@@ -1,0 +1,56 @@
+---
+# Storage Class for PostgreSQL and Redis persistent volumes
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: ciaf-fast-ssd
+  labels:
+    app: ciaf
+provisioner: kubernetes.io/gce-pd  # Change based on your cloud provider
+# For AWS: kubernetes.io/aws-ebs
+# For Azure: kubernetes.io/azure-disk
+# For GCP: kubernetes.io/gce-pd
+# For local: kubernetes.io/no-provisioner
+parameters:
+  type: pd-ssd  # GCP SSD
+  # For AWS: type: gp3
+  # For Azure: storageaccounttype: Premium_LRS
+  fstype: ext4
+  replication-type: regional-pd
+allowVolumeExpansion: true
+reclaimPolicy: Retain  # Keep data even if PVC is deleted
+volumeBindingMode: WaitForFirstConsumer
+---
+# Persistent Volume Claim for PostgreSQL
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ciaf-postgresql-pvc
+  namespace: ciaf
+  labels:
+    app: ciaf-postgresql
+    component: database
+spec:
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: ciaf-fast-ssd
+  resources:
+    requests:
+      storage: 50Gi  # Adjust based on data volume needs
+---
+# Persistent Volume Claim for Redis
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ciaf-redis-pvc
+  namespace: ciaf
+  labels:
+    app: ciaf-redis
+    component: cache
+spec:
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: ciaf-fast-ssd
+  resources:
+    requests:
+      storage: 10Gi  # Redis typically needs less storage

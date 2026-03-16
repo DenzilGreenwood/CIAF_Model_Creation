@@ -22,7 +22,7 @@ from ciaf.agents import (
 from ciaf.sessions import AgentSession
 from ciaf.org_batching import OrgBatchScheduler
 from ciaf.tagging import TagEmbedder
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 def complete_healthcare_workflow():

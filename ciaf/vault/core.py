@@ -6,7 +6,7 @@ and multi-tenant isolation.
 import sqlite3
 import json
 import hashlib
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from dataclasses import dataclass, asdict, field
 from typing import Optional, Dict, Any, List
 from pathlib import Path

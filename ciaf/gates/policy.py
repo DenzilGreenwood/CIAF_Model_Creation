@@ -10,7 +10,7 @@ import yaml
 from dataclasses import dataclass, field, asdict
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
-from datetime import datetime
+from datetime import datetime, timezone
 
 from .interfaces import Stage, GateConfiguration, StagePolicy, PolicyValidationError
 

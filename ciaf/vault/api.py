@@ -5,7 +5,7 @@ CIAF Vault API - Enterprise-grade REST endpoints for cryptographic proof custody
 import uuid
 import json
 from typing import Dict, Any, List, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 from fastapi import FastAPI, HTTPException, Query, Header, Request, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse, FileResponse
@@ -215,7 +215,7 @@ def create_vault_api() -> FastAPI:
                     "policy_count": len(request.policies_applied)
                 },
                 proof_id=receipt.proof_id,
-                ip_address=client_request.client.host if client_request else None
+                ip_address=client_request.client.host if (client_request and client_request.client) else None
             )
 
             return ReceiptResponse(
@@ -235,7 +235,7 @@ def create_vault_api() -> FastAPI:
                 actor=key_id,
                 result="failure",
                 details={"error": str(e)},
-                ip_address=client_request.client.host if client_request else None
+                ip_address=client_request.client.host if (client_request and client_request.client) else None
             )
             raise HTTPException(status_code=400, detail=str(e))
 
@@ -274,7 +274,7 @@ def create_vault_api() -> FastAPI:
                 result="success",
                 details={"read_count": proof.read_count},
                 proof_id=proof_id,
-                ip_address=client_request.client.host if client_request else None
+                ip_address=client_request.client.host if (client_request and client_request.client) else None
             )
 
             return ProofResponse(
@@ -296,7 +296,7 @@ def create_vault_api() -> FastAPI:
                 result="failure",
                 details={"error": str(e)},
                 proof_id=proof_id,
-                ip_address=client_request.client.host if client_request else None
+                ip_address=client_request.client.host if (client_request and client_request.client) else None
             )
             raise HTTPException(status_code=500, detail=str(e))
 
@@ -332,7 +332,7 @@ def create_vault_api() -> FastAPI:
                 result="success",
                 details={"certificate_id": cert.certificate_id},
                 proof_id=proof_id,
-                ip_address=client_request.client.host if client_request else None
+                ip_address=client_request.client.host if (client_request and client_request.client) else None
             )
 
             return CertificateResponse(
@@ -354,7 +354,7 @@ def create_vault_api() -> FastAPI:
                 result="failure",
                 details={"error": str(e)},
                 proof_id=proof_id,
-                ip_address=client_request.client.host if client_request else None
+                ip_address=client_request.client.host if (client_request and client_request.client) else None
             )
             raise HTTPException(status_code=500, detail=str(e))
 
@@ -391,7 +391,7 @@ def create_vault_api() -> FastAPI:
                 actor=key_id,
                 result="success",
                 details={"entry_count": len(entries)},
-                ip_address=client_request.client.host if client_request else None
+                ip_address=client_request.client.host if (client_request and client_request.client) else None
             )
 
             return {
@@ -408,7 +408,7 @@ def create_vault_api() -> FastAPI:
                 actor=key_id,
                 result="failure",
                 details={"error": str(e)},
-                ip_address=client_request.client.host if client_request else None
+                ip_address=client_request.client.host if (client_request and client_request.client) else None
             )
             raise HTTPException(status_code=500, detail=str(e))
 
@@ -527,7 +527,7 @@ def create_vault_api() -> FastAPI:
                 result="success",
                 details={"manifest_id": manifest.manifest_id},
                 proof_id=proof_id,
-                ip_address=client_request.client.host if client_request else None
+                ip_address=client_request.client.host if (client_request and client_request.client) else None
             )
 
             return manifest.to_dict()
@@ -543,7 +543,7 @@ def create_vault_api() -> FastAPI:
                 result="failure",
                 details={"error": str(e)},
                 proof_id=proof_id,
-                ip_address=client_request.client.host if client_request else None
+                ip_address=client_request.client.host if (client_request and client_request.client) else None
             )
             raise HTTPException(status_code=500, detail=str(e))
 
@@ -600,7 +600,7 @@ def create_vault_api() -> FastAPI:
                 result="success",
                 details={"certificate_id": cert.certificate_id},
                 proof_id=proof_id,
-                ip_address=client_request.client.host if client_request else None
+                ip_address=client_request.client.host if (client_request and client_request.client) else None
             )
 
             return StreamingResponse(
@@ -622,7 +622,7 @@ def create_vault_api() -> FastAPI:
                 result="failure",
                 details={"error": str(e)},
                 proof_id=proof_id,
-                ip_address=client_request.client.host if client_request else None
+                ip_address=client_request.client.host if (client_request and client_request.client) else None
             )
             raise HTTPException(status_code=500, detail=str(e))
 
@@ -752,7 +752,7 @@ def create_vault_api() -> FastAPI:
                     "proof_count": len(proofs),
                     "file_size_bytes": len(zip_bytes),
                 },
-                ip_address=client_request.client.host if client_request else None
+                ip_address=client_request.client.host if (client_request and client_request.client) else None
             )
 
             return StreamingResponse(
@@ -773,7 +773,7 @@ def create_vault_api() -> FastAPI:
                 actor=key_id,
                 result="failure",
                 details={"error": str(e)},
-                ip_address=client_request.client.host if client_request else None
+                ip_address=client_request.client.host if (client_request and client_request.client) else None
             )
             raise HTTPException(status_code=500, detail=str(e))
 

@@ -7,7 +7,7 @@ import hashlib
 import json
 from typing import List, Dict, Any, Optional
 from dataclasses import dataclass, field, asdict
-from datetime import datetime
+from datetime import datetime, timezone
 import zlib
 
 
@@ -172,12 +172,12 @@ class LCMReceiptManager:
         Returns:
             LightweightReceipt object
         """
-        receipt_id = f"{operation_type}_{len(self.receipts)}_{datetime.utcnow().timestamp()}"
+        receipt_id = f"{operation_type}_{len(self.receipts)}_{datetime.now(timezone.utc).timestamp()}"
         
         receipt = LightweightReceipt(
             receipt_id=receipt_id,
             operation_type=operation_type,
-            timestamp=datetime.utcnow().isoformat() + 'Z',
+            timestamp=datetime.now(timezone.utc).isoformat() + 'Z',
             commitment_hash=commitment_hash,
             operation_data=operation_data,
             policy_id=self.policy_id
@@ -216,13 +216,13 @@ class LCMReceiptManager:
         operation_types = list(set(r.operation_type for r in self.receipts))
         
         # Create capsule
-        capsule_id = f"capsule_{len(self.capsules)}_{datetime.utcnow().timestamp()}"
+        capsule_id = f"capsule_{len(self.capsules)}_{datetime.now(timezone.utc).timestamp()}"
         capsule = LCMCapsule(
             capsule_id=capsule_id,
             policy_id=self.policy_id,
             receipt_count=len(self.receipts),
             merkle_root=merkle_root,
-            created_at=datetime.utcnow().isoformat() + 'Z',
+            created_at=datetime.now(timezone.utc).isoformat() + 'Z',
             compressed_receipts=compressed,
             compression_ratio=compression_ratio,
             operation_types=operation_types

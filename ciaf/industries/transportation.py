@@ -92,13 +92,18 @@ class TransportationAIGovernanceFramework(AIGovernanceFramework):
                  autonomy_level: AutonomyLevel = AutonomyLevel.LEVEL_3,
                  safety_critical_mode: bool = True,
                  human_oversight_required: bool = True,
-                 ethical_framework: str = "UTILITARIAN_SAFETY_FIRST"):
+                 ethical_framework: str = "UTILITARIAN_SAFETY_FIRST",
+                 **kwargs):
         super().__init__(organization_id)
         
         self.autonomy_level = autonomy_level
         self.safety_critical_mode = safety_critical_mode
         self.human_oversight_required = human_oversight_required
         self.ethical_framework = ethical_framework
+        
+        # Store additional kwargs like fleet_id, vehicle_types etc.
+        self.fleet_id = kwargs.get('fleet_id', None)
+        self.vehicle_types = kwargs.get('vehicle_types', [])
         
         # Initialize transportation-specific validators
         self.bias_validator = BiasValidator()

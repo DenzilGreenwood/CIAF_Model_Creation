@@ -18,7 +18,7 @@ import hashlib
 from dataclasses import asdict
 from pathlib import Path
 from typing import Optional, Dict, Any, List
-from datetime import datetime
+from datetime import datetime, timezone
 
 from .metadata_config import create_config_template
 from .metadata_integration import ModelMetadataManager
@@ -800,7 +800,7 @@ def compliance_command(args):
 
 def create_basic_compliance_report(args):
     """Create a basic compliance report when full compliance module isn't available."""
-    from datetime import datetime
+    from datetime import datetime, timezone
     
     # Create basic report structure
     report = {

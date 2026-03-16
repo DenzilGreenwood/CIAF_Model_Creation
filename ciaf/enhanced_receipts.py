@@ -249,7 +249,7 @@ def create_training_receipt(
         # Basic receipt without validation
         receipt_data.update({
             "receipt_id": str(uuid.uuid4()),
-            "committed_at": datetime.utcnow().isoformat(),
+            "committed_at": datetime.now(timezone.utc).isoformat(),
             "evidence_strength": "real"
         })
         return receipt_data
@@ -278,7 +278,7 @@ def create_inference_receipt(
         # Basic receipt without validation
         receipt_data.update({
             "receipt_id": str(uuid.uuid4()),
-            "committed_at": datetime.utcnow().isoformat(),
+            "committed_at": datetime.now(timezone.utc).isoformat(),
             "evidence_strength": "real",
             "oversight": {"status": "auto_approved"}
         })

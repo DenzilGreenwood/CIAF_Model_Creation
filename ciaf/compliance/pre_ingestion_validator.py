@@ -12,7 +12,7 @@ Version: 1.0.0
 
 import warnings
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -477,7 +477,7 @@ class PreIngestionValidator:
                     data.select_dtypes(include=[np.number]).columns
                 ),
                 "categorical_features": len(
-                    data.select_dtypes(include=["object"]).columns
+                    data.select_dtypes(include=["object", "string"]).columns
                 ),
             },
             "data_quality_score": quality_score,

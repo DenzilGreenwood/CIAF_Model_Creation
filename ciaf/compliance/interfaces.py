@@ -12,7 +12,7 @@ Version: 1.0.0
 
 from __future__ import annotations
 from typing import Protocol, runtime_checkable, Optional, List, Dict, Any
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 
 

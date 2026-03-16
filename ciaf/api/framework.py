@@ -12,7 +12,7 @@ Version: 2.0.0
 
 import hashlib
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
 # Removed redundant anchoring imports - using LCM system instead
@@ -99,7 +99,8 @@ class CIAFFramework:
         self.crypto_utils = CryptoUtils()
         self.dataset_anchors: Dict[str, Dict[DatasetSplit, LCMDatasetAnchor]] = {}
         self.model_anchors: Dict[str, Dict[str, Any]] = {}
-        # Lazy managers removed - functionality integrated into LCM system
+        # Lazy managers dictionary - functionality integrated into LCM system
+        self.lazy_managers: Dict[str, Any] = {}
         self.ml_simulators: Dict[str, MLFrameworkSimulator] = {}
         self.inference_connections: Dict[str, ZKEConnections] = {}
         self.audit_generators: Dict[str, AuditTrailGenerator] = {}
@@ -609,10 +610,10 @@ class CIAFFramework:
         Returns:
             List of ProvenanceCapsule instances
         """
-        if dataset_id not in self.lazy_managers:
-            raise ValueError(f"No lazy manager found for dataset: {dataset_id}")
-
-        lazy_manager = self.lazy_managers[dataset_id]
+        # Note: lazy_managers functionality integrated into LCM system
+        # Providing stub implementation for backward compatibility
+        from ..provenance.capsules import ProvenanceCapsule
+        
         capsules = []
 
         print(
@@ -620,11 +621,11 @@ class CIAFFramework:
         )
 
         for item in data_items:
-            # Create capsule using lazy manager
-            capsule = lazy_manager.create_lazy_capsule(
-                item_id=item["metadata"]["id"],
+            # Create capsule directly without lazy manager
+            capsule = ProvenanceCapsule(
                 original_data=item["content"],
                 metadata=item["metadata"],
+                data_secret=f"secret_{item['metadata']['id']}"
             )
             capsules.append(capsule)
 
@@ -651,8 +652,16 @@ class CIAFFramework:
         dataset_anchors = {}
         for dataset_id in authorized_datasets:
             if dataset_id in self.dataset_anchors:
-                anchor = self.dataset_anchors[dataset_id]
-                dataset_anchors[dataset_id] = anchor.dataset_anchor
+                anchor_splits = self.dataset_anchors[dataset_id]
+                # anchor_splits is a Dict[DatasetSplit, LCMDatasetAnchor]
+                # Get the train split anchor as the primary reference
+                if DatasetSplit.TRAIN in anchor_splits:
+                    train_anchor = anchor_splits[DatasetSplit.TRAIN]
+                    dataset_anchors[dataset_id] = train_anchor.dataset_anchor
+                elif anchor_splits:
+                    # If no train split, use the first available
+                    first_anchor = next(iter(anchor_splits.values()))
+                    dataset_anchors[dataset_id] = first_anchor.dataset_anchor
             else:
                 print(f"WARNING: Dataset {dataset_id} not found in anchors")
 

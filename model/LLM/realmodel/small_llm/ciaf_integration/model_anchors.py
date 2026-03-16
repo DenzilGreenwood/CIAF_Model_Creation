@@ -7,7 +7,7 @@ import hashlib
 import json
 from dataclasses import dataclass, field, asdict
 from typing import Dict, Any, Optional, List
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 
@@ -178,7 +178,7 @@ class ModelAnchorManager:
             weights_hash = "uninitialized_" + config_hash[:16]
         
         # Create anchor ID
-        timestamp = datetime.utcnow().timestamp()
+        timestamp = datetime.now(timezone.utc).timestamp()
         anchor_id = f"model_{model_type}_{timestamp}_{config_hash[:8]}"
         
         # Create anchor
@@ -187,7 +187,7 @@ class ModelAnchorManager:
             model_type=model_type,
             config_hash=config_hash,
             initial_weights_hash=weights_hash,
-            created_at=datetime.utcnow().isoformat() + 'Z',
+            created_at=datetime.now(timezone.utc).isoformat() + 'Z',
             config_data=config,
             tokenizer_anchor_id=tokenizer_anchor_id,
             description=description
@@ -241,7 +241,7 @@ class ModelAnchorManager:
             checkpoint_step=checkpoint_step,
             tokens_seen=tokens_seen,
             weights_hash=weights_hash,
-            created_at=datetime.utcnow().isoformat() + 'Z',
+            created_at=datetime.now(timezone.utc).isoformat() + 'Z',
             eval_metrics=eval_metrics or {},
             training_loss=training_loss,
             validation_loss=validation_loss,
@@ -289,7 +289,7 @@ class ModelAnchorManager:
         files_hash = combined_hash.hexdigest()
         
         # Create anchor ID
-        timestamp = datetime.utcnow().timestamp()
+        timestamp = datetime.now(timezone.utc).timestamp()
         anchor_id = f"tokenizer_{tokenizer_type}_{timestamp}_{files_hash[:8]}"
         
         # Create anchor
@@ -298,7 +298,7 @@ class ModelAnchorManager:
             tokenizer_type=tokenizer_type,
             vocab_size=vocab_size,
             tokenizer_files_hash=files_hash,
-            created_at=datetime.utcnow().isoformat() + 'Z',
+            created_at=datetime.now(timezone.utc).isoformat() + 'Z',
             training_data_anchors=training_data_anchors or [],
             description=description
         )
