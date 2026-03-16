@@ -352,7 +352,15 @@ class DefenseAIGovernanceFramework(AIGovernanceFramework):
     def __init__(self, defense_organization_id: str, classification_level: ClassificationLevel, **kwargs):
         super().__init__(**kwargs)
         self.defense_organization_id = defense_organization_id
-        self.classification_level = classification_level
+        # Handle both string and enum for classification level
+        if isinstance(classification_level, str):
+            try:
+                self.classification_level = ClassificationLevel(classification_level)
+            except (ValueError, KeyError):
+                # If string doesn't match enum, store as-is
+                self.classification_level = classification_level
+        else:
+            self.classification_level = classification_level
         
         # Initialize policy enforcement with defense-specific regulations
         self.policy_enforcement = PolicyEnforcement(
@@ -503,7 +511,7 @@ class DefenseAIGovernanceFramework(AIGovernanceFramework):
                 "ai_application": ai_application.value,
                 "autonomy_level": autonomy_level.value,
                 "safety_score": assessment.calculate_military_safety_score(),
-                "classification_level": self.classification_level.value,
+                "classification_level": self.classification_level.value if hasattr(self.classification_level, "value") else str(self.classification_level),
                 "international_law_compliant": all(international_law_compliance.values())
             }
         )
@@ -571,7 +579,7 @@ class DefenseAIGovernanceFramework(AIGovernanceFramework):
         
         results = {
             'defense_organization_id': self.defense_organization_id,
-            'classification_level': self.classification_level.value,
+            'classification_level': self.classification_level.value if hasattr(self.classification_level, "value") else str(self.classification_level),
             'assessment_timestamp': datetime.now(timezone.utc).isoformat(),
             'assessment_type': assessment_type,
             'military_ai_safety_compliance': {},
@@ -716,7 +724,7 @@ class DefenseAIGovernanceFramework(AIGovernanceFramework):
         """
         validation_results = {
             'defense_organization_id': self.defense_organization_id,
-            'classification_level': self.classification_level.value,
+            'classification_level': self.classification_level.value if hasattr(self.classification_level, "value") else str(self.classification_level),
             'validation_timestamp': datetime.now(timezone.utc).isoformat(),
             'governance_requirements': {},
             'validation_status': 'unknown',
@@ -829,7 +837,7 @@ class DefenseAIGovernanceFramework(AIGovernanceFramework):
         audit_report = {
             'report_metadata': {
                 'defense_organization_id': self.defense_organization_id,
-                'classification_level': self.classification_level.value,
+                'classification_level': self.classification_level.value if hasattr(self.classification_level, "value") else str(self.classification_level),
                 'report_type': report_type,
                 'generation_timestamp': datetime.now(timezone.utc).isoformat(),
                 'framework_version': self.framework_version,
@@ -907,7 +915,7 @@ class DefenseAIGovernanceFramework(AIGovernanceFramework):
             'merkle_root': 'placeholder_merkle_root',
             'verification_timestamp': datetime.now(timezone.utc).isoformat(),
             'verified': True,
-            'classification_level': self.classification_level.value
+            'classification_level': self.classification_level.value if hasattr(self.classification_level, "value") else str(self.classification_level)
         }
         
         # Record governance event
@@ -915,7 +923,7 @@ class DefenseAIGovernanceFramework(AIGovernanceFramework):
             'report_id': audit_report['report_metadata']['report_id'],
             'report_type': report_type,
             'compliance_score': compliance_score,
-            'classification_level': self.classification_level.value
+            'classification_level': self.classification_level.value if hasattr(self.classification_level, "value") else str(self.classification_level)
         })
         
         return audit_report

@@ -435,6 +435,8 @@ class HealthcareAIGovernanceFramework(AIGovernanceFramework):
     
     def _assess_physician_oversight(self, physician: Dict) -> str:
         """Assess level of physician oversight"""
+        if isinstance(physician, str):
+            return physician if physician else 'required'
         return physician.get('oversight_level', 'standard') if physician else 'required'
     
     def _check_clinical_guidelines(self, guidelines: List[str]) -> bool:
@@ -535,15 +537,15 @@ class HealthcareAIGovernanceFramework(AIGovernanceFramework):
                 kwargs.get('data_minimization', True)
             )
             results['hipaa_compliance'] = {
-                'privacy_compliant': privacy_validation.privacy_compliant,
-                'consent_valid': privacy_validation.consent_valid,
-                'data_minimized': privacy_validation.data_minimized,
-                'phi_protected': privacy_validation.phi_protected,
-                'compliance_score': privacy_validation.compliance_score
+                'privacy_compliant': getattr(privacy_validation, 'hipaa_compliant', getattr(privacy_validation, 'privacy_compliant', False)),
+                'consent_valid': getattr(privacy_validation, 'patient_consent_valid', getattr(privacy_validation, 'consent_valid', False)),
+                'data_minimized': getattr(privacy_validation, 'data_minimization_applied', getattr(privacy_validation, 'data_minimized', False)),
+                'phi_protected': getattr(privacy_validation, 'anonymization_level', getattr(privacy_validation, 'phi_protected', 0.0)),
+                'compliance_score': getattr(privacy_validation, 'compliance_score', 0.0)
             }
-            compliance_scores.append(privacy_validation.compliance_score)
-            
-            if not privacy_validation.privacy_compliant:
+            compliance_scores.append(getattr(privacy_validation, 'compliance_score', 0.0))
+
+            if not getattr(privacy_validation, 'hipaa_compliant', getattr(privacy_validation, 'privacy_compliant', False)):
                 results['recommendations'].append(
                     "Implement comprehensive HIPAA privacy protection measures"
                 )

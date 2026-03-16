@@ -108,9 +108,13 @@ class InsuranceAIGovernanceFramework(AIGovernanceFramework):
         
         # Define protected attributes for insurance
         self.protected_attributes = [
-            'race', 'gender', 'religion', 'national_origin', 
+            'race', 'gender', 'religion', 'national_origin',
             'age', 'marital_status', 'disability_status'
         ]
+
+        # Initialize insurance-specific enforcement mechanisms
+        self.fair_pricing_enforcement = actuarial_fairness_enforcement
+        self.fair_claims_processing = anti_discrimination_enabled
     
     def validate_actuarial_fairness(self, 
                                   pricing_data: Dict[str, Any],
