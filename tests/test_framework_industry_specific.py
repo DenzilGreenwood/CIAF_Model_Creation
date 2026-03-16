@@ -315,7 +315,6 @@ class TestGovernmentIndustrySpecific:
     @pytest.fixture
     def government_framework(self):
         return GovernmentAIGovernanceFramework(
-            organization_id="agency_test_001",
             government_agency_id="AGENCY_001",
             jurisdiction="US"
         )
@@ -415,7 +414,6 @@ class TestCybersecurityIndustrySpecific:
     @pytest.fixture
     def cybersecurity_framework(self):
         return CybersecurityAIGovernanceFramework(
-            organization_id="security_test_001",
             security_organization_id="SEC_001",
             security_clearance_level='confidential'
         )
@@ -577,7 +575,6 @@ class TestEducationIndustrySpecific:
     @pytest.fixture
     def education_framework(self):
         return EducationAIGovernanceFramework(
-            organization_id="university_test_001",
             educational_institution_id="EDU_001",
             institution_type="university"
         )
