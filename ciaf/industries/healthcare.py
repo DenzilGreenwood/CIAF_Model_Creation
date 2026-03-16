@@ -706,6 +706,7 @@ class HealthcareAIGovernanceFramework(AIGovernanceFramework):
         # Record governance event
         self.record_governance_event('governance_validation', validation_results)
         
+        validation_results["organization_id"] = self.organization_id
         return validation_results
     
     def generate_audit_report(self, **kwargs) -> Dict[str, Any]:
@@ -817,4 +818,5 @@ class HealthcareAIGovernanceFramework(AIGovernanceFramework):
             'compliance_score': compliance_score
         })
         
+        audit_report["organization_id"] = self.organization_id
         return audit_report

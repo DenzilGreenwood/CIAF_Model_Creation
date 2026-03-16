@@ -657,6 +657,7 @@ class CybersecurityAIGovernanceFramework(AIGovernanceFramework):
             )
         except Exception as e:
             compliance_results["error"] = str(e)
+        compliance_results["organization_id"] = self.organization_id
         return compliance_results
     
     def validate_governance_requirements(self, system_id: str, requirements: Dict[str, Any]) -> Dict[str, Any]:
@@ -690,6 +691,7 @@ class CybersecurityAIGovernanceFramework(AIGovernanceFramework):
             )
         except Exception as e:
             validation_results["error"] = str(e)
+        validation_results["organization_id"] = self.organization_id
         return validation_results
     
     def generate_audit_report(self, system_id: str, report_type: str = "comprehensive") -> Dict[str, Any]:
@@ -758,4 +760,5 @@ class CybersecurityAIGovernanceFramework(AIGovernanceFramework):
             )
         except Exception as e:
             audit_report["error"] = str(e)
+        audit_report["organization_id"] = self.organization_id
         return audit_report

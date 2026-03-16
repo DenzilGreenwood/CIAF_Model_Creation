@@ -1093,6 +1093,7 @@ class ClimateESGAIGovernanceFramework(AIGovernanceFramework):
             compliance_results["error"] = str(e)
             compliance_results["overall_compliance_score"] = 0.0
             
+        compliance_results["organization_id"] = self.organization_id
         return compliance_results
     
     def validate_governance_requirements(self, system_id: str, requirements: Dict[str, Any]) -> Dict[str, Any]:
@@ -1243,6 +1244,7 @@ class ClimateESGAIGovernanceFramework(AIGovernanceFramework):
             validation_results["error"] = str(e)
             validation_results["validation_score"] = 0.0
             
+        validation_results["organization_id"] = self.organization_id
         return validation_results
     
     def generate_audit_report(self, system_id: str, report_type: str = "comprehensive") -> Dict[str, Any]:
@@ -1482,6 +1484,7 @@ class ClimateESGAIGovernanceFramework(AIGovernanceFramework):
             audit_report["error"] = str(e)
             audit_report["executive_summary"]["overall_governance_score"] = 0.0
             
+        audit_report["organization_id"] = self.organization_id
         return audit_report
     
     # Helper methods for validation
@@ -1549,6 +1552,7 @@ class ClimateESGAIGovernanceFramework(AIGovernanceFramework):
     
     def _calculate_sustainability_maturity(self, audit_report: Dict) -> float:
         """Calculate sustainability governance maturity score"""
+        audit_report["organization_id"] = self.organization_id
         return audit_report["executive_summary"]["overall_governance_score"]
     
     def _calculate_assessment_coverage(self, audit_report: Dict) -> float:

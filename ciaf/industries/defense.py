@@ -819,6 +819,7 @@ class DefenseAIGovernanceFramework(AIGovernanceFramework):
         # Record governance event
         self.record_governance_event('governance_validation', validation_results)
         
+        validation_results["organization_id"] = self.organization_id
         return validation_results
     
     def generate_audit_report(self, **kwargs) -> Dict[str, Any]:
@@ -926,4 +927,5 @@ class DefenseAIGovernanceFramework(AIGovernanceFramework):
             'classification_level': self.classification_level.value if hasattr(self.classification_level, "value") else str(self.classification_level)
         })
         
+        audit_report["organization_id"] = self.organization_id
         return audit_report

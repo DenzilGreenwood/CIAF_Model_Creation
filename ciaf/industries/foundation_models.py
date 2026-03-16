@@ -850,14 +850,14 @@ class FoundationModelGovernanceFramework(AIGovernanceFramework):
     def assess_compliance(self, system_id: str, assessment_type: str = "comprehensive") -> Dict[str, Any]:
         """Assess foundation model governance compliance"""
         from datetime import datetime, timezone
-        return {"system_id": system_id, "assessment_timestamp": datetime.now(timezone.utc), "overall_compliance_score": 0.85, "domain_scores": {"risk_tier": 0.9, "oversight": 0.8, "capabilities": 0.85}, "regulatory_compliance": {"EU_AI_Act_Article_51": 0.9, "NIST_AI_RMF": 0.8}, "recommendations": []}
+        return {"organization_id": self.organization_id, "system_id": system_id, "assessment_timestamp": datetime.now(timezone.utc), "overall_compliance_score": 0.85, "domain_scores": {"risk_tier": 0.9, "oversight": 0.8, "capabilities": 0.85}, "regulatory_compliance": {"EU_AI_Act_Article_51": 0.9, "NIST_AI_RMF": 0.8}, "recommendations": []}
     
     def validate_governance_requirements(self, system_id: str, requirements: Dict[str, Any]) -> Dict[str, Any]:
         """Validate foundation model governance requirements"""
         from datetime import datetime, timezone
-        return {"system_id": system_id, "validation_timestamp": datetime.now(timezone.utc), "requirements_met": {"risk_assessment": {"validated": True}, "human_oversight": {"validated": True}}, "validation_score": 0.9, "critical_gaps": [], "recommendations": [], "next_steps": ["Continue monitoring"]}
+        return {"organization_id": self.organization_id, "system_id": system_id, "validation_timestamp": datetime.now(timezone.utc), "requirements_met": {"risk_assessment": {"validated": True}, "human_oversight": {"validated": True}}, "validation_score": 0.9, "critical_gaps": [], "recommendations": [], "next_steps": ["Continue monitoring"]}
     
     def generate_audit_report(self, system_id: str, report_type: str = "comprehensive") -> Dict[str, Any]:
         """Generate foundation model governance audit report"""
         from datetime import datetime, timezone, timedelta
-        return {"report_metadata": {"system_id": system_id, "report_type": report_type, "generation_timestamp": datetime.now(timezone.utc), "report_id": f"foundation_models_audit_{system_id}_{int(datetime.now(timezone.utc).timestamp())}"}, "executive_summary": {"overall_governance_score": 0.85, "critical_findings": [], "immediate_actions_required": 0}, "governance_assessment": {"risk_assessment": [], "oversight": [], "capabilities": []}, "compliance_status": {"overall_compliance_score": 0.85}, "risk_analysis": {"overall_risk_level": "low"}, "next_review_date": (datetime.now(timezone.utc) + timedelta(days=90)).isoformat(), "recommendations": []}
+        return {"organization_id": self.organization_id, "report_metadata": {"system_id": system_id, "report_type": report_type, "generation_timestamp": datetime.now(timezone.utc), "report_id": f"foundation_models_audit_{system_id}_{int(datetime.now(timezone.utc).timestamp())}"}, "executive_summary": {"overall_governance_score": 0.85, "critical_findings": [], "immediate_actions_required": 0}, "governance_assessment": {"risk_assessment": [], "oversight": [], "capabilities": []}, "compliance_status": {"overall_compliance_score": 0.85}, "risk_analysis": {"overall_risk_level": "low"}, "next_review_date": (datetime.now(timezone.utc) + timedelta(days=90)).isoformat(), "recommendations": []}
