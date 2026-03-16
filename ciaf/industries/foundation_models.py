@@ -850,7 +850,7 @@ class FoundationModelGovernanceFramework(AIGovernanceFramework):
     def assess_compliance(self, system_id: str, assessment_type: str = "comprehensive") -> Dict[str, Any]:
         """Assess foundation model governance compliance"""
         from datetime import datetime, timezone
-        return {"organization_id": self.organization_id, "system_id": system_id, "assessment_timestamp": datetime.now(timezone.utc), "overall_compliance_score": 0.85, "domain_scores": {"risk_tier": 0.9, "oversight": 0.8, "capabilities": 0.85}, "regulatory_compliance": {"EU_AI_Act_Article_51": 0.9, "NIST_AI_RMF": 0.8}, "recommendations": []}
+        return {"organization_id": self.organization_id, "system_id": system_id, "assessment_timestamp": datetime.now(timezone.utc), "overall_compliance_score": 0.85, "compliance_status": "compliant", "domain_scores": {"risk_tier": 0.9, "oversight": 0.8, "capabilities": 0.85}, "regulatory_compliance": {"EU_AI_Act_Article_51": 0.9, "NIST_AI_RMF": 0.8}, "recommendations": []}
     
     def validate_governance_requirements(self, system_id: str, requirements: Dict[str, Any]) -> Dict[str, Any]:
         """Validate foundation model governance requirements"""

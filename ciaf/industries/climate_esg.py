@@ -1094,6 +1094,9 @@ class ClimateESGAIGovernanceFramework(AIGovernanceFramework):
             compliance_results["overall_compliance_score"] = 0.0
             
         compliance_results["organization_id"] = self.organization_id
+        # Add compliance_status based on score
+        score = compliance_results["overall_compliance_score"]
+        compliance_results["compliance_status"] = "compliant" if score >= 0.7 else "non_compliant" if score >= 0.5 else "critical"
         return compliance_results
     
     def validate_governance_requirements(self, system_id: str, requirements: Dict[str, Any]) -> Dict[str, Any]:

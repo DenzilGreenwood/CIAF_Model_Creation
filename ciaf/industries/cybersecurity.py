@@ -658,6 +658,9 @@ class CybersecurityAIGovernanceFramework(AIGovernanceFramework):
         except Exception as e:
             compliance_results["error"] = str(e)
         compliance_results["organization_id"] = self.organization_id
+        # Add compliance_status based on score
+        score = compliance_results["overall_compliance_score"]
+        compliance_results["compliance_status"] = "compliant" if score >= 0.7 else "non_compliant" if score >= 0.5 else "critical"
         return compliance_results
     
     def validate_governance_requirements(self, system_id: str = None, requirements: Dict[str, Any] = None, **kwargs) -> Dict[str, Any]:
