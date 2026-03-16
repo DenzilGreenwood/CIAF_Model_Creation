@@ -381,7 +381,7 @@ class CrossBorderAIGovernanceFramework(AIGovernanceFramework):
     """
     
     def __init__(self, organization_id: str, primary_jurisdiction: Jurisdiction, **kwargs):
-        super().__init__(**kwargs)
+        super().__init__(organization_id, **kwargs)
         self.organization_id = organization_id
         self.primary_jurisdiction = primary_jurisdiction
         # Initialize policy enforcement with cross-border-specific regulations

@@ -263,7 +263,7 @@ class ClimateESGAIGovernanceFramework(AIGovernanceFramework):
     """
     
     def __init__(self, organization_id: str, sustainability_office_id: str, **kwargs):
-        super().__init__(**kwargs)
+        super().__init__(organization_id, **kwargs)
         self.organization_id = organization_id
         self.sustainability_office_id = sustainability_office_id
         # Initialize policy enforcement with climate/ESG-specific regulations

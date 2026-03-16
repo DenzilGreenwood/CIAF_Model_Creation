@@ -396,6 +396,7 @@ class EducationAIGovernanceFramework(AIGovernanceFramework):
     
     def __init__(self, educational_institution_id: str, institution_type: str, **kwargs):
         # Following Variables Reference: organization_id is required by base class
+        kwargs.pop('organization_id', None)  # Remove if present to avoid duplication
         super().__init__(organization_id=educational_institution_id, **kwargs)
         self.educational_institution_id = educational_institution_id
         self.institution_type = institution_type  # K-12, higher_ed, corporate_training

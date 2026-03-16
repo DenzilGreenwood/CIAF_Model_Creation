@@ -93,7 +93,7 @@ class HumanResourcesAIGovernanceFramework(AIGovernanceFramework):
         
         # Initialize HR-specific validators
         self.bias_validator = BiasValidator()
-        self.audit_trail = AuditTrail()
+        self.audit_trail = AuditTrail(organization_id)
         self.policy_enforcement = PolicyEnforcement(
             industry_type='human_resources',
             regulatory_frameworks=['NYC_LOCAL_LAW_144', 'EEOC', 'ADA'],

@@ -356,7 +356,7 @@ class DefenseAIGovernanceFramework(AIGovernanceFramework):
         
         # Initialize policy enforcement with defense-specific regulations
         self.policy_enforcement = PolicyEnforcement(
-            industry='defense',
+            industry_type='defense',
             regulatory_frameworks=[
                 'DoD_AI_Strategy', 'JAIC_AI_Principles', 'International_Humanitarian_Law',
                 'Rules_of_Engagement', 'ITAR_Export_Controls', 'EAR_Export_Controls',

@@ -132,7 +132,7 @@ class ManufacturingAIGovernanceFramework(AIGovernanceFramework):
         
         # Initialize manufacturing-specific validators
         self.bias_validator = BiasValidator()
-        self.audit_trail = AuditTrail()
+        self.audit_trail = AuditTrail(organization_id)
         self.policy_enforcement = PolicyEnforcement(
             industry_type='manufacturing',
             regulatory_frameworks=['IEC_61508', 'ISO_13849', 'OSHA_1910'],

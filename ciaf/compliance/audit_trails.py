@@ -576,6 +576,18 @@ class AuditTrail:
     Simplified audit trail interface for model integration
     """
 
+    @staticmethod
+    def _to_dict(obj):
+        """Convert dataclass or dict to dict, handling nested structures"""
+        if hasattr(obj, '__dataclass_fields__'):
+            return asdict(obj)
+        elif isinstance(obj, dict):
+            return {k: AuditTrail._to_dict(v) for k, v in obj.items()}
+        elif isinstance(obj, (list, tuple)):
+            return [AuditTrail._to_dict(v) for v in obj]
+        else:
+            return obj
+
     def __init__(self, model_id: str, compliance_frameworks: Optional[List[str]] = None):
         """Initialize audit trail for a specific model"""
         self.model_id = model_id
@@ -597,6 +609,68 @@ class AuditTrail:
             results=results,
             user_id=metadata.get("user_id", "system"),
         )
+
+    def log_credit_decision(self, application_id: str, decision: str, fairness_assessment: Optional[Dict[str, Any]] = None, model_version: Optional[str] = None, timestamp: Optional[Any] = None, **kwargs) -> str:
+        """Log a credit decision audit event"""
+        import hashlib
+        import json
+        metadata = {
+            "application_id": application_id,
+            "decision": decision,
+            "fairness_assessment": self._to_dict(fairness_assessment) if fairness_assessment else None,
+            "model_version": model_version,
+            "timestamp": str(timestamp) if timestamp else None,
+            **{k: self._to_dict(v) for k, v in kwargs.items()}
+        }
+        self.log_event("credit_decision", f"Credit decision: {decision}", metadata)
+        # Return a deterministic audit trail ID
+        trail_id = hashlib.sha256(json.dumps(metadata, default=str, sort_keys=True).encode()).hexdigest()[:16]
+        return f"audit_{trail_id}"
+
+    def log_insurance_pricing(self, policy_id: str, premium: float, fairness_validation: Optional[Dict[str, Any]] = None, timestamp: Optional[Any] = None, **kwargs) -> str:
+        """Log an insurance pricing audit event"""
+        import hashlib
+        import json
+        metadata = {
+            "policy_id": policy_id,
+            "premium": premium,
+            "fairness_validation": self._to_dict(fairness_validation) if fairness_validation else None,
+            "timestamp": str(timestamp) if timestamp else None,
+            **{k: self._to_dict(v) for k, v in kwargs.items()}
+        }
+        self.log_event("insurance_pricing", f"Insurance pricing: ${premium}", metadata)
+        trail_id = hashlib.sha256(json.dumps(metadata, default=str, sort_keys=True).encode()).hexdigest()[:16]
+        return f"audit_{trail_id}"
+
+    def log_hiring_decision(self, candidate_id: str, decision: str, assessment_results: Optional[Dict[str, Any]] = None, timestamp: Optional[Any] = None, **kwargs) -> str:
+        """Log a hiring decision audit event"""
+        import hashlib
+        import json
+        metadata = {
+            "candidate_id": candidate_id,
+            "decision": decision,
+            "assessment_results": self._to_dict(assessment_results) if assessment_results else None,
+            "timestamp": str(timestamp) if timestamp else None,
+            **{k: self._to_dict(v) for k, v in kwargs.items()}
+        }
+        self.log_event("hiring_decision", f"Hiring decision: {decision}", metadata)
+        trail_id = hashlib.sha256(json.dumps(metadata, default=str, sort_keys=True).encode()).hexdigest()[:16]
+        return f"audit_{trail_id}"
+
+    def log_claims_processing(self, claim_id: str, decision: str, settlement_amount: Optional[float] = None, timestamp: Optional[Any] = None, **kwargs) -> str:
+        """Log a claims processing audit event"""
+        import hashlib
+        import json
+        metadata = {
+            "claim_id": claim_id,
+            "decision": decision,
+            "settlement_amount": settlement_amount,
+            "timestamp": str(timestamp) if timestamp else None,
+            **{k: self._to_dict(v) for k, v in kwargs.items()}
+        }
+        self.log_event("claims_processing", f"Claims decision: {decision}", metadata)
+        trail_id = hashlib.sha256(json.dumps(metadata, default=str, sort_keys=True).encode()).hexdigest()[:16]
+        return f"audit_{trail_id}"
 
     def get_records(self):
         """Get all audit records"""

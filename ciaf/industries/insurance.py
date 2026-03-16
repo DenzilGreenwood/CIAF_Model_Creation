@@ -99,7 +99,7 @@ class InsuranceAIGovernanceFramework(AIGovernanceFramework):
         
         # Initialize insurance-specific validators
         self.bias_validator = BiasValidator()
-        self.audit_trail = AuditTrail()
+        self.audit_trail = AuditTrail(organization_id)
         self.policy_enforcement = PolicyEnforcement(
             industry_type='insurance',
             regulatory_frameworks=['NAIC', 'STATE_INSURANCE_REGULATIONS', 'GDPR'],

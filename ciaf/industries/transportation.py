@@ -102,7 +102,7 @@ class TransportationAIGovernanceFramework(AIGovernanceFramework):
         
         # Initialize transportation-specific validators
         self.bias_validator = BiasValidator()
-        self.audit_trail = AuditTrail()
+        self.audit_trail = AuditTrail(organization_id)
         self.policy_enforcement = PolicyEnforcement(
             industry_type='transportation',
             regulatory_frameworks=['NHTSA', 'SAE_J3016', 'EU_TYPE_APPROVAL'],

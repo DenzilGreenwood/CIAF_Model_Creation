@@ -401,6 +401,7 @@ class CybersecurityAIGovernanceFramework(AIGovernanceFramework):
     
     def __init__(self, security_organization_id: str, security_clearance_level: str, **kwargs):
         # Following Variables Reference: organization_id is required by base class
+        kwargs.pop('organization_id', None)  # Remove if present to avoid duplication
         super().__init__(organization_id=security_organization_id, **kwargs)
         self.security_organization_id = security_organization_id
         self.security_clearance_level = security_clearance_level

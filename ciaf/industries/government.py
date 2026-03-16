@@ -305,6 +305,7 @@ class GovernmentAIGovernanceFramework(AIGovernanceFramework):
     
     def __init__(self, government_agency_id: str, jurisdiction: str, **kwargs):
         # Following Variables Reference: organization_id is required by base class
+        kwargs.pop('organization_id', None)  # Remove if present to avoid duplication
         super().__init__(organization_id=government_agency_id, **kwargs)
         self.government_agency_id = government_agency_id
         self.jurisdiction = jurisdiction

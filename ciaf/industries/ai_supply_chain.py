@@ -418,12 +418,12 @@ class AISupplyChainGovernanceFramework(AIGovernanceFramework):
     """
     
     def __init__(self, organization_id: str, supply_chain_tier: str, **kwargs):
-        super().__init__(**kwargs)
+        super().__init__(organization_id, **kwargs)
         self.organization_id = organization_id
         self.supply_chain_tier = supply_chain_tier  # tier_1, tier_2, tier_3
         self.bias_validator = BiasValidator()
-        self.audit_trail = AuditTrail()
-        self.compliance_validator = ComplianceValidator()
+        self.audit_trail = AuditTrail(organization_id)
+        self.compliance_validator = ComplianceValidator(organization_id)
         
         # AI supply chain regulatory frameworks
         self.regulatory_standards = [

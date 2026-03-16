@@ -212,13 +212,13 @@ class FoundationModelGovernanceFramework(AIGovernanceFramework):
     """
     
     def __init__(self, organization_id: str, model_registry_id: str, **kwargs):
-        super().__init__(**kwargs)
+        super().__init__(organization_id, **kwargs)
         self.organization_id = organization_id
         self.model_registry_id = model_registry_id
         self.bias_validator = BiasValidator()
-        self.audit_trail = AuditTrail()
-        self.compliance_validator = ComplianceValidator()
-        
+        self.audit_trail = AuditTrail(organization_id)
+        self.compliance_validator = ComplianceValidator(organization_id)
+
         # Foundation model specific regulatory frameworks
         self.regulatory_standards = [
             "EU_AI_Act_Article_51",      # Foundation model obligations
