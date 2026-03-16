@@ -185,7 +185,6 @@ class TestGovernmentCompliance:
     def government_framework(self):
         """Create government framework instance"""
         return GovernmentAIGovernanceFramework(
-            organization_id="test_agency_123",
             government_agency_id="AGENCY_001",
             jurisdiction="US"
         )
@@ -233,9 +232,12 @@ class TestAllFrameworksCompliance:
     ])
     def test_framework_initialization(self, framework_class, org_id):
         """Test all frameworks can be initialized"""
-        framework = framework_class(organization_id=org_id)
+        if framework_class == GovernmentAIGovernanceFramework:
+            framework = framework_class(government_agency_id=org_id, jurisdiction="US")
+        else:
+            framework = framework_class(organization_id=org_id)
         assert framework is not None
-        assert framework.organization_id == org_id
+        assert framework.organization_id == org_id or (framework_class == GovernmentAIGovernanceFramework and framework.government_agency_id == org_id)
 
     @pytest.mark.parametrize("framework_class,org_id", [
         (BankingAIGovernanceFramework, "test_bank"),
@@ -245,7 +247,10 @@ class TestAllFrameworksCompliance:
     ])
     def test_compliance_assessment_structure(self, framework_class, org_id):
         """Test compliance assessment has required structure"""
-        framework = framework_class(organization_id=org_id)
+        if framework_class == GovernmentAIGovernanceFramework:
+            framework = framework_class(government_agency_id=org_id, jurisdiction="US")
+        else:
+            framework = framework_class(organization_id=org_id)
         result = framework.assess_compliance()
 
         assert isinstance(result, dict)
@@ -260,7 +265,10 @@ class TestAllFrameworksCompliance:
     ])
     def test_audit_report_generation(self, framework_class, org_id):
         """Test audit report generation for key frameworks"""
-        framework = framework_class(organization_id=org_id)
+        if framework_class == GovernmentAIGovernanceFramework:
+            framework = framework_class(government_agency_id=org_id, jurisdiction="US")
+        else:
+            framework = framework_class(organization_id=org_id)
         report = framework.generate_audit_report()
 
         assert isinstance(report, dict)
