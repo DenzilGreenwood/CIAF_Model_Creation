@@ -616,9 +616,11 @@ class CybersecurityAIGovernanceFramework(AIGovernanceFramework):
             "network_traffic_analysis": 0.04
         }
     
-    def assess_compliance(self, system_id: str, assessment_type: str = "comprehensive") -> Dict[str, Any]:
+    def assess_compliance(self, system_id: str = None, assessment_type: str = "comprehensive") -> Dict[str, Any]:
         """Assess cybersecurity AI governance compliance"""
         from datetime import datetime, timezone
+        if system_id is None:
+            system_id = self.organization_id
         compliance_results = {
             "system_id": system_id,
             "assessment_timestamp": datetime.now(timezone.utc),
