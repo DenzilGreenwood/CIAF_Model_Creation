@@ -82,8 +82,8 @@ class EnergyAIGovernanceFramework(AIGovernanceFramework):
     
     def __init__(self, utility_id: str, grid_region: str, **kwargs):
         # Following Variables Reference: organization_id is required by base class
-        kwargs.pop('organization_id', None)  # Remove if present to avoid duplication
-        super().__init__(organization_id=utility_id, **kwargs)
+        org_id = kwargs.pop('organization_id', None) or utility_id
+        super().__init__(organization_id=org_id, **kwargs)
         self.utility_id = utility_id
         self.grid_region = grid_region
         
