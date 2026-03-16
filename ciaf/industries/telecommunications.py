@@ -120,10 +120,10 @@ class TelecommunicationsAIGovernanceFramework(AIGovernanceFramework):
     Telecommunications AI Governance Framework for network optimization and customer protection
     """
     
-    def __init__(self, carrier_id: str, service_regions: List[str], **kwargs):
+    def __init__(self, carrier_id: str = "default_carrier", service_regions: List[str] = None, **kwargs):
         super().__init__(**kwargs)
         self.carrier_id = carrier_id
-        self.service_regions = service_regions
+        self.service_regions = service_regions if service_regions is not None else ["US"]
         
         # Initialize policy enforcement with telecommunications-specific regulations
         self.policy_enforcement = PolicyEnforcement(
@@ -396,6 +396,7 @@ class TelecommunicationsAIGovernanceFramework(AIGovernanceFramework):
         privacy_data = kwargs.get('privacy_data')
         
         results = {
+            'organization_id': self.organization_id,
             'carrier_id': self.carrier_id,
             'service_regions': self.service_regions,
             'assessment_timestamp': datetime.now(timezone.utc).isoformat(),

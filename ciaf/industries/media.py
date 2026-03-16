@@ -234,7 +234,7 @@ class MediaAIGovernanceFramework(AIGovernanceFramework):
     - Cross-platform governance and algorithmic accountability
     """
     
-    def __init__(self, media_organization_id: str, platform_id: str, **kwargs):
+    def __init__(self, media_organization_id: str = "default_media_org", platform_id: str = "default_platform", **kwargs):
         super().__init__(**kwargs)
         self.media_organization_id = media_organization_id
         self.platform_id = platform_id
@@ -924,6 +924,7 @@ class MediaAIGovernanceFramework(AIGovernanceFramework):
         content_data = kwargs.get('content_data')
         
         results = {
+            'organization_id': self.organization_id,
             'media_organization_id': self.media_organization_id,
             'platform_id': self.platform_id,
             'assessment_timestamp': datetime.now(timezone.utc).isoformat(),

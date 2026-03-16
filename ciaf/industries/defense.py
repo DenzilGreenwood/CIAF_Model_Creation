@@ -349,9 +349,13 @@ class DefenseAIGovernanceFramework(AIGovernanceFramework):
     - Cybersecurity for critical defense AI infrastructure
     """
     
-    def __init__(self, defense_organization_id: str, classification_level: ClassificationLevel, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self, defense_organization_id: str = "default_defense_org", classification_level: ClassificationLevel = None, organization_id: str = None, **kwargs):
+        if organization_id is None:
+            organization_id = defense_organization_id
+        super().__init__(organization_id=organization_id, **kwargs)
         self.defense_organization_id = defense_organization_id
+        if classification_level is None:
+            classification_level = ClassificationLevel.UNCLASSIFIED if hasattr(ClassificationLevel, 'UNCLASSIFIED') else list(ClassificationLevel)[0]
         # Handle both string and enum for classification level
         if isinstance(classification_level, str):
             try:
@@ -504,8 +508,8 @@ class DefenseAIGovernanceFramework(AIGovernanceFramework):
         
         # Log military AI safety assessment
         self.record_governance_event(
-            event_type="military_ai_safety_assessment",
-            details={
+            "military_ai_safety_assessment",
+            {
                 "assessment_id": assessment_id,
                 "system_id": system_id,
                 "ai_application": ai_application.value,
@@ -578,6 +582,7 @@ class DefenseAIGovernanceFramework(AIGovernanceFramework):
         security_data = kwargs.get('security_data')
         
         results = {
+            'organization_id': self.organization_id,
             'defense_organization_id': self.defense_organization_id,
             'classification_level': self.classification_level.value if hasattr(self.classification_level, "value") else str(self.classification_level),
             'assessment_timestamp': datetime.now(timezone.utc).isoformat(),
@@ -836,6 +841,7 @@ class DefenseAIGovernanceFramework(AIGovernanceFramework):
         include_historical_data = kwargs.get('include_historical_data', True)
         
         audit_report = {
+            'organization_id': self.organization_id,
             'report_metadata': {
                 'defense_organization_id': self.defense_organization_id,
                 'classification_level': self.classification_level.value if hasattr(self.classification_level, "value") else str(self.classification_level),

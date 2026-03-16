@@ -251,7 +251,7 @@ class RetailAIGovernanceFramework(AIGovernanceFramework):
     - Cross-border e-commerce compliance and data localization
     """
     
-    def __init__(self, retail_organization_id: str, platform_id: str, **kwargs):
+    def __init__(self, retail_organization_id: str = "default_retail_org", platform_id: str = "default_platform", **kwargs):
         super().__init__(**kwargs)
         self.retail_organization_id = retail_organization_id
         self.platform_id = platform_id
@@ -789,6 +789,7 @@ class RetailAIGovernanceFramework(AIGovernanceFramework):
         customer_data = kwargs.get('customer_data')
         
         results = {
+            'organization_id': self.organization_id,
             'retail_organization_id': self.retail_organization_id,
             'platform_id': self.platform_id,
             'assessment_timestamp': datetime.now(timezone.utc).isoformat(),

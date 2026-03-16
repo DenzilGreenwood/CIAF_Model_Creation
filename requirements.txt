@@ -14,7 +14,7 @@ redis>=4.0.0
 # Cryptography & Security
 cryptography>=3.4.8
 pydantic>=1.8.0
-merkletools>=1.0.3
+# merkletools>=1.0.3
 ecdsa>=0.17.0
 python-jose>=3.3.0
 passlib>=1.7.4

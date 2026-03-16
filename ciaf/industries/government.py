@@ -303,7 +303,7 @@ class GovernmentAIGovernanceFramework(AIGovernanceFramework):
     - International cooperation and diplomatic frameworks
     """
     
-    def __init__(self, government_agency_id: str, jurisdiction: str, **kwargs):
+    def __init__(self, government_agency_id: str = "default_agency", jurisdiction: str = "US", **kwargs):
         # Following Variables Reference: organization_id is required by base class
         # If organization_id is provided in kwargs (test case), use it; otherwise use government_agency_id
         org_id = kwargs.pop('organization_id', None) or government_agency_id
@@ -442,8 +442,8 @@ class GovernmentAIGovernanceFramework(AIGovernanceFramework):
         
         # Log transparency assessment
         self.record_governance_event(
-            event_type="algorithmic_transparency_assessment",
-            details={
+            "algorithmic_transparency_assessment",
+            {
                 "assessment_id": assessment_id,
                 "system_id": system_id,
                 "ai_application": ai_application.value,
@@ -558,8 +558,8 @@ class GovernmentAIGovernanceFramework(AIGovernanceFramework):
         
         # Log citizen rights assessment
         self.record_governance_event(
-            event_type="citizen_rights_assessment",
-            details={
+            "citizen_rights_assessment",
+            {
                 "assessment_id": assessment_id,
                 "citizen_id": citizen_id,
                 "system_id": system_id,
@@ -661,8 +661,8 @@ class GovernmentAIGovernanceFramework(AIGovernanceFramework):
         
         # Log democratic oversight assessment
         self.record_governance_event(
-            event_type="democratic_oversight_assessment",
-            details={
+            "democratic_oversight_assessment",
+            {
                 "assessment_id": assessment_id,
                 "system_id": system_id,
                 "oversight_level": oversight_level.value,
@@ -767,8 +767,8 @@ class GovernmentAIGovernanceFramework(AIGovernanceFramework):
         
         # Log public service fairness assessment
         self.record_governance_event(
-            event_type="public_service_fairness_assessment",
-            details={
+            "public_service_fairness_assessment",
+            {
                 "assessment_id": assessment_id,
                 "service_id": service_id,
                 "ai_application": ai_application.value,
@@ -828,6 +828,7 @@ class GovernmentAIGovernanceFramework(AIGovernanceFramework):
         citizen_data = kwargs.get('citizen_data')
         
         results = {
+            'organization_id': self.organization_id,
             'government_agency_id': self.government_agency_id,
             'jurisdiction': self.jurisdiction,
             'assessment_timestamp': datetime.now(timezone.utc).isoformat(),

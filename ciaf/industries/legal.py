@@ -80,7 +80,7 @@ class LegalAIGovernanceFramework(AIGovernanceFramework):
     Legal AI Governance Framework for legal and professional services
     """
     
-    def __init__(self, law_firm_id: str, primary_jurisdiction: str, **kwargs):
+    def __init__(self, law_firm_id: str = "default_law_firm", primary_jurisdiction: str = "US", **kwargs):
         super().__init__(**kwargs)
         self.law_firm_id = law_firm_id
         self.primary_jurisdiction = primary_jurisdiction
@@ -323,6 +323,7 @@ class LegalAIGovernanceFramework(AIGovernanceFramework):
         ethical_data = kwargs.get('ethical_data')
         
         results = {
+            'organization_id': self.organization_id,
             'law_firm_id': self.law_firm_id,
             'jurisdiction': self.primary_jurisdiction,
             'assessment_timestamp': datetime.now(timezone.utc).isoformat(),

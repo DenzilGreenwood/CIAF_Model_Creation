@@ -394,7 +394,7 @@ class EducationAIGovernanceFramework(AIGovernanceFramework):
     - Institutional AI governance and cross-system coordination
     """
     
-    def __init__(self, educational_institution_id: str, institution_type: str, **kwargs):
+    def __init__(self, educational_institution_id: str = "default_institution", institution_type: str = "university", **kwargs):
         # Following Variables Reference: organization_id is required by base class
         org_id = kwargs.pop('organization_id', None) or educational_institution_id
         super().__init__(organization_id=org_id, **kwargs)
@@ -554,8 +554,8 @@ class EducationAIGovernanceFramework(AIGovernanceFramework):
         
         # Log student privacy assessment
         self.record_governance_event(
-            event_type="student_privacy_assessment",
-            details={
+            "student_privacy_assessment",
+            {
                 "assessment_id": assessment_id,
                 "student_id": student_id,
                 "system_id": system_id,
@@ -634,6 +634,7 @@ class EducationAIGovernanceFramework(AIGovernanceFramework):
         student_data = kwargs.get('student_data')
         
         results = {
+            'organization_id': self.organization_id,
             'educational_institution_id': self.educational_institution_id,
             'institution_type': self.institution_type,
             'assessment_timestamp': datetime.now(timezone.utc).isoformat(),
