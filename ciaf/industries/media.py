@@ -241,7 +241,7 @@ class MediaAIGovernanceFramework(AIGovernanceFramework):
         
         # Initialize policy enforcement with media-specific regulations
         self.policy_enforcement = PolicyEnforcement(
-            industry='media',
+            industry_type='media',
             regulatory_frameworks=[
                 'EU_AI_Act_Article_52', 'EU_DSA', 'EU_Copyright_Directive',
                 'DMCA', 'GDPR_Media', 'FTC_Endorsement_Guides',

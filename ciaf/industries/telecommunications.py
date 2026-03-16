@@ -127,7 +127,7 @@ class TelecommunicationsAIGovernanceFramework(AIGovernanceFramework):
         
         # Initialize policy enforcement with telecommunications-specific regulations
         self.policy_enforcement = PolicyEnforcement(
-            industry='telecommunications',
+            industry_type='telecommunications',
             regulatory_frameworks=[
                 'FCC_Part_15', 'FCC_Part_22', 'E911_Requirements',
                 'GDPR_Telecom', 'CCPA_Telecom', 'ITU_Standards'

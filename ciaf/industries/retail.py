@@ -258,7 +258,7 @@ class RetailAIGovernanceFramework(AIGovernanceFramework):
         
         # Initialize policy enforcement with retail-specific regulations
         self.policy_enforcement = PolicyEnforcement(
-            industry='retail',
+            industry_type='retail',
             regulatory_frameworks=[
                 'GDPR', 'CCPA', 'FTC_Act', 'Consumer_Protection_Laws',
                 'EU_Consumer_Rights', 'PCI_DSS', 'CAN_SPAM_Act',

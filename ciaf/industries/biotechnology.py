@@ -371,7 +371,7 @@ class BiotechnologyAIGovernanceFramework(AIGovernanceFramework):
         self.research_focus = research_focus  # drug_discovery, diagnostics, research, etc.
         # Initialize policy enforcement with biotechnology-specific regulations
         self.policy_enforcement = PolicyEnforcement(
-            industry='biotechnology',
+            industry_type='biotechnology',
             regulatory_frameworks=[
                 'FDA_AI_ML_Guidance', 'EMA_AI_Qualification', 'GINA_Genetic_Nondiscrimination',
                 'HIPAA_Genomic_Privacy', 'NIH_Genomic_Data_Sharing', 'Common_Rule_Human_Subjects',

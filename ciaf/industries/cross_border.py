@@ -386,7 +386,7 @@ class CrossBorderAIGovernanceFramework(AIGovernanceFramework):
         self.primary_jurisdiction = primary_jurisdiction
         # Initialize policy enforcement with cross-border-specific regulations
         self.policy_enforcement = PolicyEnforcement(
-            industry='cross_border',
+            industry_type='cross_border',
             regulatory_frameworks=[
                 'EU_AI_Act', 'GDPR_Cross_Border', 'US_NIST_AI_RMF', 'UK_AI_White_Paper',
                 'Canada_AIDA', 'Singapore_AI_Governance', 'OECD_AI_Principles', 'ISO_IEC_23053',

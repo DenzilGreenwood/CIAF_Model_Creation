@@ -268,7 +268,7 @@ class ClimateESGAIGovernanceFramework(AIGovernanceFramework):
         self.sustainability_office_id = sustainability_office_id
         # Initialize policy enforcement with climate/ESG-specific regulations
         self.policy_enforcement = PolicyEnforcement(
-            industry='climate_esg',
+            industry_type='climate_esg',
             regulatory_frameworks=[
                 'EU_CSRD', 'SASB_Standards', 'TCFD_Framework', 'GRI_Standards',
                 'CDP_Framework', 'EU_Taxonomy', 'UNGC_Principles', 'Paris_Agreement',

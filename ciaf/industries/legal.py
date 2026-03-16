@@ -87,7 +87,7 @@ class LegalAIGovernanceFramework(AIGovernanceFramework):
         
         # Initialize policy enforcement with legal-specific standards
         self.policy_enforcement = PolicyEnforcement(
-            industry='legal',
+            industry_type='legal',
             regulatory_frameworks=[
                 'ABA_Model_Rules', 'State_Bar_Rules', 'Federal_Rules_Evidence',
                 'GDPR_Legal_Services', 'ISO_27001_Legal'
