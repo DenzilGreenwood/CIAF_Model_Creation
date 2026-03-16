@@ -1,0 +1,101 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis
+  namespace: ciaf
+  labels:
+    app: redis
+    component: cache
+    tier: data
+spec:
+  serviceName: redis-headless
+  replicas: 1  # For HA, use 3 with Redis Sentinel
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+        component: cache
+        tier: data
+    spec:
+      serviceAccountName: ciaf-service-account
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 999  # redis user
+        fsGroup: 999
+      containers:
+      - name: redis
+        image: redis:7-alpine
+        imagePullPolicy: IfNotPresent
+        command:
+        - redis-server
+        - --maxmemory
+        - "512mb"
+        - --maxmemory-policy
+        - allkeys-lru
+        - --appendonly
+        - "yes"
+        - --requirepass
+        - "$(REDIS_PASSWORD)"
+        ports:
+        - name: redis
+          containerPort: 6379
+          protocol: TCP
+        env:
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: ciaf-db-credentials
+              key: redis_password
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          exec:
+            command:
+            - redis-cli
+            - --no-auth-warning
+            - -a
+            - $(REDIS_PASSWORD)
+            - ping
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 5
+        readinessProbe:
+          exec:
+            command:
+            - redis-cli
+            - --no-auth-warning
+            - -a
+            - $(REDIS_PASSWORD)
+            - ping
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+        volumeMounts:
+        - name: data
+          mountPath: /data
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+      labels:
+        app: redis
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: ciaf-storage
+      resources:
+        requests:
+          storage: 5Gi
