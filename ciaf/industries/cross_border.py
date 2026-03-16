@@ -587,20 +587,22 @@ class CrossBorderAIGovernanceFramework(AIGovernanceFramework):
             
         return framework_mapping
     
-    def assess_compliance(self, system_id: str, assessment_type: str = "comprehensive") -> Dict[str, Any]:
+    def assess_compliance(self, system_id: str = None, assessment_type: str = "comprehensive") -> Dict[str, Any]:
         """
         Assess compliance across all cross-border AI governance domains
-        
+
         Args:
-            system_id: Cross-border AI system identifier
+            system_id: Cross-border AI system identifier (defaults to organization_id)
             assessment_type: Type of compliance assessment
-            
+
         Returns:
             Dict containing comprehensive compliance assessment
         """
-        
+
         from datetime import datetime, timezone
-        
+        if system_id is None:
+            system_id = self.organization_id
+
         compliance_results = {
             "system_id": system_id,
             "assessment_timestamp": datetime.now(timezone.utc),
