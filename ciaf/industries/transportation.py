@@ -787,6 +787,7 @@ class TransportationAIGovernanceFramework(AIGovernanceFramework):
         include_historical_data = kwargs.get('include_historical_data', True)
         
         audit_report = {
+            'organization_id': self.organization_id,
             'report_metadata': {
                 'organization_id': self.organization_id,
                 'report_type': report_type,

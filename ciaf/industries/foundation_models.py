@@ -211,7 +211,7 @@ class FoundationModelGovernanceFramework(AIGovernanceFramework):
     - Cross-system interaction safety boundaries
     """
     
-    def __init__(self, organization_id: str, model_registry_id: str, **kwargs):
+    def __init__(self, organization_id: str = "default_org", model_registry_id: str = "default_registry", **kwargs):
         super().__init__(organization_id, **kwargs)
         self.organization_id = organization_id
         self.model_registry_id = model_registry_id

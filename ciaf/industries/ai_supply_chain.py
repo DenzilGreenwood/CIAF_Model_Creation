@@ -417,7 +417,7 @@ class AISupplyChainGovernanceFramework(AIGovernanceFramework):
     - Secure AI system retirement and data disposition procedures
     """
     
-    def __init__(self, organization_id: str, supply_chain_tier: str, **kwargs):
+    def __init__(self, organization_id: str = "default_org", supply_chain_tier: str = "TIER_1", **kwargs):
         super().__init__(organization_id, **kwargs)
         self.organization_id = organization_id
         self.supply_chain_tier = supply_chain_tier  # tier_1, tier_2, tier_3

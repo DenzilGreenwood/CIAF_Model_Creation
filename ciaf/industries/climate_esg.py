@@ -262,7 +262,7 @@ class ClimateESGAIGovernanceFramework(AIGovernanceFramework):
     - Climate risk scenario modeling and validation
     """
     
-    def __init__(self, organization_id: str, sustainability_office_id: str, **kwargs):
+    def __init__(self, organization_id: str = "default_org", sustainability_office_id: str = "default_sustainability", **kwargs):
         super().__init__(organization_id, **kwargs)
         self.organization_id = organization_id
         self.sustainability_office_id = sustainability_office_id

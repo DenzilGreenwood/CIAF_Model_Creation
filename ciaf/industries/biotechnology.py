@@ -365,7 +365,7 @@ class BiotechnologyAIGovernanceFramework(AIGovernanceFramework):
     - Dual-use research oversight and responsible innovation
     """
     
-    def __init__(self, biotech_organization_id: str, research_focus: str, **kwargs):
+    def __init__(self, biotech_organization_id: str = "default_biotech", research_focus: str = "genomics", **kwargs):
         super().__init__(**kwargs)
         self.biotech_organization_id = biotech_organization_id
         self.research_focus = research_focus  # drug_discovery, diagnostics, research, etc.

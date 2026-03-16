@@ -380,10 +380,10 @@ class CrossBorderAIGovernanceFramework(AIGovernanceFramework):
     - Cultural and legal pluralism in AI ethics and governance
     """
     
-    def __init__(self, organization_id: str, primary_jurisdiction: Jurisdiction, **kwargs):
+    def __init__(self, organization_id: str = "default_org", primary_jurisdiction: Jurisdiction = None, **kwargs):
         super().__init__(organization_id, **kwargs)
         self.organization_id = organization_id
-        self.primary_jurisdiction = primary_jurisdiction
+        self.primary_jurisdiction = primary_jurisdiction if primary_jurisdiction is not None else Jurisdiction.UNITED_STATES
         # Initialize policy enforcement with cross-border-specific regulations
         self.policy_enforcement = PolicyEnforcement(
             industry_type='cross_border',

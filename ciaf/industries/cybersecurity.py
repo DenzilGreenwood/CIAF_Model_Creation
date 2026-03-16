@@ -399,7 +399,7 @@ class CybersecurityAIGovernanceFramework(AIGovernanceFramework):
     - International cybersecurity AI collaboration and standards
     """
     
-    def __init__(self, security_organization_id: str, security_clearance_level: str, **kwargs):
+    def __init__(self, security_organization_id: str = "default_security_org", security_clearance_level: str = "standard", **kwargs):
         # Following Variables Reference: organization_id is required by base class
         org_id = kwargs.pop('organization_id', None) or security_organization_id
         super().__init__(organization_id=org_id, **kwargs)
@@ -660,9 +660,19 @@ class CybersecurityAIGovernanceFramework(AIGovernanceFramework):
         compliance_results["organization_id"] = self.organization_id
         return compliance_results
     
-    def validate_governance_requirements(self, system_id: str, requirements: Dict[str, Any]) -> Dict[str, Any]:
+    def validate_governance_requirements(self, system_id: str = None, requirements: Dict[str, Any] = None, **kwargs) -> Dict[str, Any]:
         """Validate cybersecurity AI governance requirements"""
         from datetime import datetime, timezone
+        # Provide defaults if not specified
+        if system_id is None:
+            system_id = kwargs.get('system_id', self.security_organization_id)
+        if requirements is None:
+            requirements = kwargs.get('requirements', {
+                "threat_detection": {},
+                "biometric_privacy": {},
+                "incident_response": {},
+                "adversarial_resilience": {}
+            })
         validation_results = {
             "system_id": system_id,
             "validation_timestamp": datetime.now(timezone.utc),
@@ -694,10 +704,14 @@ class CybersecurityAIGovernanceFramework(AIGovernanceFramework):
         validation_results["organization_id"] = self.organization_id
         return validation_results
     
-    def generate_audit_report(self, system_id: str, report_type: str = "comprehensive") -> Dict[str, Any]:
+    def generate_audit_report(self, system_id: str = None, report_type: str = "comprehensive", **kwargs) -> Dict[str, Any]:
         """Generate comprehensive cybersecurity AI governance audit report"""
         from datetime import datetime, timezone, timedelta
+        # Provide default system_id if not specified
+        if system_id is None:
+            system_id = kwargs.get('system_id', self.security_organization_id)
         audit_report = {
+            "organization_id": self.organization_id,
             "report_metadata": {
                 "system_id": system_id,
                 "report_type": report_type,

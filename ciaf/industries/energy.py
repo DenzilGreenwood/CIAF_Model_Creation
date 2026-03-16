@@ -80,7 +80,7 @@ class EnergyAIGovernanceFramework(AIGovernanceFramework):
     Energy AI Governance Framework for power grid and utility systems
     """
     
-    def __init__(self, utility_id: str, grid_region: str, **kwargs):
+    def __init__(self, utility_id: str = "default_utility", grid_region: str = "NORTH_AMERICA", **kwargs):
         # Following Variables Reference: organization_id is required by base class
         org_id = kwargs.pop('organization_id', None) or utility_id
         super().__init__(organization_id=org_id, **kwargs)

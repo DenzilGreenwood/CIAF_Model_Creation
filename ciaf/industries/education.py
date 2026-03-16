@@ -394,7 +394,7 @@ class EducationAIGovernanceFramework(AIGovernanceFramework):
     - Institutional AI governance and cross-system coordination
     """
     
-    def __init__(self, educational_institution_id: str, institution_type: str, **kwargs):
+    def __init__(self, educational_institution_id: str = "default_institution", institution_type: str = "university", **kwargs):
         # Following Variables Reference: organization_id is required by base class
         org_id = kwargs.pop('organization_id', None) or educational_institution_id
         super().__init__(organization_id=org_id, **kwargs)

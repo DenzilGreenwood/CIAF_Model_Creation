@@ -303,7 +303,7 @@ class GovernmentAIGovernanceFramework(AIGovernanceFramework):
     - International cooperation and diplomatic frameworks
     """
     
-    def __init__(self, government_agency_id: str, jurisdiction: str, **kwargs):
+    def __init__(self, government_agency_id: str = "default_agency", jurisdiction: str = "US", **kwargs):
         # Following Variables Reference: organization_id is required by base class
         # If organization_id is provided in kwargs (test case), use it; otherwise use government_agency_id
         org_id = kwargs.pop('organization_id', None) or government_agency_id
