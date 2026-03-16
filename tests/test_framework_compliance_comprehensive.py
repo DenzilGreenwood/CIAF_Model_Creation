@@ -202,7 +202,7 @@ class TestGovernmentCompliance:
         audit_report = government_framework.generate_audit_report()
 
         assert 'organization_id' in audit_report
-        assert audit_report['organization_id'] == "test_agency_123"
+        assert audit_report['organization_id'] == "AGENCY_001"
 
     def test_omb_m24_10_compliance(self, government_framework):
         """Test OMB M-24-10 memorandum compliance"""

@@ -53,6 +53,7 @@ class FairLendingAssessment:
     disparate_impact_ratio: float
     remediation_required: bool
     compliance_score: float
+    overall_bias_score: float = 0.0
 
 
 @dataclass
@@ -66,6 +67,10 @@ class CreditDecisionResult:
     fairness_validation: FairLendingAssessment
     audit_trail_id: str
     human_review_required: bool
+
+    def __contains__(self, item):
+        import dataclasses
+        return item in {f.name for f in dataclasses.fields(self)}
 
 
 @dataclass
@@ -154,7 +159,8 @@ class BankingAIGovernanceFramework(AIGovernanceFramework):
             protected_attribute_analysis=bias_analysis.protected_attribute_scores,
             disparate_impact_ratio=disparate_impact,
             remediation_required=not is_compliant,
-            compliance_score=bias_analysis.overall_compliance_score
+            compliance_score=bias_analysis.overall_compliance_score,
+            overall_bias_score=bias_analysis.overall_bias_score
         )
     
     def make_credit_decision_with_governance(self, 

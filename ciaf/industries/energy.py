@@ -195,6 +195,7 @@ class EnergyAIGovernanceFramework(AIGovernanceFramework):
         environmental_data = kwargs.get('environmental_data')
         
         results = {
+            'organization_id': self.organization_id,
             'utility_id': self.utility_id,
             'grid_region': self.grid_region,
             'assessment_timestamp': datetime.now(timezone.utc).isoformat(),
