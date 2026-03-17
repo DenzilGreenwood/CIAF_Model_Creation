@@ -371,7 +371,7 @@ class ModernCIAFModelWrapper(ModelWrapper):
             # Store training results
             self.training_snapshot = training_snapshot
             self.model_version = model_version
-            
+
             # Create audit entry
             training_duration = (datetime.now() - start_time).total_seconds()
             self._create_audit_entry("training_completed", {
@@ -382,7 +382,7 @@ class ModernCIAFModelWrapper(ModelWrapper):
                 "training_duration_seconds": training_duration,
                 "policy_hash": self.policy.get_policy_hash()
             })
-            
+
             # Log compliance information
             compliance_mode = self.policy.compliance_policy.compliance_mode.value
             if compliance_mode == "healthcare":
@@ -391,8 +391,12 @@ class ModernCIAFModelWrapper(ModelWrapper):
                 print(f"🏦 Financial compliance: Audit trail created for regulatory reporting")
             elif compliance_mode == "strict":
                 print(f"🔒 Strict compliance: Enhanced security and validation applied")
-            
-            return training_snapshot or self._create_mock_training_snapshot(model_version, training_data)
+
+            # Return snapshot (using mock if CIAF snapshot not created)
+            final_snapshot = training_snapshot or self._create_mock_training_snapshot(model_version, training_data)
+            # Store the final snapshot even if it's mock
+            self.training_snapshot = final_snapshot
+            return final_snapshot
             
         except Exception as e:
             error_context = {

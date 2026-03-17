@@ -76,7 +76,7 @@ class MLFrameworkSimulator:
         # Extract provenance hashes for snapshot
         provenance_hashes = []
         for capsule in training_data_capsules:
-            hash_proof = capsule.compute_hash_proof()
+            hash_proof = capsule.hash_proof
             provenance_hashes.append(hash_proof)
             print(f"   ✓ Validated capsule with hash: {hash_proof[:16]}...")
 

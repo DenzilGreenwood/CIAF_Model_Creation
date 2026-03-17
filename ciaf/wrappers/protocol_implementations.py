@@ -263,15 +263,29 @@ class DefaultModelAdapter(ModelAdapter):
         """Prepare training data for the specific model type."""
         try:
             model_type = self.detect_model_type(model)
-            
+
             # Extract X and y from CIAF format
             X = []
             y = []
-            
+
             for item in training_data:
-                X.append(item["content"])
+                # Support multiple field names: content, features, or data
+                if "content" in item:
+                    X.append(item["content"])
+                elif "features" in item:
+                    X.append(item["features"])
+                elif "data" in item:
+                    X.append(item["data"])
+                else:
+                    raise KeyError(f"No recognized data field in training item. Expected 'content', 'features', or 'data'")
+
+                # Support multiple target field names
                 if "target" in item.get("metadata", {}):
                     y.append(item["metadata"]["target"])
+                elif "label" in item:
+                    y.append(item["label"])
+                elif "target" in item:
+                    y.append(item["target"])
             
             # Use preprocessing if available
             if PREPROCESSING_AVAILABLE:
@@ -515,28 +529,31 @@ class DefaultModelValidator(ModelValidator):
             "errors": [],
             "data_summary": {}
         }
-        
+
         try:
             if not training_data:
                 result["is_compatible"] = False
                 result["errors"].append("Training data is empty")
                 return result
-            
+
             # Basic data structure validation
             result["data_summary"]["sample_count"] = len(training_data)
-            
-            # Check CIAF format
+
+            # Check CIAF format - support multiple field names
+            recognized_data_fields = {"content", "features", "data", "x", "X"}
             for i, item in enumerate(training_data[:5]):  # Check first 5 items
                 if not isinstance(item, dict):
                     result["errors"].append(f"Training item {i} is not a dictionary")
                     result["is_compatible"] = False
-                
-                if "content" not in item:
-                    result["errors"].append(f"Training item {i} missing 'content' field")
+
+                # Check if item has any recognized data field
+                has_data_field = any(field in item for field in recognized_data_fields)
+                if not has_data_field:
+                    result["errors"].append(f"Training item {i} missing recognized data field (expected one of: {recognized_data_fields})")
                     result["is_compatible"] = False
-            
+
             return result
-            
+
         except Exception as e:
             result["is_compatible"] = False
             result["errors"].append(f"Training data validation failed: {e}")
