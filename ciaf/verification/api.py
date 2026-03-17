@@ -12,7 +12,7 @@ import sqlite3
 from typing import Optional, Dict, Any
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 from .proof_store import PostgresProofStore
 from .verification_service import VerificationService, VerificationResult
@@ -49,6 +49,8 @@ class VerificationRequest(BaseModel):
 
 class VerificationResponse(BaseModel):
     """Response from verification."""
+
+    model_config = ConfigDict(protected_namespaces=())
 
     verified: bool
     tag_id: str

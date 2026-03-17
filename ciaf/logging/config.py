@@ -6,7 +6,7 @@ import logging
 import json
 import sys
 from datetime import datetime, timezone
-from pythonjsonlogger import jsonlogger
+from pythonjsonlogger.json import JsonFormatter
 import uuid
 import os
 
@@ -65,7 +65,7 @@ def setup_logging(
     root_logger.handlers.clear()
 
     # JSON formatter
-    formatter = jsonlogger.JsonFormatter(
+    formatter = JsonFormatter(
         fmt='%(timestamp)s %(level)s %(name)s %(message)s %(trace_id)s %(span_id)s %(request_id)s',
         timestamp=True
     )

@@ -5,12 +5,19 @@ Supports environment-based configuration to avoid hardcoded values.
 """
 
 from pydantic_settings import BaseSettings
+from pydantic import ConfigDict
 from typing import Optional
 from pathlib import Path
 
 
 class VaultConfig(BaseSettings):
     """Vault configuration from environment variables."""
+
+    model_config = ConfigDict(
+        env_prefix="CIAF_VAULT_",
+        case_sensitive=False,
+        env_file=".env"
+    )
 
     # Vault Storage
     vault_path: str = str(Path.home() / ".ciaf" / "vault")
@@ -50,11 +57,6 @@ class VaultConfig(BaseSettings):
     # Logging
     log_level: str = "INFO"
     enable_structured_logging: bool = True
-
-    class Config:
-        env_prefix = "CIAF_VAULT_"
-        case_sensitive = False
-        env_file = ".env"
 
     def get_cors_origins(self) -> list:
         """Parse CORS origins from config."""

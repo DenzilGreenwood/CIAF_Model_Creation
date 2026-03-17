@@ -40,3 +40,6 @@ structlog>=22.1.0
 # Health checks
 aiohttp>=3.8.0
 websockets>=10.0
+
+# other 
+psutil>=7.2.2
