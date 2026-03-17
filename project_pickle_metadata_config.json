@@ -1,6 +1,6 @@
 {
   "storage_backend": "pickle",
-  "storage_path": "C:\\Users\\Denzi\\AppData\\Local\\Temp\\tmpi8f8ozeq\\metadata_pickle",
+  "storage_path": "C:\\Users\\Denzi\\AppData\\Local\\Temp\\tmptl4iecy4\\metadata_pickle",
   "enable_compression": false,
   "max_file_size_mb": 100,
   "enable_lazy_materialization": true,
